@@ -6,15 +6,15 @@ import Entypo from '@expo/vector-icons/Entypo';
 import {useWindowDimensions} from 'react-native';
 import events from '../../data/events'; 
 
-function PostFeature({imageLink}:any){
-    const {height, width} = useWindowDimensions();
-    if(imageLink!=null){
-        return (
-            <Image source = {{uri: imageLink}} style = {[{height: height/5}, styles.postImage]} resizeMode = "cover"/>
-        )
-    }
-    else return(null)
-}
+//function PostFeature({imageLink}:any){
+//    const {height, width} = useWindowDimensions();
+//    if(imageLink!=null){
+//        return (
+//            <Image source = {{uri: imageLink}} style = {[{height: height/5}, styles.postImage]} resizeMode = "cover"/>
+//        )
+//    }
+//    else return(null)
+//}
 
 function Post({postData}:any){
     const [likeClicked, setLikeClicked] = useState(false);
@@ -22,22 +22,29 @@ function Post({postData}:any){
     const [volunteerClicked, setVolunteerClicked] = useState(false);
     const [saveClicked, setSaveClicked] = useState(false);
     const [shareClicked, setShareClicked] = useState(false);
+    const date = new Date(postData.date)
     return(
         <View style = {styles.post}>
             
-            <Image source = {{uri: postData.profilePicture}} style = {styles.profilePicture} resizeMode = "cover"/>
-            
+            <View style = {[{aspectRatio: 1}, styles.pfpContainer]}>
+              <Image source = {{uri: postData.profilePicture}} style = {{height: "100%", borderRadius: 1000}} resizeMode = "cover"/>
+            </View>
+
             <View style = {styles.postInfo}>
                 
                 <View style = {styles.postAuthored}> 
                     <Text style = {styles.name}>{postData.name}</Text>
                     <Text style = {styles.username}>@{postData.username}</Text>
-                    <Text style = {styles.timeElapsed}>{postData.timePosted /* change to timeElapsed needed once conversion is implemented */}</Text>
+                    <Text style = {styles.timeElapsed}>{date.getDay()}/{date.getMonth()}/{date.getFullYear()}</Text>
                 </View>
 
                 <Text style = {styles.postContent}>{postData.content}</Text>
 
-                <PostFeature imageLink = {postData.imageLink}/>
+                {/** <PostFeature imageLink = {postData.imageLink}/> **/}
+            
+                <View style = {[{aspectRatio: 1}, styles.featureImage]}>
+                  <Image source = {{uri: postData.imageLink}} style = {{height: "100%", borderRadius: 15}} resizeMode = "cover"/>
+                </View>
 
                 <View style = {styles.postStats}> 
 
@@ -101,8 +108,8 @@ const Tab = () => {
 
 const styles = StyleSheet.create({
     headerImage: {
-        marginTop: 20,
-        marginBottom: 20,
+        marginTop: "15%",
+        marginBottom: "15%",
         marginLeft: "auto",
         marginRight: "auto",
     },
@@ -114,31 +121,32 @@ const styles = StyleSheet.create({
         borderBottomWidth: 0.2,
         display: "flex",
         flexDirection: "row",
-        padding: 15,
+        padding: "3%",
+        fontFamily: "Roboto",
     },
 
-    profilePicture: {
-        height: 40,
-        width: 40,
-        borderRadius: 50,
-        marginRight: 15, 
-        marginTop: 2,
+    pfpContainer: {
+        width: "12%",
+        marginRight: "3%",
     },
 
     postInfo: {
-
+        width:"85%", 
+        fontFamily: "Roboto",
     },
 
     postAuthored: {
         display:"flex",
         flexDirection:"row",
         gap: 10,
+        fontFamily: "Roboto",
     },
 
     name: {
         fontWeight: "700",
         color: "#000000",
         fontSize: 14,
+        fontFamily: "Roboto",
     },
 
     username: {
@@ -150,22 +158,31 @@ const styles = StyleSheet.create({
     },
 
     postContent: {
-        marginTop: 1,
-        marginBottom: 10,
-        width: 250,
-        color: "#000"
+        marginTop: "1%",
+        marginBottom: "5%",
+        paddingRight: "3%",
+        color: "#000",
+        fontFamily: "sans-serif",
+        fontSize: 14,
+        lineHeight: 18,
     },
+
 
     postStats: {
         display: "flex",
         flexDirection:"row",
         gap: 10,
         justifyContent:"space-between",
-        marginTop: 15,
-        width:"90%",
-        paddingLeft: 5,
-        paddingRight: 6,
+        alignItems:"center",
+        marginTop: "4%",
+        width:"100%",
+        paddingLeft: "3%",
+        paddingRight:"6%",
+    },
 
+    featureImage: {
+        width: "100%",
+        paddingRight: "3%",
     },
     
     statsText: {
@@ -173,7 +190,7 @@ const styles = StyleSheet.create({
     },
 
     postImage: {
-        width:"100%",
+        width:"80%",
         borderRadius: 10,
     },
     

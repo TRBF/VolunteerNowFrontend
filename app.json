@@ -25,7 +25,13 @@
       "bundler": "metro"
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      [
+        "expo-font",
+        {
+          "fonts": ["node_modules/@expo-google-fonts/roboto/Roboto_400Regular.ttf"]
+        }
+      ]
     ],
     "experiments": {
       "baseUrl": "/volunteer-now-demo"

@@ -4,6 +4,7 @@ import { Link } from 'expo-router'
 import companies from '../../data/companies';
 import {useWindowDimensions} from 'react-native';
 import events from "../../data/events"
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 let notificationsAsc = events.map((x)=>(x));
 let notificationsDesc = events.map((x)=>(x));
@@ -33,24 +34,26 @@ const Tab = () => {
     const [tab, setTab] = useState("unread");
 
     return(
-        <ScrollView>
-            <ImageBackground source = {require("../../assets/images/backgroundlight.jpeg")}  resizeMode='cover' style = {{flex: 1}}>
-                <View style = {styles.header}>
-                    <Pressable onPress = {() => setTab("unread")} style = {[styles.tabButton, tab=="unread" ? styles.tabActive : styles.tabInactive]}><Text style = {styles.tabButtonText}>Unread</Text></Pressable>
-                    <Pressable onPress = {() => setTab("read")} style = {[styles.tabButton, tab=="read" ? styles.tabActive : styles.tabInactive]}><Text style = {styles.tabButtonText}>Read</Text></Pressable>
-                </View>
-                {
-                    tab=="unread" ? 
-                    <ScrollView style = {styles.notificationsSection}>
-                            {notificationsAsc.map((notification:any) => <Notification notification = {notification}/>)}
-                    </ScrollView>
-                    :
-                    <ScrollView style = {styles.notificationsSection}>
-                            {notificationsDesc.map((notification:any) => <Notification notification = {notification}/>)}
-                    </ScrollView>
-                }
-            </ImageBackground>
-        </ScrollView>
+        <SafeAreaView>
+            <ScrollView>
+                <ImageBackground source = {require("../../assets/images/backgroundlight.jpeg")}  resizeMode='cover' style = {{flex: 1}}>
+                    <View style = {styles.header}>
+                        <Pressable onPress = {() => setTab("unread")} style = {[styles.tabButton, tab=="unread" ? styles.tabActive : styles.tabInactive]}><Text style = {styles.tabButtonText}>Unread</Text></Pressable>
+                        <Pressable onPress = {() => setTab("read")} style = {[styles.tabButton, tab=="read" ? styles.tabActive : styles.tabInactive]}><Text style = {styles.tabButtonText}>Read</Text></Pressable>
+                    </View>
+                    {
+                        tab=="unread" ? 
+                        <ScrollView style = {styles.notificationsSection}>
+                                {notificationsAsc.map((notification:any) => <Notification notification = {notification}/>)}
+                        </ScrollView>
+                        :
+                        <ScrollView style = {styles.notificationsSection}>
+                                {notificationsDesc.map((notification:any) => <Notification notification = {notification}/>)}
+                        </ScrollView>
+                    }
+                </ImageBackground>
+            </ScrollView>
+        </SafeAreaView>
     )
 }
 
