@@ -34,9 +34,9 @@ const Tab = () => {
     const [tab, setTab] = useState("unread");
 
     return(
-        <SafeAreaView>
-            <ScrollView>
-                <ImageBackground source = {require("../../assets/images/backgroundlight.jpeg")}  resizeMode='cover' style = {{flex: 1}}>
+        <View style = {{height: "100%", backgroundColor: "#ffffff"}}>
+            <SafeAreaView style = {{backgroundColor: "#ffffff"}}>
+                <ScrollView style = {styles.mainSection}>
                     <View style = {styles.header}>
                         <Pressable onPress = {() => setTab("unread")} style = {[styles.tabButton, tab=="unread" ? styles.tabActive : styles.tabInactive]}><Text style = {styles.tabButtonText}>Unread</Text></Pressable>
                         <Pressable onPress = {() => setTab("read")} style = {[styles.tabButton, tab=="read" ? styles.tabActive : styles.tabInactive]}><Text style = {styles.tabButtonText}>Read</Text></Pressable>
@@ -51,15 +51,18 @@ const Tab = () => {
                                 {notificationsDesc.map((notification:any) => <Notification notification = {notification}/>)}
                         </ScrollView>
                     }
-                </ImageBackground>
-            </ScrollView>
-        </SafeAreaView>
+                </ScrollView>
+            </SafeAreaView>
+        </View>
     )
 }
 
 const styles = StyleSheet.create({
     whitebg: {
         backgroundColor: "white",
+    },
+    mainSection: {
+        backgroundColor: "white"
     },
     exploreText: {
         width: "100%",

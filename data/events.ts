@@ -1,5 +1,6 @@
 const volunteering = [
     {
+        id: 1,
         name: "UNICEF",
         username: "unicef",
         content: "UNICEF organizeaza o actiune de strangere de fonduri in Parcul Cismigiu si este nevoie de voluntari!",
@@ -9,8 +10,10 @@ const volunteering = [
         likeCount: 124,
         volunteerCount: 121,
         sendCount: 24,
+        forProfit: 0,
     },
     {
+        id: 2,
         name: "Salvati copiii",
         username: "salvati.copiii",
         content: "Salvati copiii organizeaza un maraton pentru a atrage atentia asupra saraciei in masa din Romania. Au nevoie de 80 de voluntari",
@@ -20,8 +23,10 @@ const volunteering = [
         likeCount: 437,
         volunteerCount: 837,
         sendCount: 75,
+        forProfit: 0,
     },
     {
+        id: 3,
         name: "UNTOLD",
         username: "untold",
         content: "Cel mai mare festival de muzica electronica din Romania are nevoie de voluntari! Inscrie-te acum!",
@@ -31,8 +36,10 @@ const volunteering = [
         likeCount: 256,
         volunteerCount: 187,
         sendCount: 32,
+        forProfit: 1,
     },
     {
+        id: 4,
         name: "UE",
         username: "uniunea.europeana",
         content: "Uniunea Europeana organizeaza o campanie de constientizare a drepturilor omului in Bucuresti. Este nevoie de 500 de voluntari.",
@@ -42,8 +49,10 @@ const volunteering = [
         likeCount: 256,
         volunteerCount: 187,
         sendCount: 32,
+        forProfit: 0,
     },
     {
+        id: 5,
         name: "UNESCO",
         username: "UNESCO",
         content: "UNESCO va organiza o expozitie despre patrimoniul cultural in Brasov si cauta voluntari.",
@@ -53,8 +62,10 @@ const volunteering = [
         likeCount: 312,
         volunteerCount: 145,
         sendCount: 58,
+        forProfit: 0,
     },
     {
+        id: 6,
         name: "NEVERSEA",
         username: "neversea",
         content: "Neversea 2024 is coming! This year will be epic with Maluma, Bebe Rexha, Salvatore Ganacci, G-eazy, Inna and many more artists! Help is needed from 1000 volunteers that want to offer the best experience to our guests.",
@@ -63,9 +74,11 @@ const volunteering = [
         date: Date.parse('2024-07-07T10:00:00Z'),
         likeCount: 600,
         volunteerCount: 800,
-        sendCount: 210
+        sendCount: 210,
+        forProfit: 1,
     },
     {
+        id: 7,
         name: "Beach, Please!",
         username: "beach.please",
         content: "Let’s have some fun! Beach, Please! 2024 will feature Travis Scott, Ice Spice, Anitta, Wiz Khalifa, Yeat, Chief Keef and others! Help us and join other 300 volunteers this year.",
@@ -74,9 +87,11 @@ const volunteering = [
         date: Date.parse('2024-08-15T14:00:00Z'),
         likeCount: 400,
         volunteerCount: 250,
-        sendCount: 100
+        sendCount: 100,
+        forProfit: 1,
     },
     {
+        id: 8,
         name: "SAGA",
         username: "saga.festival",
         content: "Nicky Minaj is coming to Saga Festival in Bucharest! Loreen, Claptone, Tyla and other artists will offer you a magical time. Join our team of 200 volunteers and help us offer the best experience.",
@@ -85,9 +100,11 @@ const volunteering = [
         date: Date.parse('2024-06-10T12:00:00Z'),
         likeCount: 900,
         volunteerCount: 180,
-        sendCount: 150
+        sendCount: 150,
+        forProfit: 1,
     },
     {
+        id: 9,
         name: "Electric Castle",
         username: "electric.castle",
         content: "Join Electric Castle for fun and magical moments! This year we need 1000 volunteers to have the best time.",
@@ -96,8 +113,10 @@ const volunteering = [
         date: Date.parse('2024-07-15T09:00:00Z'),
         likeCount: 750,
         volunteerCount: 950,
-        sendCount: 200
-    },
+        sendCount: 200,
+        forProfit: 1,
+    }
 ];
+
 
 export default volunteering;

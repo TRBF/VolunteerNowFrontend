@@ -1,34 +1,15 @@
 import React, { useState } from 'react';
 import { ScrollView, StyleSheet, Image, Text, View, Pressable } from 'react-native';
-import { useWindowDimensions } from 'react-native';
 import ExperienceSection from './experiences';
-
-function DiplomaSection({ diploma }: any) {
-    const { height } = useWindowDimensions();
-    return (
-        <View style={styles.diplomaSection}>
-            <Image source={require("../../assets/images/image.jpg")} resizeMode='cover' style={[styles.experienceImage, {
-                height: height / 12,
-                width: height / 12,
-            }]} />
-            <Image source={require("../../assets/images/image.jpg")} resizeMode='cover' style={[styles.experienceImage, {
-                height: height / 2,
-                width: height / 3,
-            }]} />
-        </View>
-    )
-}
 
 export default function ProfileScreen() {
     let volunteerCount = 3;
     let dominantTag = 7;
     let firstVolunteered = "12/03/23";
     let hours = "Untold";
-    let [tab, setTab] = useState("experiences");
     let name = "Mihnea";
     let username = "tomoioaga";
     let description = "Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat. Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat. Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.";
-    const { height, width } = useWindowDimensions();
 
     const experienceObject = {
         name: name,
@@ -37,17 +18,10 @@ export default function ProfileScreen() {
         description: description,
     }
 
-    const diplomaObject = {
-        name: name,
-        username: username,
-        hours: hours,
-        description: description,
-    }
-
     return (
         <View style={{ flex: 1, backgroundColor: "white"}}>
-            <View style={styles.circlePfp}></View>
             <ScrollView style={{ flex: 1}}>
+              <View style={styles.circlePfp}></View>
                 <View style={styles.profileTopSection }>
                     <View style={styles.containerPfp}>
                         <Image source={require("../../assets/images/image.jpg")} style={styles.profilePicture} resizeMode='cover' />
@@ -155,8 +129,6 @@ const styles = StyleSheet.create({
         elevation: 10,
         marginBottom: "5%",
         borderRadius: 100,
-        shadowColor: "#000000",
-        shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
     },

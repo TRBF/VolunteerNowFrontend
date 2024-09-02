@@ -1,133 +1,124 @@
 import React, {useState} from 'react';
-import { Image, StyleSheet, Text, View, ScrollView, Pressable } from 'react-native';
-import Ionicons from '@expo/vector-icons/Ionicons';
+import { StyleSheet, Text, View, ScrollView, Pressable } from 'react-native';
+import { Image } from 'expo-image';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Entypo from '@expo/vector-icons/Entypo';
 import {useWindowDimensions} from 'react-native';
 import events from '../../data/events'; 
+import {
+  SafeAreaView,
+  SafeAreaProvider,
+  SafeAreaInsetsContext,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
+import { Link } from 'expo-router';
 
-//function PostFeature({imageLink}:any){
-//    const {height, width} = useWindowDimensions();
-//    if(imageLink!=null){
-//        return (
-//            <Image source = {{uri: imageLink}} style = {[{height: height/5}, styles.postImage]} resizeMode = "cover"/>
-//        )
-//    }
-//    else return(null)
-//}
 
-function Post({postData}:any){
-    const [likeClicked, setLikeClicked] = useState(false);
-    const [sendClicked, setSendClicked] = useState(false);
-    const [volunteerClicked, setVolunteerClicked] = useState(false);
+
+function Post({postObject}:any){
     const [saveClicked, setSaveClicked] = useState(false);
     const [shareClicked, setShareClicked] = useState(false);
-    const date = new Date(postData.date)
+    const { height, width } = useWindowDimensions();
+
+    const date = new Date(postObject.date)
     return(
-        <View style = {styles.post}>
-            
-            <View style = {[{aspectRatio: 1}, styles.pfpContainer]}>
-              <Image source = {{uri: postData.profilePicture}} style = {{height: "100%", borderRadius: 1000}} resizeMode = "cover"/>
+        //<View style = {[{backgroundColor: postObject.forProfit ? "white" : "#FBF2FF"}, styles.post]}> 
+        <View style = {[{marginBottom: height/(7*10)}, styles.post]}> 
+            <View style = {{width: "12%", aspectRatio: 1, marginRight: "4%"}}>
+                <Link href={{
+                    pathname: 'org/[username]',
+                    params: { username: postObject.username },
+                }} asChild>
+                    <Pressable style = {{width: "100%", aspectRatio: 1}}> 
+                        <Image 
+                          source = {{uri: postObject.profilePicture}}
+                          style = {{height: "100%", borderRadius: 1000}}
+                          contentFit = "cover"
+                        />
+                    </Pressable>
+                </Link>
             </View>
+            <Link href={{
+                pathname: 'posts/[id]',
+                params: { id: postObject.id }
+            }} asChild>
+                <Pressable style = {{width: "100%", height: "100%"}}>
+                    <View style = {styles.postInfo}>
+                        
+                        <View style = {styles.creationData}> 
+                            <View style = {styles.authorData}>
+                                <Link href={{pathname: 'org/[username]', params: { username: postObject.username }}} asChild>
+                                <Text style = {styles.authorName}>{postObject.name}</Text>
+                                </Link>
+                                <Link href={{pathname: 'org/[username]', params: { username: postObject.username }}} asChild>
+                                <Text style = {styles.authorUsername}>@{postObject.username}</Text>
+                                </Link>
+                            </View>
+                            <Text style = {styles.timeElapsed}>{date.getDay()}/{date.getMonth()}/{date.getFullYear()}</Text>
+                        </View>
 
-            <View style = {styles.postInfo}>
-                
-                <View style = {styles.postAuthored}> 
-                    <Text style = {styles.name}>{postData.name}</Text>
-                    <Text style = {styles.username}>@{postData.username}</Text>
-                    <Text style = {styles.timeElapsed}>{date.getDay()}/{date.getMonth()}/{date.getFullYear()}</Text>
-                </View>
+                        <Text style = {styles.postContent}>{postObject.content}</Text>
+                        
+                        <View style = {{
+                              width: "95%",
+                              aspectRatio: 1,
+                              marginTop: height/(7*10),
+                              marginBottom: height/(7*10),
+                        }}>
+                            <Image source = {postObject.imageLink} style = {styles.featureImage} contentFit = "cover"/>
+                        </View>
+                        <View style = {styles.bottomSection}> 
+                        
 
-                <Text style = {styles.postContent}>{postData.content}</Text>
+                            <View style = {styles.rightButtons}>
+                            {/*
+                                <Pressable onPress = {() => setSaveClicked(!saveClicked)}>
+                                    <FontAwesome name='bookmark' style = {Object.assign({color: saveClicked ? "yellow" : "#9394a5"}, styles.icon)}/>
+                                </Pressable> */}
+                                <Pressable onPress = {() => setShareClicked(!shareClicked)}>
+                                    <FontAwesome name={shareClicked ? 'send' : 'send-o'} style = {[{color: '#9394a5'}, styles.icon]}/>
+                                </Pressable>
+                            </View>
 
-                {/** <PostFeature imageLink = {postData.imageLink}/> **/}
-            
-                <View style = {[{aspectRatio: 1}, styles.featureImage]}>
-                  <Image source = {{uri: postData.imageLink}} style = {{height: "100%", borderRadius: 15}} resizeMode = "cover"/>
-                </View>
+                            <Text style = {styles.volunteersNeeded}>{postObject.volunteerCount} volunteers needed</Text>
 
-                <View style = {styles.postStats}> 
-
-                    <View style = {styles.leftButtons}>
-                        <Pressable onPress = {() => {!likeClicked ? postData.likeCount++ : postData.likeCount--; setLikeClicked(!likeClicked)}}>
-                            <Text style = {Object.assign({color: likeClicked ? "red" : "#9394a5"}, styles.statsText)}>
-                                 <Ionicons name={likeClicked ? 'heart' : 'heart-outline'} style = {styles.icon}/>{postData.likeCount} { /* has to fill in */}
-                            </Text>
-                        </Pressable>
-                        <Pressable onPress = {() => {!sendClicked ? postData.sendCount++ : postData.sendCount--; setSendClicked(!sendClicked)}}>
-                            <Text style = {Object.assign({color: sendClicked ? "blue" : "#9394a5"}, styles.statsText)}>
-                                <FontAwesome name={sendClicked ? 'send' : 'send-o'} style = {styles.icon}/> {postData.sendCount}
-                            </Text>
-                        </Pressable>
-                        <Pressable onPress = {() => {!volunteerClicked ? postData.volunteerCount++ : postData.volunteerCount--; setVolunteerClicked(!volunteerClicked)}}>
-                            <Text style = {Object.assign({color: volunteerClicked ? "#7211A2" : "#9394a5"}, styles.statsText)}>
-                                <Ionicons name={volunteerClicked ? 'hand-right-sharp' : 'hand-right-outline'} style = {styles.icon}/> {postData.volunteerCount}
-                            </Text>
-                        </Pressable>
+                        </View>
                     </View>
-
-                    <View style = {styles.rightButtons}>
-                        <Pressable onPress = {() => setSaveClicked(!saveClicked)}>
-                            <FontAwesome name='bookmark' style = {Object.assign({color: saveClicked ? "yellow" : "#9394a5"}, styles.icon)}/>
-                        </Pressable>
-                        <Pressable onPress = {() => setShareClicked(!shareClicked)}>
-                            <Entypo name='share' style = {Object.assign({color: "#9394a5"}, styles.icon)}/>
-                        </Pressable>
-                    </View>
-
-                </View>
-            </View>
+                </Pressable>
+            </Link>
         </View>
     )
 }
 
 const Tab = () => {
-    const testPost = {
-        name: 'Mihnea Tomoiaga',
-        username: 'zizou',
-        timePosted: '01/05/2024',
-        timeElapsed: null,
-        content: 'Help zizou now! Volunteer right now and be Zidan\'s goalkeeper for the 2025 season. Limited availability, so hurry up!',
-        likeCount: 100,
-        volunteerCount: 200,
-        sendCount: 49,
-        imageLink: 'https://www.arabobserver.com/wp-content/uploads/2021/04/Zidan.jpg',
-    }
-    const {height, width} = useWindowDimensions();
     return(
-    <ScrollView style = {{backgroundColor: "#ffffff"}}>
-        <Image source = {require("../../assets/images/vlight.png")} style = {[styles.headerImage, {
-                height: height/12,
-                width: width/5,
-            }]}/>
-        {events.map((event:any) => <Post postData = {{...event}}/>)}
-    </ScrollView>
-
+    <View style = {{backgroundColor:"#ffffff"}}>
+        <SafeAreaView>
+            <ScrollView style = {{backgroundColor: "#ffffff"}}>
+                {events.map((event:any) => <Post postObject = {{...event}} key = {event.content}/>)}
+            </ScrollView>
+        </SafeAreaView>
+    </View>
     )
 }
 
 const styles = StyleSheet.create({
-    headerImage: {
-        marginTop: "15%",
-        marginBottom: "15%",
-        marginLeft: "auto",
-        marginRight: "auto",
-    },
-
     post: {
-        backgroundColor:"#ffffff",
-        // borderColor: "#7211A2",
-        borderColor: "#9394a5",
-        borderBottomWidth: 0.2,
+        backgroundColor: "#ffffff",
+        borderColor: "#C981EC",
+        //borderBottomWidth: 0.2,
         display: "flex",
         flexDirection: "row",
-        padding: "3%",
+        paddingTop: "5%",
+        paddingBottom: "5%",
+        paddingLeft: "5%",
+        paddingRight: "5%",
         fontFamily: "Roboto",
     },
 
-    pfpContainer: {
-        width: "12%",
-        marginRight: "3%",
+    authorData: {
+        display: "flex",
+        flexDirection: "row",
     },
 
     postInfo: {
@@ -135,21 +126,23 @@ const styles = StyleSheet.create({
         fontFamily: "Roboto",
     },
 
-    postAuthored: {
+    creationData: {
         display:"flex",
         flexDirection:"row",
-        gap: 10,
+        width: "95%",
+        justifyContent: "space-between",
         fontFamily: "Roboto",
     },
 
-    name: {
+    authorName: {
         fontWeight: "700",
         color: "#000000",
         fontSize: 14,
         fontFamily: "Roboto",
+        marginRight: "5%"
     },
 
-    username: {
+    authorUsername: {
         color: "#9394a5", 
     },
 
@@ -158,47 +151,35 @@ const styles = StyleSheet.create({
     },
 
     postContent: {
-        marginTop: "1%",
-        marginBottom: "5%",
-        paddingRight: "3%",
+        width: "90%",
+        marginTop: "2%",
         color: "#000",
         fontFamily: "sans-serif",
         fontSize: 14,
         lineHeight: 18,
     },
 
+    featureImage: {
+        borderRadius: 15,
+        width: "100%",
+        height: "100%",
+    },
 
-    postStats: {
+    bottomSection: {
         display: "flex",
         flexDirection:"row",
-        gap: 10,
         justifyContent:"space-between",
         alignItems:"center",
-        marginTop: "4%",
-        width:"100%",
-        paddingLeft: "3%",
-        paddingRight:"6%",
-    },
-
-    featureImage: {
-        width: "100%",
-        paddingRight: "3%",
-    },
-    
-    statsText: {
-        fontSize: 15,
+        width:"95%",
     },
 
     postImage: {
         width:"80%",
         borderRadius: 10,
     },
-    
-    leftButtons:{
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-between",
-        gap: 20,
+
+    volunteersNeeded: {
+        color: "#9394a5", 
     },
 
     rightButtons: {
@@ -209,7 +190,7 @@ const styles = StyleSheet.create({
     },
 
     icon: {
-        fontSize: 14,
+        fontSize: 16,
     },
 })
 
