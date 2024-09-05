@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { ScrollView, StyleSheet, Image, Text, View, Pressable } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, Pressable } from 'react-native';
+import { Image } from 'expo-image';
 import { useLocalSearchParams, useNavigation } from 'expo-router';
 import { useEffect } from 'react';
 import { useWindowDimensions } from 'react-native';
@@ -49,6 +50,7 @@ export default function Tab() {
     let name = "Mihnea";
     let username = "tomoioaga";
     let description = "Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat. Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat. Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.";
+    let bannerLink = "https://static4.libertatea.ro/wp-content/uploads/2023/10/untold-2024-e1696503120515.jpg"
 
     const experienceObject = {
         name: name,
@@ -68,7 +70,7 @@ export default function Tab() {
                   <Entypo name='dots-three-horizontal' style = {Object.assign({color: "#9394a5"}, styles.settingsIcon)}/>
               </View>
             <ScrollView style={{ flex: 1}}>
-              <View style={styles.circlePfp}></View>
+              <Image style={styles.circlePfp} source = {{uri: bannerLink}}/>
                 <View style={styles.profileTopSection }>
                     <View style={styles.containerPfp}>
                         <Image source={require("../../assets/images/image.jpg")} style={styles.profilePicture} resizeMode='cover' />
@@ -100,7 +102,7 @@ export default function Tab() {
                 </View>
                 
                 <Experience experience={{...experienceObject}} />
-                {events.map((event:any) => <Experience requirement = {{...requirement}}/>)}
+                {events.map((experience:any) => <Experience experience = {{...experience}}/>)}
                 
                 <Pressable>
                     <Text style={styles.seeAllText}>See all</Text>
@@ -170,10 +172,7 @@ const styles = StyleSheet.create({
         marginBottom: "5%",
     },
     circlePfp: {
-        backgroundColor: 'rgba(114, 17, 162, .7)',
         width: "100%",
-        borderBottomLeftRadius: 40,
-        borderBottomRightRadius: 40,
         position: "absolute",
         height: 100,
         top: 0,

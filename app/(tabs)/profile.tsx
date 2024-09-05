@@ -24,7 +24,7 @@ export default function ProfileScreen() {
               <View style={styles.circlePfp}></View>
                 <View style={styles.profileTopSection }>
                     <View style={styles.containerPfp}>
-                        <Image source={require("../../assets/images/image.jpg")} style={styles.profilePicture} resizeMode='cover' />
+                        <Image source={require("../../assets/images/image.jpg")} style={styles.profilePicture} resizeMode='covRequirementer' />
                     </View>
                     {/* pfp + stats (no. of volunteers, dominant tag, volunteering since) */}
                     <View style={{ flexDirection: "row" }}>
