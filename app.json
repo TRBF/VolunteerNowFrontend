@@ -34,7 +34,7 @@
       ]
     ],
     "experiments": {
-      "baseUrl": "/volunteer-now-demo"
+      "baseUrl": "/VolunteerNowFrontend"
     },
     "scheme": "my-scheme"
   }
