@@ -1,13 +1,18 @@
-const form = document.querySelector('form');
+import 'add.ts';
 
-function uploadFiles() {
-    const url = 'https://httpbin.org/post';
-    const method = 'post';
-  
-    const xhr = new XMLHttpRequest();
-  
-    const data = new FormData(form);
-  
-    xhr.open(method, url);
-    xhr.send(data);
+export function uploadFile(fileToUpload : Blob) {
+    return new Promise((resolve, reject) => {
+        const url = 'https://http://188.214.88.101:3000';
+        const method = 'post';
+      
+        const xhr = new XMLHttpRequest();
+        xhr.onload = resolve;
+        xhr.onerror = reject;
+      
+        const data = new FormData();
+        data.set("file", fileToUpload);
+      
+        xhr.open(method, url);
+        xhr.send(data);
+    });
 }
