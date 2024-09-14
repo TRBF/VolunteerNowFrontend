@@ -11,14 +11,14 @@ export async function login(username, password) {
 }
 
 // functie pt creare de user:
-export async function createUser(username, password, gender, first_name, last_name, email) {
+export async function createUser(username, password, gender, first_name, last_name, email, birthday) {
     const url = url_endpoint+'/api/register';
     const response = await fetch(url, {
         method: 'POST',
         headers: {
         'Content-Type': 'application/json',
         },
-        body: JSON.stringify([username, password, gender, first_name, last_name, email]),
+        body: JSON.stringify({username: username, password: password, gender: gender, first_name: first_name, last_name: last_name, email: email, birthday: birthday}),
     });
     const newUser = await response.json();
     return newUser;
