@@ -13,9 +13,6 @@ async function getUsers() {
     const users = await response.json();
     return users;
 }
-const users = await getUsers();
-
-
 
 // functie pt creare de user:
 async function createUser(user) {
@@ -30,8 +27,23 @@ async function createUser(user) {
     const newUser = await response.json();
     return newUser;
 }
-const user = {
-    name: 'John Doe',
-    email: 'john.doe@example.com',
-};
-const newUser = await createUser(user);
+
+async function eventGet(number: any) {
+    const url = 'http://localhost:3000/api/get_events?page';
+    const response = await fetch(url);
+    const event = await response.json();
+    return event;
+}
+
+async function eventAdd(name, description, link_to_pfp, link_to_cover_image, edition, location, time) {
+    const url = 'http://localhost:3000/api/add_event';
+    const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json',
+        },
+        body: JSON.stringify([name, description, link_to_pfp, link_to_cover_image, edition, location, time]),
+    });
+    const newEvent = await response.json();
+    return newEvent;   
+}
