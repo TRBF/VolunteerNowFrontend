@@ -8,19 +8,10 @@ import {
   SafeAreaInsetsContext,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
+import { LinearGradient } from 'expo-linear-gradient';
 
 function ExperienceSection({ experience }) {
-    const [inputText, setInputText] = useState(experience.description);
-
     const { height, width } = useWindowDimensions();
-
-    const handleEdit = () => {
-        return;
-        };
-
-    const handleDelete = () => {
-        return;
-        }
 
     return (
         <View style={styles.experienceSection}>
@@ -29,90 +20,19 @@ function ExperienceSection({ experience }) {
                     height: height / 12,
                     width: height / 12,
                 }]} />
-                    <Text style={styles.experienceDate}>{experience.firstVolunteered}</Text>
-
+                <Text style={styles.experienceDate}>{experience.firstVolunteered}</Text>
             </View>
-
-            {/* cover pic */}
-
-            {/* Popup when  Edit is clicked */}
-
 
             <View style={{ width: "76%" }}>
                 <View style={styles.experienceIdentifiers}>
                     <Text style={styles.experienceName}>{experience.name}</Text>
-                    {/* name */}
                     <Text style={styles.experienceUsername}>@{experience.username}</Text>
-                    {/* username */}
-                    {/* date */}
                 </View>
                 <Text style={styles.experienceDescription}>{experience.description}</Text>
-                {/* description (shortened) */}
-
             </View>
+
         </View>
     );
-}
-
-function DiplomaSection({diploma}: any){
-    const [modalVisible, setModalVisible] = useState(false);
-
-    const handleEdit = () => {
-        return;
-        };
-
-    const handleDelete = () => {
-        return;
-        }
-
-    const {height, width} = useWindowDimensions();
-    return(
-        <View style = {styles.diplomaSection}>
-            <Image source={require("../../assets/images/image.jpg")} resizeMode='cover' style = {[styles.experienceImage, {
-                height: height/12,
-                width: height/12,
-            }]}/>
-            <Image source={require("../../assets/images/image.jpg")} resizeMode='cover' style = {[styles.experienceImage, {
-                height: height/4,
-                width: "90%",
-                marginTop: 10,
-            }]}/>
-
-            <View style={{flexDirection: "row", justifyContent: "center"}}>
-                <TouchableOpacity onPress={() => setModalVisible(true)} style={{marginRight: 10}}>
-                    <Text>Edit</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => handleDelete()} style={{marginLeft: 10}}>
-                    <Text>Delete</Text>
-                </TouchableOpacity>
-            </View>
-
-            <Modal
-                animationType="slide"
-                transparent={true}
-                onRequestClose={() => setModalVisible(false)}
-                visible={modalVisible}
-            >
-                <View style={styles.modalOverlay}>
-                    <View style={styles.modalContainer}>
-                        <Text style={styles.editExperienceText}>Edit Diploma</Text>
-                        <View>
-                        </View>
-                        <View style={styles.editExperienceButtons}>
-                            <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.closeButton}>
-                                <Text style={styles.closeButtonText}>Close</Text>
-                            </TouchableOpacity>
-
-                            <TouchableOpacity onPress={handleEdit()} style={styles.closeButton}>
-                                <Text style={styles.closeButtonText}>Edit</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </View>
-            </Modal>
-
-        </View>
-    )
 }
 
 export default function DiplomasPastExperiencesScreen() {
@@ -122,13 +42,9 @@ export default function DiplomasPastExperiencesScreen() {
     const name = "Voluntariat Untold 2024 2 zile";
     const username = "tomoioaga";
     const description = "Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat. Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat. Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.";
-    const [addDiploma, setAddDiploma] = useState(false)
+    const [ visible, setVisible ] = useState(false);
 
-    const handleAddDiploma = () => {
-        return;
-        };
-
-    const updateSearch = (text) => {
+    const updateSearch = (text: string) => {
         setSearchText(text);
     };
 
@@ -139,21 +55,8 @@ export default function DiplomasPastExperiencesScreen() {
     ];
 
     return (
-        <View style = {{backgroundColor: "#ffffff"}}>
-            <SafeAreaView style={styles.container}>
-                <View style={styles.profileTabSection}>
-                    <Pressable onPress={() => { setTab("experiences"); console.log(tab); }} style={styles.buttonsView}>
-                        <View style={[styles.profileTab, tab === 'experiences' ? styles.activeTab : styles.inactiveTab]}>
-                            <Text style={[styles.profileTabText, tab === 'experiences' ? styles.activeTabText : styles.inactiveTabText]}>Past experiences</Text>
-                        </View>
-                    </Pressable>
-                    <Pressable onPress={() => { setTab("diplomas"); console.log(tab); }} style={styles.buttonsView}>
-                        <View style={[styles.profileTab, tab === 'diplomas' ? styles.activeTab : styles.inactiveTab]}>
-                            <Text style={[styles.profileTabText, tab === 'diplomas' ? styles.activeTabText : styles.inactiveTabText]}>Diplomas</Text>
-                        </View>
-                    </Pressable>
-                </View>
-
+        <View style = {{backgroundColor: "#ffffff", flex: 1}}>
+            <SafeAreaView style= {[styles.container, {overflow: 'visible'}]}>
                 <TextInput
                     placeholder="Search"
                     onChangeText={updateSearch}
@@ -161,52 +64,43 @@ export default function DiplomasPastExperiencesScreen() {
                     style={styles.searchBar}
                 />
 
-                <View style={{ flex: 1 }}>
-                    {tab === "experiences" &&
-                        <ScrollView style={styles.scrollViewPadding}>
+                <View style={{ flex: 1, overflow: 'visible'}}>
+                      <ScrollView>
                             {experienceObjects.map((object, index) => (
                                 (object.name.toLowerCase().startsWith(searchText.toLowerCase()) || searchText === "") ? (
                                     <ExperienceSection key={index} experience={object} />
                                 ) : null
                             ))}
-                        </ScrollView>}
-
-                    {tab === "diplomas" &&
-                    <View>
-                        <ScrollView>
-                            {experienceObjects.map((diploma, index) => (
-                                <DiplomaSection key={index} diploma={diploma} />
+                            {experienceObjects.map((object, index) => (
+                                (object.name.toLowerCase().startsWith(searchText.toLowerCase()) || searchText === "") ? (
+                                    <ExperienceSection key={index} experience={object} />
+                                ) : null
                             ))}
-                        </ScrollView>
-                        <Pressable style={styles.addButton} onPress={() => {setAddDiploma(true)}}>
+                      </ScrollView>
+
+                      <Pressable style={styles.addButton} onPress={() => {setVisible(true)}}>
                             <Ionicons name={'add'} size={24} color={"#FFFFFF"} />
-                        </Pressable>
+                      </Pressable>
 
-                        <Modal
-                            animationType="slide"
-                            transparent={true}
-                            onRequestClose={() => setAddDiploma(false)}
-                            visible={addDiploma}
-                        >
-                            <View style={styles.modalOverlay}>
-                                <View style={styles.modalContainer}>
-                                    <Text style={styles.editExperienceText}>Add Diploma</Text>
-                                    <View>
-                                    </View>
-                                    <View style={styles.editExperienceButtons}>
-                                        <TouchableOpacity onPress={() => setAddDiploma(false)} style={styles.closeButton}>
-                                            <Text style={styles.closeButtonText}>Close</Text>
-                                        </TouchableOpacity>
 
-                                        <TouchableOpacity onPress={() => handleAddDiploma()} style={styles.closeButton}>
-                                            <Text style={styles.closeButtonText}>Add</Text>
-                                        </TouchableOpacity>
-                                    </View>
-                                </View>
-                            </View>
-                        </Modal>
-
-                    </View>}
+                      <Modal
+                          animationType="slide"
+                          transparent={true}
+                          visible={visible}
+                          onRequestClose={() => {
+                              setVisible(!visible);
+                          }}>
+                          <View style={styles.centeredView}>
+                              <View style={styles.modalView}>
+                                  <Text style={styles.modalText}>Hello World!</Text>
+                                  <Pressable
+                                      style={[styles.button, styles.buttonClose]}
+                                      onPress={() => setVisible(!visible)}>
+                                      <Text style={styles.textStyle}>Hide Modal</Text>
+                                  </Pressable>
+                              </View>
+                          </View>
+                      </Modal>
 
                 </View>
             </SafeAreaView>
@@ -224,15 +118,14 @@ const styles = StyleSheet.create({
         padding: "3%",
         marginTop: "5%",
         marginHorizontal: "2%",
-        borderWidth: 1,
-        borderColor: 'gray',
         borderRadius: 15,
         backgroundColor: "#FFFFFF",
         shadowColor: '#0000000',
-        shadowOffset: { width: 0, height: 2 },
+        shadowOffset: { width: 2, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5,
+        zIndex: 1,
     },
     experienceImage: {
         borderRadius: 10,
@@ -260,13 +153,12 @@ const styles = StyleSheet.create({
     container: {
         width: "100%",
         height: "100%",
-        backgroundColor: "white"
+        color: "white",
     },
     buttonsView: {
         width: "40%",
     },
     button: {
-        justifyConte: "row",
         backgroundColor: 'rgba(114, 17, 162, .7)',
     },
     profileTabSection: {
@@ -289,14 +181,19 @@ const styles = StyleSheet.create({
     inactiveTab: {
         backgroundColor: "#FFFFFF",
         borderRadius: 15,
-        borderColor: 'gray',
-        borderWidth: 2,
+        shadowColor: '#000000',
+        shadowOffset: { width: 2, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
     },
     activeTab: {
         backgroundColor: 'rgba(114, 17, 162, .7)',
         borderRadius: 15,
-        borderColor: 'rgba(114, 17, 162, .7)',
-        borderWidth: 2,
+        shadowColor: '#000000',
+        shadowOffset: { width: 2, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
     },
     inactiveTabText: {
         color: "#000000",
@@ -305,35 +202,32 @@ const styles = StyleSheet.create({
         color: "#FFFFFF",
     },
     searchBar: {
-        height: 50,
-        borderColor: 'gray',
-        borderWidth: 2,
+        height: "6%",
         borderRadius: 20,
         paddingLeft: 10,
         marginHorizontal: 10,
+        backgroundColor: "#ffffff",
         marginTop: "5%",
+        marginBottom: "2%",
+        shadowColor: '#000000',
+        shadowOffset: { width: 2, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+        zIndex: 3,
     },
-    addButton: {
-        height: "5%",
-        width: "5%",
-        borderRadius: 50,
-        backgroundColor: "#000000",
-        marginTop: "5%",
-        },
     diplomaSection: {
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
         alignItems: "center",
         width: "96%",
-        borderWidth: 1,
         marginTop: "5%",
         marginLeft: "2%",
         marginRight: "2%",
         paddingLeft: "5%",
         paddingVertical: "4%",
         paddingRight: "1%",
-        borderColor: 'gray',
         borderRadius: 15,
         backgroundColor: "#FFFFFF",
         shadowColor: '#0000000',
@@ -397,18 +291,52 @@ const styles = StyleSheet.create({
         },
     addButton: {
         position: 'absolute',
-        bottom: 20,
-        right: 20,
-        width: 50,
-        height: 50,
-        borderRadius: 25,
+        bottom: "4%",
+        right: "8%",
+        aspectRatio: 1,
+        width: "15%",
+        borderRadius: 100,
         backgroundColor: '#7211A2',
         justifyContent: 'center',
         alignItems: 'center',
         shadowColor: '#000000',
-        shadowOffset: { width: 0, height: 2 },
+        shadowOffset: { width: 2, height: 2 },
         shadowOpacity: 0.8,
         shadowRadius: 2,
         elevation: 5,
+    },
+
+    centeredView: {
+       flex: 1,
+       justifyContent: 'center',
+       alignItems: 'center',
+       marginTop: 22,
+    },
+    modalView: {
+       margin: 20,
+       backgroundColor: 'white',
+       borderRadius: 20,
+       height: "80%",
+       width: "90%",
+       alignItems: 'center',
+       shadowColor: '#000',
+       shadowOffset: {
+          width: 2,
+          height: 2,
+       },
+       shadowOpacity: 0.25,
+       shadowRadius: 4,
+       elevation: 5,
+    },
+    buttonOpen: {
+      backgroundColor: '#F194FF',
+    },
+    buttonClose: {
+      backgroundColor: '#2196F3',
+    },
+    textStyle: {
+      color: 'white',
+      fontWeight: 'bold',
+      textAlign: 'center',
     },
 });
