@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, TextInput, ScrollView, Pressable, Image, ImageBackground, Dimensions, Keyboard } from 'react-native';
+import { StyleSheet, View, Text, TextInput, ScrollView, Pressable, Image, ImageBackground, Dimensions, Keyboard, SafeAreaView } from 'react-native';
 import events from '../../data/events';
 
 const companies = events.map((x) => (x));
@@ -43,6 +43,7 @@ const Tab = () => {
 
     return (
         <SafeAreaView style={{ backgroundColor: "#ffffff", flex: 1 }}>
+            <Pressable onPress = {Keyboard.dismiss} style = {{height: "100%", width: "100%"}}>
             <View style={styles.mainView}>
                 <SearchBar
                     placeholder="Search"
@@ -58,7 +59,7 @@ const Tab = () => {
                         </Text>
                     </Pressable>
                     <Pressable style={styles.button} onPress={() => setOrganisersFilter(false)}>
-                        <Text style={[styles.topProfileButton, { backgroundColor: !organisersFilter ? "#C981EC" : "#FBF2FF" , textColor: "white"},]}>
+                        <Text style={[styles.topProfileButton, { backgroundColor: !organisersFilter ? "#C981EC" : "#FBF2FF" },]}>
                             Volunteers
                         </Text>
                     </Pressable>
@@ -73,6 +74,7 @@ const Tab = () => {
                     }
                 </ScrollView>
             </View>
+            </Pressable>
         </SafeAreaView>
     );
 }
