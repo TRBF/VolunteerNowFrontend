@@ -91,17 +91,33 @@ function Post({postObject}:any){
 }
 
 const Tab = () => {
-    return(
-    <ScrollView>
-    <View style = {{backgroundColor:"#ffffff"}}>
-        <SafeAreaView>
-            <ScrollView style = {{backgroundColor: "#ffffff"}}>
-                {events.map((event:any) => <Post postObject = {{...event}} key = {event.content}/>)}
+    const handleSecondImagePress = () => console.log('Second image pressed');
+
+    return (
+        <View style={{ backgroundColor: '#ffffff' }}>
+            <ScrollView style={{ backgroundColor: "#ffffff" }}>
+            <View style={styles.bannerContainer}>
+                
+                    <View style={styles.bannerImageContainer}>
+
+                        <Pressable onPress={handleSecondImagePress}>
+                            <Image style={styles.bannerImage3} source={require("../../assets/images/profile.png")} />
+                        </Pressable>
+                        
+                        <Image style={styles.bannerImage} source={require("../../assets/images/logo2.png")} />
+                        
+                        <Pressable onPress={handleSecondImagePress}>
+                            <Image style={styles.bannerImage2} source={require("../../assets/images/chat2.png")} />
+                        </Pressable>
+
+                    </View>
+
+            </View>
+            
+                {events.map((event: any) => <Post postObject={{ ...event }} key={event.content} />)}
             </ScrollView>
-        </SafeAreaView>
-    </View>
-    </ScrollView>
-    )
+        </View>
+    );
 }
 
 const styles = StyleSheet.create({
@@ -134,7 +150,7 @@ const styles = StyleSheet.create({
         width: "95%",
         justifyContent: "space-between",
         fontFamily: "Roboto",
-    },
+    },  
 
     authorName: {
         fontWeight: "700",
@@ -150,6 +166,69 @@ const styles = StyleSheet.create({
 
     timeElapsed: {
         color: "#9394a5", 
+    },
+
+    bannerContainer: {
+        flexDirection: 'row',
+        borderBottomWidth: 1,
+        borderBottomColor: '#7211A2',
+        borderRightWidth: 1,
+        borderRightColor: '#7211A2',
+        borderLeftWidth: 1,
+        borderLeftColor: '#7211A2',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: 1,
+        height: 100,
+        backgroundColor: '#ffffff',
+        borderBottomLeftRadius: 30,
+        borderBottomRightRadius: 30,
+    },
+
+    bannerImageContainer: {
+        flexDirection: 'row', // Align images horizontally
+        justifyContent: 'center', // Center images horizontally
+        alignItems: 'center', // Center images vertically
+        width: '100%',
+      },
+
+      bannerImage: {
+        width: 200, // Adjust this width to fit your design
+        height: 100,
+        resizeMode: 'contain',
+        marginTop: 20,
+        marginHorizontal: 10, // Reduced space between images
+      },
+
+      bannerImage2: {
+        width: 35
+        , // Adjust this width to fit your design
+        height: 50,
+        resizeMode: 'contain',
+        marginTop: 20,
+        marginHorizontal: 43, // Reduced space between images
+      },
+
+      bannerImage3: {
+        width: 50, // Adjust this width to fit your design
+        height: 47,
+        resizeMode: 'contain',
+        marginTop: 20,
+        marginHorizontal: 35, // Reduced space between images
+      },
+
+
+    bannerButton: {
+        backgroundColor: '#ffffff',
+        borderRadius: 5,
+        padding: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+
+    buttonText: {
+        color: '#000000',
+        fontSize: 16,
     },
 
     postContent: {
