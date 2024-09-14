@@ -1,12 +1,9 @@
-export const urlendpoint="http://api.volunteernow.ro";
-
-
-
+import { url_endpoint } from "./_config";
 import { uploadFile } from "./fileuploading";
 
 // functie pt login la users
 export async function getUsers() {
-    const url = urlendpoint+'/api/login?username&password';
+    const url = url_endpoint+'/api/login?username&password';
     const response = await fetch(url);
     const users = await response.json();
     return users;
@@ -14,7 +11,7 @@ export async function getUsers() {
 
 // functie pt creare de user:
 export async function createUser(username, password, gender, first_name, last_name, email) {
-    const url = urlendpoint+'/api/register';
+    const url = url_endpoint+'/api/register';
     const response = await fetch(url, {
         method: 'POST',
         headers: {
@@ -27,14 +24,14 @@ export async function createUser(username, password, gender, first_name, last_na
 }
 
 export async function eventGet(number) {
-    const url = urlendpoint+'/api/get_events?page';
+    const url = url_endpoint+'/api/get_events?page';
     const response = await fetch(url);
     const event = await response.json();
     return event;
 }
 
 export async function eventAdd(name, description, link_to_pfp, link_to_cover_image, edition, location, time) {
-    const url = urlendpoint+'/api/add_event';
+    const url = url_endpoint+'/api/add_event';
     const response = await fetch(url, {
         method: 'POST',
         headers: {
@@ -48,7 +45,7 @@ export async function eventAdd(name, description, link_to_pfp, link_to_cover_ima
 
 export async function addExperiences(name, description, location, time, file:Blob){
     const asset_hash = await uploadFile(file);
-    const url = urlendpoint+'/api/add_experience';
+    const url = url_endpoint+'/api/add_experience';
     const token="";
     const response = await fetch(url, {
         method: 'GET', 

@@ -1,3 +1,5 @@
+import { url_endpoint } from "./_config";
+
 export function uploadFile(fileToUpload : Blob) {
     return new Promise((resolve, reject) => {
         const method = 'post';
@@ -9,7 +11,7 @@ export function uploadFile(fileToUpload : Blob) {
         const data = new FormData();
         data.set("file", fileToUpload);
       
-        xhr.open(method, url);
+        xhr.open(method, url_endpoint + "/api/upload");
         xhr.send(data);
     });
 }
