@@ -94,7 +94,7 @@ const Tab = () => {
     const handleSecondImagePress = () => console.log('Second image pressed');
 
     return (
-        <View style={{ backgroundColor: '#ffffff' }}>
+        <View style={{ backgroundColor: '#ffffff', }}>
             <ScrollView style={{ backgroundColor: "#ffffff" }}>
             <View style={styles.bannerContainer}>
                 
@@ -169,17 +169,18 @@ const styles = StyleSheet.create({
     },
 
     bannerContainer: {
+        
+        borderWidth:3,
         flexDirection: 'row',
-        borderBottomWidth: 1,
+        // borderBottomWidth: 1,
         borderBottomColor: '#7211A2',
-        borderRightWidth: 1,
+        // borderRightWidth: 1,
         borderRightColor: '#7211A2',
-        borderLeftWidth: 1,
+        // borderLeftWidth: 1,
         borderLeftColor: '#7211A2',
         alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: 1,
-        height: 100,
+        justifyContent: 'space-evenly',
+        height: 110,
         backgroundColor: '#ffffff',
         borderBottomLeftRadius: 30,
         borderBottomRightRadius: 30,
@@ -187,9 +188,11 @@ const styles = StyleSheet.create({
 
     bannerImageContainer: {
         flexDirection: 'row', // Align images horizontally
-        justifyContent: 'center', // Center images horizontally
+        justifyContent: 'space-evenly', // Center images horizontally
         alignItems: 'center', // Center images vertically
         width: '100%',
+        // position: 'absolute',
+        // zIndex:,
       },
 
       bannerImage: {
@@ -197,24 +200,24 @@ const styles = StyleSheet.create({
         height: 100,
         resizeMode: 'contain',
         marginTop: 20,
-        marginHorizontal: 10, // Reduced space between images
       },
 
       bannerImage2: {
-        width: 35
+        width: 30
         , // Adjust this width to fit your design
-        height: 50,
+        height: 30,
         resizeMode: 'contain',
         marginTop: 20,
-        marginHorizontal: 43, // Reduced space between images
+        // marginHorizontal: 28, // Reduced space between images
+        
       },
 
       bannerImage3: {
-        width: 50, // Adjust this width to fit your design
-        height: 47,
+        width: 40, // Adjust this width to fit your design
+        height: 40,
         resizeMode: 'contain',
         marginTop: 20,
-        marginHorizontal: 35, // Reduced space between images
+        // marginHorizontal: 26, // Reduced space between images
       },
 
 
