@@ -7,7 +7,7 @@ import {
   SafeAreaInsetsContext,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
-
+import { search_event, search_organisers, search_volunteers } from '../get-post/search';
 
 
 const companies = events.map((x)=>(x));
@@ -55,9 +55,12 @@ const Tab = () => {
                 <View style = {styles.mainView}>
                     <SearchBar
                         placeholder="Search"
-                        onChangeText={(value:string) => {
+                        onChangeText={async (value: string) => {
                             setSearch(value);
-                            setResults(request(value));
+
+                            // Await the request function to get the actual results
+                            const results = await request(value); 
+                            setResults(results); // Set the resolved results
                         }}
                     />
                     <Text style = {[search ? {display:"none"} : {display:"flex"}, styles.exploreText]} >
@@ -140,21 +143,26 @@ const styles = StyleSheet.create({
     }
 }) 
 
-const request = (query: string) => {
-    const results = [];
-    const queryUpperCase = query.toUpperCase();
-    let uncheck: boolean;
-    let ncheck: boolean;
-    for(let company in companies) {
-        uncheck = true;
-        ncheck = true;
-        for(let i = 0; i<query.length; i++){
-            if(queryUpperCase[i]!=companies[company].name.toUpperCase()[i]) ncheck = false;   
-            if(queryUpperCase[i]!=companies[company].username.toUpperCase()[i]) uncheck = false;   
-        }
-        if(ncheck || uncheck) results.push(companies[company]);
+const request = async (query: string) => {
+    if (!query) return []; // Return empty array if search query is empty
+
+    try {
+        // Execute all search functions asynchronously
+        const [eventResults, organiserResults, volunteerResults] = await Promise.all([
+            search_event(query),
+            search_organisers(query),
+            search_volunteers(query)
+        ]);
+
+        // Combine the results (optional)
+        const combinedResults = [...eventResults, ...organiserResults, ...volunteerResults];
+        console.log(combinedResults);
+        return combinedResults;
+    } catch (error) {
+        console.error("Error fetching search results: ", error);
+        return [];
     }
-    return results;
-}
+};
+
 
 export default Tab;
