@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, TextInput, ScrollView, Pressable, Image, ImageBackground, Dimensions } from 'react-native';
+import { StyleSheet, View, Text, TextInput, ScrollView, Pressable, Image, ImageBackground, Dimensions, Keyboard } from 'react-native';
 import events from '../../data/events';
 import {
   SafeAreaView,
@@ -51,25 +51,27 @@ const Tab = () => {
 
     return(
         <View style = {{backgroundColor: "#ffffff"}}>
-            <SafeAreaView>
-                <View style = {styles.mainView}>
-                    <SearchBar
-                        placeholder="Search"
-                        onChangeText={(value:string) => {
-                            setSearch(value);
-                            setResults(request(value));
-                        }}
-                    />
-                    <Text style = {[search ? {display:"none"} : {display:"flex"}, styles.exploreText]} >
-                    Type something above to start searching for volunteering opportunities!
-                    </Text>
-                    <ScrollView style = {[!search ? {display:"none"} : {display:"flex"}, styles.resultsSection]} >
-                      {
-                        results.map((company) => <Result company = {company}/>)
-                      }
-                    </ScrollView>
-                </View>
-            </SafeAreaView>
+            <Pressable onPress={Keyboard.dismiss}>
+                <SafeAreaView>
+                    <View style = {styles.mainView}>
+                        <SearchBar
+                            placeholder="Search"
+                            onChangeText={(value:string) => {
+                                setSearch(value);
+                                setResults(request(value));
+                            }}
+                        />
+                        <Text style = {[search ? {display:"none"} : {display:"flex"}, styles.exploreText]} >
+                        Type something above to start searching for volunteering opportunities!
+                        </Text>
+                        <ScrollView style = {[!search ? {display:"none"} : {display:"flex"}, styles.resultsSection]} >
+                          {
+                            results.map((company) => <Result company = {company}/>)
+                          }
+                        </ScrollView>
+                    </View>
+                </SafeAreaView>
+            </Pressable>
         </View>
     )
 }
