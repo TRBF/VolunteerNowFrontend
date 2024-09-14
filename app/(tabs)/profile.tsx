@@ -3,7 +3,6 @@ import { ScrollView, StyleSheet, Image, Text, View, Pressable } from 'react-nati
 import ExperienceSection from './experiences';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Link, router } from 'expo-router';
-import { useRoute } from 'expo-router';
 
 export default function ProfileScreen() {
     let volunteerCount = 3;

@@ -37,7 +37,6 @@ function ExperienceSection({ experience }) {
     }
 
     function pressableClicked(){
-        console.log('eee')
         if(Keyboard.isVisible()) Keyboard.dismiss()
         else setVisible(!visible)
     }
