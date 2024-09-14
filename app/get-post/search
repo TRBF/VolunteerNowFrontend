@@ -1,0 +1,20 @@
+async function search_event() {
+    const url='http:localhost:3000/api/search_events/<search_term>'
+    const response = await fetch(url);
+    const result = await response.json();
+    return result;
+}
+
+async function search_organisers(){
+    const url='http:localhost:3000/api/search_organisers/<search_term>'
+    const response = await fetch(url);
+    const result = await response.json();
+    return result;
+}
+
+async function search_volunteers(){
+    const url='http:localhost:3000/api/serach_volunteers/<search_term>'
+    const response = await fetch(url);
+    const result = await response.json();
+    return result;
+}
