@@ -2,11 +2,12 @@ import { url_endpoint } from "./_config";
 import { uploadFile } from "./fileuploading";
 
 // functie pt login la users
-export async function getUsers() {
-    const url = url_endpoint+'/api/login?username&password';
+export async function login(username, password) {
+    const url = url_endpoint+`/api/login?username=${username}&password=${password}`;
     const response = await fetch(url);
-    const users = await response.json();
-    return users;
+    const result = await response.json();
+    console.log(result);
+    return result;
 }
 
 // functie pt creare de user:

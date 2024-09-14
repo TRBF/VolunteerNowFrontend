@@ -11,13 +11,12 @@ import {
   View,
 } from "react-native";
 import { StyleSheet } from "react-native";
+import { login } from "../get-post/add";
 
 export default function Login() {
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
 
-  const id = Number;
-  const token = String;
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -47,9 +46,7 @@ export default function Login() {
               placeholderTextColor="black"
             />
             <View style={styles.btnContainer}>
-              <Button title="Submit" onPress={(
-                
-              ) => null} />
+              <Button title="Submit" onPress={() => login(username, password)} />
             </View>
           </View>
         </View>
