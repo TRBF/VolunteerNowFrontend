@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, TextInput, ScrollView, Pressable, Image, Dimensions, SafeAreaView } from 'react-native';
+import { StyleSheet, View, Text, TextInput, ScrollView, Pressable, Image, ImageBackground, Dimensions, Keyboard } from 'react-native';
 import events from '../../data/events';
 
 const companies = events.map((x) => (x));
