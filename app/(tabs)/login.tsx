@@ -16,6 +16,8 @@ export default function Login() {
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
 
+  const id = Number;
+  const token = String;
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -25,7 +27,7 @@ export default function Login() {
         <View style={styles.mainView}>
           <Image
             style={styles.bgImage}
-            source={require("../assets/images/wave2.png")}
+            source={require("../../assets/images/wave2.png")}
           />
           <View style={styles.loginInfo}>
             <Text style={styles.loginText}>Login now</Text>
@@ -45,7 +47,9 @@ export default function Login() {
               placeholderTextColor="black"
             />
             <View style={styles.btnContainer}>
-              <Button title="Submit" onPress={() => null} />
+              <Button title="Submit" onPress={(
+                
+              ) => null} />
             </View>
           </View>
         </View>
@@ -58,6 +62,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     margin: 0,
+    backgroundColor: '#FFFFFF',
   },
 
   mainView: {
