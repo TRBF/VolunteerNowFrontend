@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, TextInput, ScrollView, Pressable, Image, ImageBackground, Dimensions, Keyboard, SafeAreaView } from 'react-native';
+import { StyleSheet, View, Text, TextInput, ScrollView, Pressable, Image, ImageBackground, Dimensions, Keyboard } from 'react-native';
 import events from '../../data/events';
 import {
   SafeAreaView,
@@ -52,23 +52,11 @@ const Tab = () => {
             <View style={styles.mainView}>
                 <SearchBar
                     placeholder="Search"
-                    onChangeText={(value) => {
+                    onChangeText={async (value) => {
                         setSearch(value);
-                        setResults(request(value));
+                        setResults(await request(value));
                     }}
                 />
-                <View style={styles.buttonContainer}>
-                    <Pressable style={styles.button} onPress={() => setOrganisersFilter(true)}>
-                        <Text style={[styles.topProfileButton, { backgroundColor: organisersFilter ? "#C981EC" : "#FBF2FF" }]}>
-                            Organisers
-                        </Text>
-                    </Pressable>
-                    <Pressable style={styles.button} onPress={() => setOrganisersFilter(false)}>
-                        <Text style={[styles.topProfileButton, { backgroundColor: !organisersFilter ? "#C981EC" : "#FBF2FF" },]}>
-                            Volunteers
-                        </Text>
-                    </Pressable>
-                </View>
 
                 <Text style={[search ? { display: "none" } : { display: "flex" }, styles.exploreText]}>
                     Type something above to start searching for volunteering opportunities!
