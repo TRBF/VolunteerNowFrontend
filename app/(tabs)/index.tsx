@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
-import { StyleSheet, Text, View, ScrollView, Pressable } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Pressable, Modal } from 'react-native';
 import { Image } from 'expo-image';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Entypo from '@expo/vector-icons/Entypo';
 import {useWindowDimensions} from 'react-native';
-import events from '../../data/events'; 
+import events from '../../data/events';
 import {
   SafeAreaView,
   SafeAreaProvider,
@@ -18,19 +18,28 @@ import { Link } from 'expo-router';
 function Post({postObject}:any){
     const [saveClicked, setSaveClicked] = useState(false);
     const [shareClicked, setShareClicked] = useState(false);
+    const [heartClicked, setHeartClicked] = useState(false);
+    const [commentClicked, setCommentClicked] = useState(false);
     const { height, width } = useWindowDimensions();
+
+    const usersComment = [
+        { pfp: "pfp1", username: "Darius", text: "Foarte Fain, imi place foarte mult aaaaaaaaaaaaaaaaaaaaaa" },
+        { pfp: "pfp2", username: "JonSnow", text: "Foarte Naspa lala lala lala lala lala lala" },
+        { pfp: "pfp3", username: "CineSunt", text: "Foarte Indiferent" },
+    ];
+
 
     const date = new Date(postObject.date)
     return(
-        //<View style = {[{backgroundColor: postObject.forProfit ? "white" : "#FBF2FF"}, styles.post]}> 
-        <View style = {[{marginBottom: height/(7*10)}, styles.post]}> 
+        //<View style = {[{backgroundColor: postObject.forProfit ? "white" : "#FBF2FF"}, styles.post]}>
+        <View style = {[{marginBottom: height/(7*10)}, styles.post]}>
             <View style = {{width: "12%", aspectRatio: 1, marginRight: "4%"}}>
                 <Link href={{
                     pathname: 'org/[username]',
                     params: { username: postObject.username },
                 }} asChild>
-                    <Pressable style = {{width: "100%", aspectRatio: 1}}> 
-                        <Image 
+                    <Pressable style = {{width: "100%", aspectRatio: 1}}>
+                        <Image
                           source = {{uri: postObject.profilePicture}}
                           style = {{height: "100%", borderRadius: 1000}}
                           contentFit = "cover"
@@ -44,8 +53,8 @@ function Post({postObject}:any){
             }} asChild>
                 <Pressable style = {{width: "100%", height: "100%"}}>
                     <View style = {styles.postInfo}>
-                        
-                        <View style = {styles.creationData}> 
+
+                        <View style = {styles.creationData}>
                             <View style = {styles.authorData}>
                                 <Link href={{pathname: 'org/[username]', params: { username: postObject.username }}} asChild>
                                 <Text style = {styles.authorName}>{postObject.name}</Text>
@@ -58,7 +67,7 @@ function Post({postObject}:any){
                         </View>
 
                         <Text style = {styles.postContent}>{postObject.content}</Text>
-                        
+
                         <View style = {{
                               width: "100%",
                               aspectRatio: 1,
@@ -67,8 +76,8 @@ function Post({postObject}:any){
                         }}>
                             <Image source = {postObject.imageLink} style = {styles.featureImage} contentFit = "cover"/>
                         </View>
-                        <View style = {styles.bottomSection}> 
-                        
+                        <View style = {styles.bottomSection}>
+
 
                             <View style = {styles.rightButtons}>
                             {/*
@@ -78,6 +87,38 @@ function Post({postObject}:any){
                                 <Pressable onPress = {() => setShareClicked(!shareClicked)}>
                                     <FontAwesome name={shareClicked ? 'send' : 'send-o'} style = {[{color: '#9394a5'}, styles.icon]}/>
                                 </Pressable>
+                                <Pressable onPress = {() => setHeartClicked(!heartClicked)}>
+                                    <FontAwesome name={heartClicked ? 'heart' : 'heart-o'} style = {[{color: '#9394a5'}, styles.icon]}/>
+                                </Pressable>
+                                <Pressable onPress = {() => setCommentClicked(!commentClicked)}>
+                                    <FontAwesome name={'comment-o'} style = {[{color: '#9394a5'}, styles.icon]}/>
+                                </Pressable>
+                                <Modal
+                                      animationType="slide"
+                                      visible={commentClicked}
+                                      onRequestClose={() => {
+                                          setVisible(!commentClicked);
+                                      }}>
+                                      <View style={styles.centeredView}>
+                                          <View style={styles.modalView}>
+                                              <Text style={styles.modalText}>Comments</Text>
+                                              <Pressable
+                                                  onPress={() => setCommentClicked(!commentClicked)}>
+                                                  <FontAwesome name={'close'} style = {[{color: '#9394a5'}, styles.icon]}/>
+                                              </Pressable>
+                                          </View>
+                                        <ScrollView>
+                                            {usersComment.map((comment, index) => (
+                                                <Comment
+                                                    key={index}
+                                                    pfp={comment.pfp}
+                                                    username={comment.username}
+                                                    text={comment.text}
+                                                />
+                                            ))}
+                                        </ScrollView>
+                                      </View>
+                                  </Modal>
                             </View>
 
                             <Text style = {styles.volunteersNeeded}>{postObject.volunteerCount} volunteers needed</Text>
@@ -88,6 +129,21 @@ function Post({postObject}:any){
             </Link>
         </View>
     )
+}
+
+const Comment = ({ pfp, username, text }) => {
+    return (
+        <View style={styles.commentContainer}>
+        <Image
+          source={{ uri: "https://via.placeholder.com/40x40/000000/000000" }}
+          style={{ width: 50, height: 50, borderRadius: 40 }}
+        />
+            <View style={{flexDirection: "column", paddingLeft: "3%"}}>
+                <Text style={{fontWeight: "semibold", color:"gray"}}>@{username}</Text>
+                <Text>{text}</Text>
+            </View>
+        </View>
+    );
 }
 
 const Tab = () => {
@@ -192,8 +248,67 @@ const styles = StyleSheet.create({
     },
 
     icon: {
-        fontSize: 16,
+        fontSize: 18,
     },
+modalOverlay: {
+        height: '100%',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    modalContainer: {
+        width: '90%',
+        backgroundColor: '#fff',
+        borderRadius: 10,
+        padding: 20,
+        alignItems: 'center',
+        justifyContent: 'center',
+
+    },
+    modalContent: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        width: '100%',
+    },
+    modalText: {
+        fontSize: 18,
+        marginRight: 20,
+    },
+    modalTextInput: {
+        borderRadius: 15,
+        borderColor: "gray",
+        borderWidth: 1,
+        },
+        modalView: {
+            flexDirection: "row",
+            marginHorizontal: 5,
+            marginVertical: 15,
+            justifyContent: "space-between",
+           backgroundColor: 'white',
+           alignItems: 'center',
+           shadowColor: '#000',
+        },
+        buttonOpen: {
+          backgroundColor: '#F194FF',
+        },
+        buttonClose: {
+          backgroundColor: '#2196F3',
+        },
+        textStyle: {
+          color: 'white',
+          fontWeight: 'bold',
+          textAlign: 'center',
+        },
+    commentContainer: {
+        flexDirection: "row",
+        marginHorizontal: 7,
+        marginVertical: 15,
+        borderRadius: 15,
+        padding: 5,
+        backgroundColor: "#FFFFFF",
+        borderColor: "gray",
+        }
 })
 
 export default Tab;

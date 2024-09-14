@@ -1,15 +1,21 @@
 import React, { useState } from 'react';
 import { ScrollView, StyleSheet, Image, Text, View, Pressable } from 'react-native';
 import ExperienceSection from './experiences';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { Link, router } from 'expo-router';
+import { useRoute } from 'expo-router';
 
 export default function ProfileScreen() {
     let volunteerCount = 3;
-    let dominantTag = 7;
+    let dominantTag = 8;
     let firstVolunteered = "12/03/23";
     let hours = "Untold";
     let name = "Mihnea";
+    let lastName = "Coman"
     let username = "tomoioaga";
     let description = "Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat. Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat. Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.";
+    let gender = "male";
+    let birthday = '08/07/2006'
 
     const experienceObject = {
         name: name,
@@ -18,13 +24,32 @@ export default function ProfileScreen() {
         description: description,
     }
 
+
     return (
         <View style={{ flex: 1, backgroundColor: "white"}}>
             <ScrollView style={{ flex: 1}}>
               <View style={styles.circlePfp}></View>
-                <View style={styles.profileTopSection }>
+                <View style={styles.profileTopSection}>
+                    <View style={{ flexDirection: "row", justifyContent: "flex-end", width: "100%" }}>
+                                <Link
+                                    href={{
+                                        pathname: 'pages/editProfile',
+                                        params: { username: username, name: name, description: description }
+                                    }}
+                                >
+                                    <FontAwesome name={'edit'} style={[{ color: '#9394a5'}, styles.icon]} />
+                                </Link>
+                                <View style={{paddingHorizontal: "2%"}}>
+                                    <Link href={{
+                                            pathname: 'pages/settingsUser'
+                                        }}
+                                    >
+                                        <FontAwesome name={'cog'} style={[{ color: '#9394a5' }, styles.icon]} />
+                                    </Link>
+                        </View>
+                    </View>
                     <View style={styles.containerPfp}>
-                        <Image source={require("../../assets/images/image.jpg")} style={styles.profilePicture} resizeMode='covRequirementer' />
+                        <Image source={require("../../assets/images/image.jpg")} style={styles.profilePicture} resizeMode='cover' />
                     </View>
                     {/* pfp + stats (no. of volunteers, dominant tag, volunteering since) */}
                     <View style={{ flexDirection: "row" }}>
@@ -50,17 +75,6 @@ export default function ProfileScreen() {
                         <Text style={styles.username}>@{username}</Text>
                     </View>
                     <Text style={styles.description}>{description}</Text>
-                </View>
-
-                <View style = {styles.profileButtonSection}>
-                    <Pressable style = {{width: "50%"}}>
-                        <Text style = {styles.topProfileButton}>Edit Profile</Text>
-                    </Pressable>
-                        {/* edit profile */}
-                    <Pressable style = {{width: "50%"}}>
-                        <Text style = {styles.topProfileButton}>Share profile</Text>
-                    </Pressable>
-                        {/* share profile */}
                 </View>
 
 
@@ -272,4 +286,8 @@ const styles = StyleSheet.create({
         marginTop: "2%",
         color: 'rgba(114, 17, 162, .8)',
     },
+    icon:{
+        fontSize: 20,
+        paddingHorizontal: '1%',
+        },
 })

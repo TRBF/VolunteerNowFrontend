@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Button, TouchableOpacity, Text, View, Pressable, TextInput, ScrollView, Image, Modal } from 'react-native';
+import { StyleSheet, Button, TouchableOpacity, Text, View, Pressable, TextInput, ScrollView, Image, Modal, KeyboardAvoidingView, Platform } from 'react-native';
 import {useWindowDimensions} from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import {
@@ -55,7 +55,7 @@ export default function DiplomasPastExperiencesScreen() {
     ];
 
     return (
-        <View style = {{backgroundColor: "#ffffff", flex: 1}}>
+        <View style = {{backgroundColor: "#ffffff"}}>
             <SafeAreaView style= {[styles.container, {overflow: 'visible'}]}>
                 <TextInput
                     placeholder="Search"
@@ -64,7 +64,7 @@ export default function DiplomasPastExperiencesScreen() {
                     style={styles.searchBar}
                 />
 
-                <View style={{ flex: 1, overflow: 'visible'}}>
+                <View style={{ flex: 1, overflow: 'visible', marginTop: 10}}>
                       <ScrollView>
                             {experienceObjects.map((object, index) => (
                                 (object.name.toLowerCase().startsWith(searchText.toLowerCase()) || searchText === "") ? (
@@ -202,7 +202,7 @@ const styles = StyleSheet.create({
         color: "#FFFFFF",
     },
     searchBar: {
-        height: "6%",
+        height: 40,
         borderRadius: 20,
         paddingLeft: 10,
         marginHorizontal: 10,

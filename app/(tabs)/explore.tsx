@@ -1,46 +1,36 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, TextInput, ScrollView, Pressable, Image, ImageBackground, Dimensions } from 'react-native';
+import { StyleSheet, View, Text, TextInput, ScrollView, Pressable, Image, Dimensions, SafeAreaView } from 'react-native';
 import events from '../../data/events';
-import {
-  SafeAreaView,
-  SafeAreaProvider,
-  SafeAreaInsetsContext,
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
 
+const companies = events.map((x) => (x));
 
-
-const companies = events.map((x)=>(x));
-
-function Result({company}:any){
-    return(
+function Result({ company }) {
+    return (
         <Pressable>
-            <View style = {styles.result}>
-                <Image source = {{uri: company.profilePicture}} style = {styles.resultPFP} resizeMode = "cover"/>
-                <View style = {styles.resultInfo}>
-                    <Text style = {styles.resultName}>{company.name}</Text>
-                    <Text style = {styles.resultUsername}>@{company.username}</Text>
+            <View style={styles.result}>
+                <Image source={{ uri: company.profilePicture }} style={styles.resultPFP} resizeMode="cover" />
+                <View style={styles.resultInfo}>
+                    <Text style={styles.resultName}>{company.name}</Text>
+                    <Text style={styles.resultUsername}>@{company.username}</Text>
                 </View>
             </View>
         </Pressable>
-    ) 
+    );
 }
 
-function SearchBar({placeholder, onChangeText}){
-
+function SearchBar({ placeholder, onChangeText }) {
     const [focus, setFocus] = useState(false);
 
-    return(
-        <TextInput 
-            onChangeText={(value) => {onChangeText(value)}}
+    return (
+        <TextInput
+            onChangeText={(value) => { onChangeText(value); }}
             onFocus={() => setFocus(true)}
             placeholder={placeholder}
-            style = {[{color: "white", backgroundColor: focus ? "6%" : "6%"}, styles.searchBar]}
-            selectionColor= "#C981EC"
+            style={[{ color: "white", backgroundColor: focus ? "#C981EC" : "#FBF2FF", marginTop: "10%" }, styles.searchBar]}
+            selectionColor="#C981EC"
         />
-    )
+    );
 }
-
 
 const Tab = () => {
     const [search, setSearch] = useState("");
@@ -49,48 +39,57 @@ const Tab = () => {
         username: "",
     }]);
 
-    return(
-        <View style = {{backgroundColor: "#ffffff"}}>
-            <SafeAreaView>
-                <View style = {styles.mainView}>
-                    <SearchBar
-                        placeholder="Search"
-                        onChangeText={(value:string) => {
-                            setSearch(value);
-                            setResults(request(value));
-                        }}
-                    />
-                    <Text style = {[search ? {display:"none"} : {display:"flex"}, styles.exploreText]} >
-                    Type something above to start searching for volunteering opportunities!
-                    </Text>
-                    <ScrollView style = {[!search ? {display:"none"} : {display:"flex"}, styles.resultsSection]} >
-                      {
-                        results.map((company) => <Result company = {company}/>)
-                      }
-                    </ScrollView>
+    const [organisersFilter, setOrganisersFilter] = useState(true)
+
+    return (
+        <SafeAreaView style={{ backgroundColor: "#ffffff", flex: 1 }}>
+            <View style={styles.mainView}>
+                <SearchBar
+                    placeholder="Search"
+                    onChangeText={(value) => {
+                        setSearch(value);
+                        setResults(request(value));
+                    }}
+                />
+                <View style={styles.buttonContainer}>
+                    <Pressable style={styles.button} onPress={() => setOrganisersFilter(true)}>
+                        <Text style={[styles.topProfileButton, { backgroundColor: organisersFilter ? "#C981EC" : "#FBF2FF" }]}>
+                            Organisers
+                        </Text>
+                    </Pressable>
+                    <Pressable style={styles.button} onPress={() => setOrganisersFilter(false)}>
+                        <Text style={[styles.topProfileButton, { backgroundColor: !organisersFilter ? "#C981EC" : "#FBF2FF" , textColor: "white"},]}>
+                            Volunteers
+                        </Text>
+                    </Pressable>
                 </View>
-            </SafeAreaView>
-        </View>
-    )
+
+                <Text style={[search ? { display: "none" } : { display: "flex" }, styles.exploreText]}>
+                    Type something above to start searching for volunteering opportunities!
+                </Text>
+                <ScrollView style={[!search ? { display: "none" } : { display: "flex" }, styles.resultsSection]}>
+                    {
+                        results.map((company, index) => <Result key={index} company={company} />)
+                    }
+                </ScrollView>
+            </View>
+        </SafeAreaView>
+    );
 }
 
 const styles = StyleSheet.create({
     mainView: {
-      backgroundColor: "white",
-    },
-    bg: {
-        position: "absolute",
-        height: "100%",
-        bottom: 0, 
+        backgroundColor: "white",
+        flex: 1,
+        padding: 10,
     },
     exploreText: {
         width: "100%",
-        height: "100%",
         textAlign: "center",
         paddingTop: "40%",
         paddingLeft: "10%",
         paddingRight: "10%",
-        fontSize: 18, 
+        fontSize: 18,
         fontWeight: "300",
     },
     profilePicture: {
@@ -98,22 +97,19 @@ const styles = StyleSheet.create({
         height: 100,
     },
     resultsSection: {
-        height: "100%",
+        flex: 1,
     },
     result: {
-        display: "flex",
-        width: "100%",
         flexDirection: "row",
         justifyContent: "flex-start",
-        paddingLeft: "5%",
-        paddingRight: "5%",
-        paddingTop: "2%",
-        paddingBottom: "2%",
+        padding: 10,
+        borderBottomWidth: 0.5,
+        borderBottomColor: "#ddd",
     },
     resultPFP: {
-        height: Dimensions.get('window').height/16,
-        width: Dimensions.get('window').height/16,
-        marginRight: "5%",
+        height: Dimensions.get('window').height / 16,
+        width: Dimensions.get('window').height / 16,
+        marginRight: 10,
         borderRadius: 50,
     },
     resultName: {
@@ -122,37 +118,51 @@ const styles = StyleSheet.create({
         fontSize: 15,
     },
     resultUsername: {
-      color: "#C981EC"
+        color: "#C981EC",
     },
     resultInfo: {
-
+        justifyContent: "center",
     },
     searchBar: {
         backgroundColor: "#FBF2FF",
         borderRadius: 30,
         width: "90%",
-        margin: "auto",
-        marginTop: "2%",
-        marginBottom: "2%",
-        padding: "2%",
-        paddingLeft: "5%",
+        alignSelf: "center",
+        marginVertical: 10,
+        padding: 10,
         color: "#7211A2",
-    }
-}) 
+    },
+    buttonContainer: {
+        flexDirection: "row",
+        justifyContent: "space-around",
+        width: "100%",
+        padding: 10,
+    },
+    button: {
+        width: "32%",
+    },
+    topProfileButton: {
+        width: "100%",
+        paddingVertical: 10,
+        textAlign: "center",
+        borderRadius: 15,
+        color: "#FFFFFF",
+        fontWeight: "400",
+    },
+});
 
-const request = (query: string) => {
+const request = (query) => {
     const results = [];
     const queryUpperCase = query.toUpperCase();
-    let uncheck: boolean;
-    let ncheck: boolean;
-    for(let company in companies) {
+    let uncheck, ncheck;
+    for (let company of companies) {
         uncheck = true;
         ncheck = true;
-        for(let i = 0; i<query.length; i++){
-            if(queryUpperCase[i]!=companies[company].name.toUpperCase()[i]) ncheck = false;   
-            if(queryUpperCase[i]!=companies[company].username.toUpperCase()[i]) uncheck = false;   
+        for (let i = 0; i < query.length; i++) {
+            if (queryUpperCase[i] !== company.name.toUpperCase()[i]) ncheck = false;
+            if (queryUpperCase[i] !== company.username.toUpperCase()[i]) uncheck = false;
         }
-        if(ncheck || uncheck) results.push(companies[company]);
+        if (ncheck || uncheck) results.push(company);
     }
     return results;
 }
