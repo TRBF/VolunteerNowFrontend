@@ -5,6 +5,8 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Entypo from '@expo/vector-icons/Entypo';
 import {useWindowDimensions} from 'react-native';
 
+
+// functie pt login la users
 async function getUsers() {
     const url = 'http://localhost:3000/api/login?username&password';
     const response = await fetch(url);
@@ -15,7 +17,7 @@ const users = await getUsers();
 
 
 
-
+// functie pt creare de user:
 async function createUser(user) {
     const url = 'http://localhost:3000/api/register';
     const response = await fetch(url, {
