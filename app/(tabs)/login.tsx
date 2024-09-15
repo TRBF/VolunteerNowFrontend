@@ -9,13 +9,41 @@ import {
   TextInput,
   TouchableWithoutFeedback,
   View,
+  ActivityIndicator 
 } from "react-native";
 import { StyleSheet } from "react-native";
-import { login } from "./get-post/add";
+import { login } from "../get-post/add";
 
 export default function Login() {
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [loading, setLoading] = React.useState(false); // To track the loading state
+
+  const handleLogin = async () => {
+    // Validate the inputs first
+    if (!username || !password) {
+      alert("Error, Please enter both username and password.");
+      return;
+    }
+
+    try {
+      setLoading(true); // Set loading to true
+      const result = await login(username, password);
+      
+      // Handle the response based on the result
+      if (result.success) {
+        alert("Success, Login successful!");
+        // Navigate to another screen if necessary
+      } else {
+        alert("Error, Login failed. Please check your credentials.");
+      }
+    } catch (error) {
+      alert("Error, An error occurred during login.");
+      console.error(error);
+    } finally {
+      setLoading(false); // Set loading to false regardless of success or failure
+    }
+  };
 
   return (
     <KeyboardAvoidingView
@@ -24,30 +52,37 @@ export default function Login() {
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.mainView}>
-          <Image
-            style={styles.bgImage}
-            source={require("../assets/images/wave2.png")}
-          />
           <View style={styles.loginInfo}>
             <Text style={styles.loginText}>Login now</Text>
             <TextInput
               value={username}
-              onChangeText={setUsername} 
+              onChangeText={setUsername}
               style={styles.inputText}
               placeholder="username"
               placeholderTextColor="black"
             />
             <TextInput
               value={password}
-              onChangeText={setPassword} 
+              onChangeText={setPassword}
               style={styles.inputText}
               placeholder="password"
               secureTextEntry={true}
               placeholderTextColor="black"
             />
-            <View style={styles.btnContainer}>
-              <Button title="Submit" onPress={() => login(username, password)} />
-            </View>
+
+            {/* Display loading spinner when loading */}
+            {loading ? (
+              <ActivityIndicator size="large" color="#0000ff" />
+            ) : (
+              <View style={styles.btnContainer}>
+                <Button title="Submit" onPress={handleLogin} />
+              </View>
+            )}
+            
+            <Image
+              style={styles.bgImage}
+              source={require("../../assets/images/wave2.png")}
+            />
           </View>
         </View>
       </TouchableWithoutFeedback>
