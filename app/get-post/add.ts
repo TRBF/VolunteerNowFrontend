@@ -10,6 +10,18 @@ export async function login(username, password) {
     return result;
 }
 
+export async function modify_Profile(username, first_name, last_name, description){
+    const url=url_endpoint+`/api/`;
+    const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({username: username, first_name: first_name, last_name: last_name})
+    });
+    const result=await response.json();
+    return result;
+}
 // functie pt creare de user:
 export async function createUser(username, password, gender, first_name, last_name, email, birthday) {
     const url = url_endpoint+'/api/register';

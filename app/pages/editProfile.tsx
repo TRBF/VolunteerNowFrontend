@@ -1,11 +1,10 @@
-import { useParams } from 'expo-router';
 import React, { useState, useEffect } from 'react';
 import { ScrollView, StyleSheet, Text, View, TextInput, Pressable, Image, SafeAreaView, Platform, StatusBar } from 'react-native';
 import { useNavigation, useRouter, useLocalSearchParams } from "expo-router";
 import { useWindowDimensions } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import * as DocumentPicker from 'expo-document-picker';
-
+import {modify_Profile} from '../get-post/add'
 
 export default function EditProfileScreen() {
     const navigation = useNavigation();
@@ -65,7 +64,7 @@ export default function EditProfileScreen() {
                 </ScrollView>
 
                 <View style={styles.buttonContainer}>
-                    <Pressable style={styles.button}>
+                    <Pressable style={styles.button} onPress={()=>{modify_Profile(username, firstName, secondName, description)}}>
                         <Text style={styles.topProfileButton}>Save</Text>
                     </Pressable>
                 </View>
