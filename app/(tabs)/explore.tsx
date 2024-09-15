@@ -14,7 +14,7 @@ function Result({ company }) {
             <View style={styles.result}>
                 <Image source={ company.LinkToPFP ? { uri: company.LinkToPFP } : null } style={ styles.resultPFP } resizeMode="cover" />
                 <View style={ styles.resultInfo }>
-                    <Text style={ styles.resultName }>{ !company.Name ? company.FirstName+company.LastName : company.Name }</Text>
+                    <Text style={ styles.resultName }>{ !company.Name ? company.FirstName + " " + company.LastName : company.Name }</Text>
                     { company.Username && <Text style={ styles.resultUsername }>@{ company.Username }</Text> }
                 </View>
             </View>
