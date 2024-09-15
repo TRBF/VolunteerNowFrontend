@@ -1,60 +1,36 @@
 import React, { useState } from 'react';
-import { ScrollView, StyleSheet, Image, Text, View, Pressable, KeyboardAvoidingView, Modal, Keyboard } from 'react-native';
+import { ScrollView, StyleSheet, Image, Text, View, Pressable, SafeAreaView, Platform, StatusBar } from 'react-native';
+import ExperienceSection from './experiences';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import Ionicons from '@expo/vector-icons/Ionicons';
-import Entypo from '@expo/vector-icons/Entypo';
 import { Link, router } from 'expo-router';
+import { useRoute } from 'expo-router';
 import { useWindowDimensions } from 'react-native';
-import {
-  SafeAreaView,
-  SafeAreaProvider,
-  SafeAreaInsetsContext,
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { differenceInYears } from 'date-fns';
 
-function ExperienceSection({ experience }) {
-    const { height, width } = useWindowDimensions();
-    const [visible, setVisible] = useState(true);
 
-    return (
-           <View style={styles.experienceSection}>
-               <View style={{flexDirection: "column", alignItems: "baseline"}}>
-                   <Image source={require("../../assets/images/image.jpg")} resizeMode='cover' style={[styles.experienceImage, {
-                       height: height / 12,
-                       width: height / 12,
-                   }]} />
-                   <Text style={styles.experienceDate}>{experience.experienceStartDate}</Text>
-                   <Text style={styles.experienceDate}>{experience.hours} hours</Text>
-               </View>
-
-               <View style={{ width: "76%" }}>
-                   <View style={styles.experienceIdentifiers}>
-                       <Text style={styles.experienceName}>{experience.name}</Text>
-                       <Text style={styles.experienceUsername}>@{experience.username}</Text>
-                   </View>
-                   <Text style={styles.experienceDescription}>{experience.description}</Text>
-               </View>
-           </View>
-    );
-}
 
 export default function ProfileScreen() {
     let volunteerCount = 3;
     let dominantTag = 8;
     let firstVolunteered = "12/03/23";
     let hours = "Untold";
-    let firstName = "Mihnea";
-    let secondName = "Tomoiaga";
-    let lastName = "Coman"
+    let name = "Mihnea";
+    let lastName = "Bobo"
     let username = "tomoioaga";
     let description = "Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat. Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat. Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.";
     let gender = "male";
     let birthday = '08/07/2006'
+
+    const startDate = new Date('2006-07-08');
+    const endDate = new Date();
+    const yearsDifference = differenceInYears(endDate, startDate);
+
     const { height, width } = useWindowDimensions();
 
+
     const experienceObject = {
-        firstName: firstName,
-        secondName: secondName,
+        name: name,
         username: username,
         firstVolunteered: firstVolunteered,
         description: description,
@@ -62,95 +38,88 @@ export default function ProfileScreen() {
 
 
     return (
-        <View style={{ flex: 1, backgroundColor: "white"}}>
-            <SafeAreaView style = {{ flex:1 }}>
-                <ScrollView style = {{ flex: 1}}>
-                  <View style = {[{height: height/100*7}, styles.header]}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: "white"}}>
+          <View style = {[{height: height/100*10}, styles.header]}>
+              <Link href={{
+                        pathname: 'pages/settingsUser'
+                    }}
+                >
+                    <FontAwesome name={'cog'} style={[{ color: '#9394a5' }, styles.icon]} />
+                </Link>
+              <Text style = { styles.headerTitle }>@{ username }</Text>
+                  <View style={{ flexDirection: "row", justifyContent: "flex-end"}}>
                       <Link
                           href={{
                               pathname: 'pages/editProfile',
-                              params: { username: username, firstName: firstName, secondName: secondName, description: description }
-                          }}>
+                              params: { username: username, name: name, description: description }
+                          }}
+                      >
                           <FontAwesome name={'edit'} style={[{ color: '#9394a5'}, styles.icon]} />
                       </Link>
-                      <Text style = { styles.headerTitle }>{ username }</Text>
-                          <Link href={{
-                                  pathname: 'pages/settingsUser'
-                              }}>
-                              <FontAwesome name={'cog'} style={[{ color: '#9394a5' }, styles.icon]} />
-                          </Link>
                   </View>
-                  <View style={styles.purpleBlock}></View>
-                    <View style={styles.profileTopSection}>
-                        <View style={styles.containerPfp}>
-                            <Image source={require("../../assets/images/image.jpg")} style={styles.profilePicture} resizeMode='cover' />
-                        </View>
-                        {/* pfp + stats (no. of volunteers, dominant tag, volunteering since) */}
-                        <View style={{ flexDirection: "row" }}>
-                            <View style={styles.profileStatsSection}>
-                                <View style={styles.profileStatsSubsection}>
-                                    <Text style={styles.profileStatsSubsectionText}>{volunteerCount}</Text>
-                                    <Text style={styles.profileStatsSubsectionTextV2}>participations</Text>
-                                </View>
-                                <View style={styles.profileStatsSubsection}>
-                                    <Text style={styles.profileStatsSubsectionText}>{dominantTag}</Text>
-                                    <Text style={styles.profileStatsSubsectionTextV2}>diplomas</Text>
-                                </View>
-                                <View style={styles.profileStatsSubsection}>
-                                    <Text style={styles.profileStatsSubsectionText}>{hours}</Text>
-                                    <Text style={styles.profileStatsSubsectionTextV2}>most frequented</Text>
-                                </View>
+          </View>
+            <ScrollView style={{ flex: 1}}>
+              <View style={styles.circlePfp}></View>
+                <View style={styles.profileTopSection}>
+                    <View style={styles.containerPfp}>
+                        <Image source={require("../../assets/images/image.jpg")} style={styles.profilePicture} resizeMode='cover' />
+                    </View>
+                    {/* pfp + stats (no. of volunteers, dominant tag, volunteering since) */}
+                    <View style={{ flexDirection: "row" }}>
+                        <View style={styles.profileStatsSection}>
+                            <View style={styles.profileStatsSubsection}>
+                                <Text style={styles.profileStatsSubsectionText}>{volunteerCount}</Text>
+                                <Text style={styles.profileStatsSubsectionTextV2}>participations</Text>
+                            </View>
+                            <View style={styles.profileStatsSubsection}>
+                                <Text style={styles.profileStatsSubsectionText}>{dominantTag}</Text>
+                                <Text style={styles.profileStatsSubsectionTextV2}>diplomas</Text>
+                            </View>
+                            <View style={styles.profileStatsSubsection}>
+                                <Text style={styles.profileStatsSubsectionText}>{hours}</Text>
+                                <Text style={styles.profileStatsSubsectionTextV2}>most frequented</Text>
                             </View>
                         </View>
                     </View>
-                    <KeyboardAvoidingView style={styles.profileInfoSection}>
-                        <View style={styles.identifiers}>
-                            <Text style={styles.name}>{firstName}</Text>
-                            <Text style={styles.name}>{secondName}</Text>
+                </View>
+                <View style={styles.profileInfoSection}>
+                    <View style={styles.identifiers}>
+                        <Text style={styles.name}>{name}</Text>
+                        <Text style={styles.name}>{lastName}</Text>
+                    </View>
+                    <Text style={styles.description}>{description}</Text>
+                </View>
+
+                <View style={{ flexDirection: "row", justifyContent: 'space-around', alignItems: 'space-around', paddingTop: "10%" }}>
+                        <View style={styles.profileStatsSection}>
+                            <View style={styles.profileStatsSubsection}>
+                                <Text style={styles.profileStatsSubsectionTextV4}>Age</Text>
+                                <Text style={styles.profileStatsSubsectionTextV3}>{yearsDifference}</Text>
+                            </View>
+                            <View style={styles.profileStatsSubsection}>
+                                <Text style={styles.profileStatsSubsectionTextV4}>Gender</Text>
+                                <Text style={styles.profileStatsSubsectionTextV3}>{gender}</Text>
+                            </View>
                         </View>
-                        <Text style={styles.description}>{description}</Text>
-                    </KeyboardAvoidingView>
-                        <ExperienceSection experience={experienceObject} />
-                    <Pressable>
-                        <Text style={styles.seeAllText}>See all</Text>
-                    </Pressable>
-                </ScrollView>
-            </SafeAreaView>
-        </View>
+                    </View>
+
+
+                {/* make them some kind of tabs */}
+                <Text style={styles.recentEventText}>Most recent event</Text>
+                <ExperienceSection experience={experienceObject} />
+                <Pressable>
+                    <Text style={styles.seeAllText}>See all</Text>
+                </Pressable>
+            </ScrollView>
+        </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
-  header: {
-        width: "100%",
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-        paddingLeft: "4%",
-        paddingRight: "6%",
-        backgroundColor: "#ffffff",
-    },
-    headerTitle: {
-        fontSize: 16,
-        fontWeight: "bold",
-    },
-    backIcon: {
-        fontSize: 30,
-    },
-    settingsIcon: {
-
-    },
-    purpleBlock: {
-        width: "100%",
-        height: 100,
-        backgroundColor: "rgba(114, 17, 162, .7)",
-        marginBottom: -100,
-    },
     profileStatsSection: {
         display: "flex",
         flexDirection: "row",
-        justifyContent: "space-between",
+        justifyContent: "space-around",
         alignItems: "center",
         width: "100%",
     },
@@ -158,8 +127,6 @@ const styles = StyleSheet.create({
         display: "flex",
         flexDirection: "column",
         width: "33%",
-        justifyContent: "flex-start",
-        alignSelf: "flex-start",
         marginBottom: "5%",
     },
     profileStatsSubsectionText: {
@@ -176,6 +143,20 @@ const styles = StyleSheet.create({
         textAlign: "center",
         flexWrap: "wrap",
     },
+    profileStatsSubsectionTextV3: {
+        color: "#000000",
+        fontWeight: "800",
+        fontSize: 14,
+        textAlign: "center",
+        flexWrap: "wrap",
+    },
+    profileStatsSubsectionTextV4: {
+        color: 'rgba(114, 17, 162, .7)',
+        fontWeight: "600",
+        fontSize: 20,
+        textAlign: "center",
+        flexWrap: "wrap",
+    },
     profilePicture: {
         height: 125,
         width: 125,
@@ -183,6 +164,14 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         marginBottom: "5%",
+    },
+    circlePfp: {
+        backgroundColor: 'rgba(114, 17, 162, .7)',
+        width: "100%",
+        position: "absolute",
+        height: 100,
+        top: 0,
+        left: 0,
     },
     containerPfp: {
         shadowColor: "#000000",
@@ -267,6 +256,9 @@ const styles = StyleSheet.create({
         fontWeight: "600",
         marginRight: "2%",
     },
+    username: {
+        color: "#9394a5",
+    },
     description: {
         color: "#000000"
     },
@@ -276,6 +268,30 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         width: "100%",
         marginTop: "5%",
+    },
+    experienceSection: {
+        display: "flex",
+        flexDirection: "row",
+        width: "100%",
+        padding: "5%",
+        borderTopWidth: 0.2,
+        borderBottomWidth: 0.2,
+    },
+    experienceImage: {
+        borderRadius: 10,
+        marginRight: "5%",
+    },
+    experienceName: {
+        color: "#000000",
+    },
+    experienceUsername: {
+        color: "#9394a5",
+    },
+    experienceDate: {
+        color: "#000000",
+    },
+    experienceDescription: {
+        color: "#000000",
     },
     experienceIdentifiers: {
         display: "flex",
@@ -297,7 +313,6 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: "semibold",
         marginLeft: "3%",
-        marginTop: "5%"
     },
     seeAllText: {
         fontWeight: "800",
@@ -307,47 +322,25 @@ const styles = StyleSheet.create({
         color: 'rgba(114, 17, 162, .8)',
     },
     icon:{
-        fontSize: 25,
+        fontSize: 20,
         paddingHorizontal: '1%',
-    },
-    experienceSection: {
-        display: "flex",
-        flexDirection: "row",
-        width: "96%",
-        padding: "3%",
-        marginTop: "5%",
-        marginHorizontal: "2%",
-        borderRadius: 15,
-        backgroundColor: "#FFFFFF",
-        shadowColor: '#0000000',
-        shadowOffset: { width: 2, height: 2 },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 5,
-        zIndex: 1,
-    },
-    experienceImage: {
-        borderRadius: 10,
-        marginRight: "5%",
-    },
-    experienceName: {
-        color: "#000000",
-    },
-    experienceUsername: {
-        color: "#9394a5",
-    },
-    experienceDate: {
-        color: "#9394a5",
-        fontSize: 12,
-    },
-    experienceDescription: {
-        color: "#000000",
-    },
-    experienceIdentifiers: {
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
-        width: "80%",
-        marginBottom: "2%",
-    },
+        },
+        header: {
+            width: "100%",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            paddingLeft: "4%",
+            paddingRight: "6%",
+            backgroundColor: "#ffffff",
+            paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0, // Adjusts for the status bar on Android
+        },
+        headerTitle: {
+            fontSize: 16,
+            fontWeight: "bold",
+            paddingLeft: "3%",
+        },
+        backIcon: {
+            fontSize: 30,
+        },
 })
