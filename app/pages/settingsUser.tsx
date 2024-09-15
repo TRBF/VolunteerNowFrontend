@@ -24,7 +24,7 @@ export default function SettingsUserScreen(){
         <SafeAreaView>
             <View style={[styles.header, { height: height / 100 * 12 }]}>
                 <Pressable onPress={() => { router.back() }}>
-                    <Ionicons name='chevron/ujvv -back' style={Object.assign({ color: "#9394a5" }, styles.backIcon)} />
+                    <Ionicons name='chevron-back' style={Object.assign({ color: "#9394a5" }, styles.backIcon)} />
                 </Pressable>
                 <Text style={styles.headerTitle}>Settings</Text>
             </View>

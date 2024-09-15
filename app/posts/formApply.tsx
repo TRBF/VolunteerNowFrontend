@@ -51,6 +51,9 @@ export default function FormApply() {
                         answers={answers}
                     />
                 ))}
+                <Pressable style={{alignItems: "center", marginTop:"10%"}} onPress={() => {router.back()}}>
+                    <Text style={{color: "#C981EC", fontSize: 16, fontWeight: "bold"}}>Apply</Text>
+                </Pressable>
             </ScrollView>
         </SafeAreaView>
     );
