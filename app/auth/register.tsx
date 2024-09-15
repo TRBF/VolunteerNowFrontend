@@ -169,6 +169,8 @@ export default function Register() {
                         date={date}
                         onConfirm={onConfirmSingle}
                         presentationStyle='pageSheet'
+                        startYear={(new Date()).getFullYear()-100}
+                        endYear={(new Date()).getFullYear()}
                       />
                     </View>
                   </View>
