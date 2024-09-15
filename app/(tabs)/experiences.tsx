@@ -14,9 +14,10 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import * as DocumentPicker from 'expo-document-picker';
-import { get_event, getExperiences } from '../get-post/add';
+import { deleteExperience, get_event, getExperiences } from '../get-post/add';
 import { getAccountId } from '../get-post/_account';
 import { url_endpoint } from '../get-post/_config';
+import { router } from 'expo-router';
 
 function ExperienceSection({ experience }) {
     const { height, width } = useWindowDimensions();
@@ -46,10 +47,12 @@ function ExperienceSection({ experience }) {
     }
 
     function getDocument(){
-        DocumentPicker.getDocumentAsync({type: "image/*"}).then(result => {
-            console.log(result);
+        DocumentPicker.getDocumentAsync({type: "image/*", multiple: false}).then(result => {
+            console.log(result.assets[0].file);
         })
     }
+
+    const [confirmDelete, setConfirmDelete] = useState(false);
 
     return (
         <Pressable onPress={() => {pressableClicked()}}>
@@ -124,8 +127,8 @@ function ExperienceSection({ experience }) {
                                 />
                             </View>
                             <View style = {{width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-evenly"}}>
-                            <Pressable style = {styles.deleteButton}>
-                                <Text style = {{color: "white"}}>Delete</Text>
+                            <Pressable style = {styles.deleteButton} onPress={()=>{if(!confirmDelete) setConfirmDelete(true); else {deleteExperience(experience.id); setVisible(false);}}}>
+                                <Text style = {{color: "white"}}>{confirmDelete ? "Confirm" : "Delete"}</Text>
                             </Pressable>
                             <Pressable style = {styles.submitButton}>
                                 <Text style = {{color: "white"}}>Done</Text>
@@ -168,11 +171,11 @@ export default function DiplomasPastExperiencesScreen() {
                     setExperiences([]);
                     for (const experience of result.result) {
                         if(experience.EventID == null) {
-                            setExperiences([...experiences, {name: experience.Name, description: experience.Description, username: experience.Location, days: experience.Days, diploma: experience.Diploma}]);
+                            setExperiences([...experiences, {id: experience.ID, name: experience.Name, description: experience.Description, username: experience.Location, days: experience.Days, diploma: experience.Diploma}]);
                         } else {
                             get_event(experience.EventID).then(res => {
                                 if(res.success)
-                                    setExperiences([...experiences, {name: res.result.Name, description: res.result.Description, username: experience.Location, days: experience.Days, diploma: res.result.LinkToPFP}]);
+                                    setExperiences([...experiences, {id: experience.ID, name: res.result.Name, description: res.result.Description, username: experience.Location, days: experience.Days, diploma: res.result.LinkToPFP}]);
                             });
                         }
                     }

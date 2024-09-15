@@ -102,3 +102,13 @@ export async function getExperiences(userid) {
     const response = await fetch(url);
     return await response.json();
 }
+
+export async function deleteExperience(expid) {
+    const url = url_endpoint + `/api/delete_experience/${expid}`;
+    const response = await fetch(url, {
+        headers: {
+            'Authorization': await getAccountToken()
+        }
+    });
+    return await response.json();
+}
