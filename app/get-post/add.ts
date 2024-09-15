@@ -11,8 +11,7 @@ export async function login(username, password) {
     console.log(result);
     return result;
 }
-
-export async function modify_Profile(username, first_name, last_name, description){
+export async function get_profile(profile_id) {
     if(!isLoggedIn())
         return;
     console.log("Hello World!");
@@ -23,12 +22,27 @@ export async function modify_Profile(username, first_name, last_name, descriptio
             'Content-Type': 'application/json',
             'Authorization': await getAccountToken()
         },
-        body: JSON.stringify({Username: username, FirstName: first_name, LastName: last_name})
+        body: JSON.stringify({Username: username, FirstName: first_name, LastName: last_name, Description: description})
     });
     console.log("wait")
     console.log(response);
     const result=await response.json();
     console.log(result);
+    return result;
+}
+export async function modify_Profile(username, first_name, last_name, description){
+    if(!isLoggedIn())
+        return;
+    const url=url_endpoint+`/api/modify_profile`;
+    const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': await getAccountToken()
+        },
+        body: JSON.stringify({Username: username, FirstName: first_name, LastName: last_name, Description: description})
+    });
+    const result=await response.json();
     return result;
 }
 // functie pt creare de user:
