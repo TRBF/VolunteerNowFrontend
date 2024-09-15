@@ -43,14 +43,16 @@ export async function modify_Profile(username, first_name, last_name, descriptio
     return result;
 }
 // functie pt creare de user:
-export async function createUser(username, password, gender, first_name, last_name, email, birthday) {
+export async function signUp(username, password, email, first_name, last_name, gender, birthday) {
     const url = url_endpoint+'/api/register';
     const response = await fetch(url, {
         method: 'POST',
         headers: {
         'Content-Type': 'application/json',
         },
-        body: JSON.stringify({username: username, password: password, gender: gender, first_name: first_name, last_name: last_name, email: email, birthday: birthday}),
+        body: JSON.stringify({username: username, password: password,
+            email: email, first_name: first_name, last_name: last_name, 
+            gender: gender, birthday: birthday}),
     });
     const newUser = await response.json();
     return newUser;
