@@ -36,9 +36,8 @@ export default function ProfileScreen() {
         });
     }, []);
 
-    const startDate = new Date('2006-07-08');
     const endDate = new Date();
-    const yearsDifference = differenceInYears(endDate, startDate);
+    const yearsDifference = differenceInYears(endDate, birthday);
 
     const { height, width } = useWindowDimensions();
 
