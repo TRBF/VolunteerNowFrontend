@@ -119,7 +119,7 @@ export default function EditProfileScreen() {
                     </View>
 
                     <View style={styles.buttonContainer}>
-                        <Pressable style={styles.button} onPress={async () => { await modify_Profile(username, firstName, secondName, description, country); router.back() }}>
+                        <Pressable style={styles.button} onPress={async () => { await modify_Profile(username, firstName, secondName, description, country); router.back(), alert("Ai dat save deja homalaule") }}>
                             <Text style={styles.topProfileButton}>Save</Text>
                         </Pressable>
                     </View>
