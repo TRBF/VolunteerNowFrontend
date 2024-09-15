@@ -63,7 +63,7 @@ export default function Register() {
     navigation.setOptions({ headerShown: false });
   }, [navigation]);
 
-  const [date, setDate] = React.useState(undefined);
+  const [date, setDate] = React.useState(new Date());
   const [open, setOpen] = React.useState(false);
 
   const onDismissSingle = React.useCallback(() => {
@@ -180,7 +180,10 @@ export default function Register() {
             </View>
 
             <View style={styles.btnSubmitView}>
-              <Pressable onPress={()=>{signUp(username, password, email, fname, lname, country, date), alert("I was press nigga")}}>
+              <Pressable onPress={()=>{signUp(username, password, email, fname, lname, country == "1" ? "Male" : (country == "2" ? "Female" : "Other"), Math.floor(date.getTime() / 1000) + 1).then(result => {
+                if(result.success) router.back();
+                else alert("Error signing up: " + result.error);
+              })}}>
                 <Text style={styles.btnSubmitText}>Register</Text>
               </Pressable>
             </View>

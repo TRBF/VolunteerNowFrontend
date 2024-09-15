@@ -31,12 +31,13 @@ export default function ProfileScreen() {
                 setUsername(profile.result.Username);
                 setDescription(profile.result.Description);
                 setGender(profile.result.Gender);
-                setBirthday(new Date(profile.result.BirthDay * 1000));
+                setBirthday(new Date(profile.result.Birthday * 1000));
             }
         });
     }, []);
 
     const endDate = new Date();
+    console.log(birthday);
     const yearsDifference = differenceInYears(endDate, birthday);
 
     const { height, width } = useWindowDimensions();
