@@ -1,3 +1,4 @@
+import {signUp} from '../get-post/add'
 import React, { useEffect, useState } from "react";
 import { SelectCountry } from "react-native-element-dropdown";
 import {
@@ -179,7 +180,7 @@ export default function Register() {
             </View>
 
             <View style={styles.btnSubmitView}>
-              <Pressable>
+              <Pressable onPress={()=>{signUp(username, password, email, fname, lname, country, date), alert("I was press nigga")}}>
                 <Text style={styles.btnSubmitText}>Register</Text>
               </Pressable>
             </View>
