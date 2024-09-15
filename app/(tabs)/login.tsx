@@ -155,11 +155,12 @@ const styles = StyleSheet.create({
   inputText: {
     borderWidth: 1,
     width: "90%",
-    height: 50,
+    height: 40,
     padding: 5,
     margin: 20,
     marginRight: 0,
-    borderRadius: 5,
+    borderRadius: 10,
+    borderColor: "#460069",
     color: "black",
   },
 
