@@ -11,7 +11,7 @@ export default function EditProfileScreen() {
     const navigation = useNavigation();
     const router = useRouter();
     const params = useLocalSearchParams();
-    const { usernameH, firstNameH, secondNameH, descriptionH } = params;
+    const { usernameH, firstNameH, secondNameH, descriptionH, genderH, passwordH } = params;
     useEffect(() => {
         navigation.setOptions({ headerShown: false });
     }, [navigation]);
@@ -22,6 +22,8 @@ export default function EditProfileScreen() {
     const [firstName, setFirstName] = useState(firstNameH)
     const [secondName, setSecondName] = useState(secondNameH)
     const [description, setDescription] = useState(descriptionH)
+    const [gender, setGender]=useState(genderH)
+    const [password, setPassword]=useState(passwordH)
 
     function getDocument(){
         DocumentPicker.getDocumentAsync({type: "image/*", multiple: false}).then(result => {
@@ -67,10 +69,13 @@ export default function EditProfileScreen() {
                             <EditBar value={username} setValue={setUsername} title={"Username"} />
                         </View>
                         <EditBar value={description} setValue={setDescription} title={"Description"} numberOfLines={6} />
+                        <View style={styles.editContainer}>
+                            <EditBar value={gender} setValue={setGender} title={"Gender"} />
+                        </View>
                     </View>
 
                     <View style={styles.buttonContainer}>
-                        <Pressable style={styles.button} onPress={async () => { await modify_Profile(username, firstName, secondName, description); router.back() }}>
+                        <Pressable style={styles.button} onPress={async () => { await modify_Profile(username, firstName, secondName, description, gender, password); router.back() }}>
                             <Text style={styles.topProfileButton}>Save</Text>
                         </Pressable>
                     </View>
