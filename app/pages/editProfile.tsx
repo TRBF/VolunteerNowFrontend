@@ -5,6 +5,7 @@ import { useWindowDimensions } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import * as DocumentPicker from 'expo-document-picker';
 import {modify_Profile} from '../get-post/add'
+import { lastDayOfMonth } from 'date-fns';
 
 export default function EditProfileScreen() {
     const navigation = useNavigation();
@@ -69,7 +70,7 @@ export default function EditProfileScreen() {
                     </View>
 
                     <View style={styles.buttonContainer}>
-                        <Pressable style={styles.button} onPress={() => { router.back() }}>
+                        <Pressable style={styles.button} onPress={async () => { await modify_Profile(username, firstName, secondName, description); router.back() }}>
                             <Text style={styles.topProfileButton}>Save</Text>
                         </Pressable>
                     </View>

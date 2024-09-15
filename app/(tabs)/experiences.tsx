@@ -24,7 +24,7 @@ function ExperienceSection({ experience }) {
     const [nameText, setNameText] = useState(experience.name);
     const [organiserText, setOrganiserText] = useState(experience.username);
     const [descriptionText, setDescriptionText] = useState(experience.description);
-    const [diplomaHash, setDiplomaHash] = useState("");
+    const [diplomaHash, setDiplomaHash] = useState(experience.diploma);
     const [startDate, setStartDate] = useState("")
     const [endDate, setEndDate] = useState("")
     const [visible, setVisible] = useState(false);
