@@ -51,7 +51,7 @@ export default function ProfileScreen() {
                       <Link
                           href={{
                               pathname: 'pages/editProfile',
-                              params: { username: username, name: name, description: description }
+                              params: { usernameH: username, firstNameH: name, secondNameH: lastName, descriptionH: description }
                           }}
                       >
                           <FontAwesome name={'edit'} style={[{ color: '#9394a5'}, styles.icon]} />

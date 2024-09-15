@@ -4,17 +4,30 @@ import { ScrollView, StyleSheet, Text, View, TextInput, Pressable, Image, SafeAr
 import { useNavigation, useRouter, useLocalSearchParams } from "expo-router";
 import { useWindowDimensions } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import * as DocumentPicker from 'expo-document-picker';
+
 
 export default function EditProfileScreen() {
     const navigation = useNavigation();
     const router = useRouter();
     const params = useLocalSearchParams();
-    const { username, firstName, secondName, description } = params;
+    const { usernameH, firstNameH, secondNameH, descriptionH } = params;
     useEffect(() => {
         navigation.setOptions({ headerShown: false });
     }, [navigation]);
 
     const { height, width } = useWindowDimensions();
+
+    const [username, setUsername] = useState(usernameH)
+    const [firstName, setFirstName] = useState(firstNameH)
+    const [secondName, setSecondName] = useState(secondNameH)
+    const [description, setDescription] = useState(descriptionH)
+
+
+
+    function getDocument(){
+        DocumentPicker.getDocumentAsync({type: "image/*"})
+    }
 
     return (
         <SafeAreaView style={{flex: 1}}>
@@ -30,7 +43,7 @@ export default function EditProfileScreen() {
                         source={{ uri: 'https://via.placeholder.com/150' }}
                         style={styles.profileImage}
                     />
-                    <Pressable>
+                    <Pressable onPress= {() => {getDocument()}}>
                         <Text style={styles.modifyButtonText}>Change Profile Image</Text>
                     </Pressable>
                 </View>
@@ -38,17 +51,17 @@ export default function EditProfileScreen() {
                 <ScrollView contentContainerStyle={styles.container}>
                     <View style={styles.nameRow}>
                         <View style={styles.nameField}>
-                            <EditBar placeholder={firstName} title={"First Name"} />
+                            <EditBar value={firstName} setValue={setFirstName} title={"First Name"} />
                         </View>
                         <View style={styles.nameField}>
-                            <EditBar placeholder={secondName} title={"Last Name"} />
+                            <EditBar value={secondName} setValue={setSecondName} title={"Last Name"} />
                         </View>
                     </View>
 
                     <View style={styles.editContainer}>
-                        <EditBar placeholder={username} title={"Username"} />
+                        <EditBar value={username} setValue={setUsername} title={"Username"} />
                     </View>
-                    <EditBar placeholder={description} title={"Description"} numberOfLines={6} />
+                    <EditBar value={description} setValue={setDescription} title={"Description"} numberOfLines={6} />
                 </ScrollView>
 
                 <View style={styles.buttonContainer}>
@@ -61,16 +74,14 @@ export default function EditProfileScreen() {
     );
 }
 
-function EditBar({ placeholder, title, numberOfLines=1 }) {
-    const [value, setValue] = useState(placeholder);
-
+function EditBar({ value, setValue, title, numberOfLines = 1 }) {
     return (
         <View>
             <Text style={styles.title}>{title}</Text>
             <TextInput
                 value={value}
                 onChangeText={(text) => setValue(text)}
-                placeholder={placeholder}
+                placeholder={value}
                 style={[styles.textInput, { backgroundColor: '#ffffff' }]}
                 selectionColor="#C981EC"
                 multiline={true}
@@ -79,6 +90,7 @@ function EditBar({ placeholder, title, numberOfLines=1 }) {
         </View>
     );
 }
+
 
 const styles = StyleSheet.create({
     container: {
