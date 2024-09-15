@@ -53,7 +53,8 @@ function ExperienceSection({ experience }) {
                         height: height / 12,
                         width: height / 12,
                     }]} />
-                    <Text style={styles.experienceDate}>{experience.firstVolunteered}</Text>
+                    <Text style={styles.experienceDate}>{experience.experienceStartDate}</Text>
+                    <Text style={styles.experienceDate}>{experience.hours} hours</Text>
                 </View>
 
                 <View style={{ width: "76%" }}>
@@ -116,9 +117,14 @@ function ExperienceSection({ experience }) {
                                     style={styles.modalDate}
                                 />
                             </View>
-                            <Pressable style = {styles.submitButton}>
-                                <Text style = {{color: "white"}}>Submit</Text>
+                            <View style = {{width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-evenly"}}>
+                            <Pressable style = {styles.deleteButton}>
+                                <Text style = {{color: "white"}}>Delete</Text>
                             </Pressable>
+                            <Pressable style = {styles.submitButton}>
+                                <Text style = {{color: "white"}}>Done</Text>
+                            </Pressable>
+                            </View>
                         </KeyboardAvoidingView>
                     </Pressable>
                 </Modal>
@@ -136,23 +142,25 @@ export default function DiplomasPastExperiencesScreen() {
     const [endDate, setEndDate] = useState("")
     const [ visible, setVisible ] = useState(false);
 
-    const firstVolunteered = "12/03/2023";
+    const experienceStartDate = "12/03/2023";
+    const experienceEndDate = "12/03/2023";
     const name = "Voluntariat Untold 2024 2 zile";
     const username = "tomoioaga";
-    const description = "Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat. Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat. Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.";
+    const description = "Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat. Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.";
     const imageLink = "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png" 
+    const hours = 50
 
     const updateSearch = (text: string) => {
         setSearchText(text);
     };
 
     const experienceObjects = [
-        { name, username, firstVolunteered, description, imageLink },
-        { name, username, firstVolunteered, description, imageLink },
-        { name, username, firstVolunteered, description, imageLink },
-        { name, username, firstVolunteered, description, imageLink },
-        { name, username, firstVolunteered, description, imageLink },
-        { name, username, firstVolunteered, description, imageLink },
+        { name, username, experienceStartDate, experienceEndDate, description, imageLink, hours },
+        { name, username, experienceStartDate, experienceEndDate, description, imageLink, hours},
+        { name, username, experienceStartDate, experienceEndDate, description, imageLink, hours},
+        { name, username, experienceStartDate, experienceEndDate, description, imageLink, hours},
+        { name, username, experienceStartDate, experienceEndDate, description, imageLink, hours},
+        { name, username, experienceStartDate, experienceEndDate, description, imageLink, hours},
     ];
 
 
@@ -186,6 +194,7 @@ export default function DiplomasPastExperiencesScreen() {
                     onChangeText={updateSearch}
                     value={searchText}
                     style={styles.searchBar}
+                    placeholderTextColor={"#e3b5f7"}
                 />
 
                 <View style={{ flex: 1, overflow: 'visible', marginTop: 10}}>
@@ -299,6 +308,7 @@ const styles = StyleSheet.create({
     },
     experienceDate: {
         color: "#9394a5",
+        fontSize: 12,
     },
     experienceDescription: {
         color: "#000000",
@@ -363,19 +373,33 @@ const styles = StyleSheet.create({
         color: "#FFFFFF",
     },
     searchBar: {
-        height: 40,
-        borderRadius: 20,
-        paddingLeft: 10,
-        marginHorizontal: 10,
-        backgroundColor: "#ffffff",
+        //height: 40,
+        //borderRadius: 20,
+        //paddingLeft: 10,
+        //marginHorizontal: 10,
+        //backgroundColor: "#ffffff",
         marginTop: "5%",
         marginBottom: "2%",
-        shadowColor: '#000000',
-        shadowOffset: { width: 2, height: 2 },
+        //shadowColor: '#000000',
+        //shadowOffset: { width: 2, height: 2 },
+        //shadowOpacity: 0.25,
+        //shadowRadius: 3.84,
+        //elevation: 5,
+        //zIndex: 3,
+        backgroundColor: "#FBF2FF",
+        borderRadius: 30,
+        width: "90%",
+        alignSelf: "center",
+        padding: 10,
+        color: "#7211A2",
+        shadowColor: '#C981EC',
+        shadowOffset: {
+          width: 2,
+          height: 2,
+        },
         shadowOpacity: 0.25,
-        shadowRadius: 3.84,
+        shadowRadius: 4,
         elevation: 5,
-        zIndex: 3,
     },
     diplomaSection: {
         display: "flex",
@@ -504,6 +528,13 @@ const styles = StyleSheet.create({
     },
     submitButton: {
       backgroundColor: "#7211A2",
+      paddingVertical: "3%",
+      paddingHorizontal: "15%",
+      borderRadius: 15,
+      marginBottom: "5%",
+    },
+    deleteButton: {
+      backgroundColor: "#ff0000",
       paddingVertical: "3%",
       paddingHorizontal: "15%",
       borderRadius: 15,

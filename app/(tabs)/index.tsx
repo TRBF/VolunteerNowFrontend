@@ -14,18 +14,25 @@ import {
 import { Link } from 'expo-router';
 
 
-
 function Post({postObject}:any){
-    const [saveClicked, setSaveClicked] = useState(false);
     const [shareClicked, setShareClicked] = useState(false);
     const [heartClicked, setHeartClicked] = useState(false);
     const [commentClicked, setCommentClicked] = useState(false);
+    const [visible, setVisible] = useState(true);
     const { height, width } = useWindowDimensions();
 
     const usersComment = [
         { pfp: "pfp1", username: "Darius", text: "Foarte Fain, imi place foarte mult aaaaaaaaaaaaaaaaaaaaaa" },
         { pfp: "pfp2", username: "JonSnow", text: "Foarte Naspa lala lala lala lala lala lala" },
         { pfp: "pfp3", username: "CineSunt", text: "Foarte Indiferent" },
+        { pfp: "pfp4", username: "CineSunt", text: "Foarte Indiferent" },
+        { pfp: "pfp5", username: "CineSunt", text: "Foarte Indiferent" },
+        { pfp: "pfp6", username: "CineSunt", text: "Foarte Indiferent" },
+        { pfp: "pfp7", username: "CineSunt", text: "Foarte Indiferent" },
+        { pfp: "pfp8", username: "CineSunt", text: "Foarte Indiferent" },
+        { pfp: "pfp9", username: "CineSunt", text: "Foarte Indiferent" },
+        { pfp: "pfp10", username: "CineSunt", text: "Foarte Indiferent" },
+        { pfp: "pfp11", username: "CineSunt", text: "Foarte Indiferent" },
     ];
 
 
@@ -151,27 +158,20 @@ const Tab = () => {
 
     return (
         <View style={{ backgroundColor: '#ffffff', }}>
-            <ScrollView style={{ backgroundColor: "#ffffff" }}>
-            <View style={styles.bannerContainer}>
-                
-                    <View style={styles.bannerImageContainer}>
-
-                        <Pressable onPress={handleSecondImagePress}>
-                            <Image style={styles.bannerImage3} source={require("../../assets/images/profile.png")} />
+            <SafeAreaView>
+                <ScrollView style={{ backgroundColor: "#ffffff" }}>
+                    <View style={styles.bannerContainer}>
+                        <Pressable onPress={handleSecondImagePress} style = {styles.headerImageContainerLeft}>
+                            <Image style={{aspectRatio: 1, borderRadius: 50}} source={require("../../assets/images/image.jpg")} />
                         </Pressable>
-                        
                         <Image style={styles.bannerImage} source={require("../../assets/images/logo2.png")} />
-                        
-                        <Pressable onPress={handleSecondImagePress}>
-                            <Image style={styles.bannerImage2} source={require("../../assets/images/chat2.png")} />
+                        <Pressable onPress={handleSecondImagePress} style = {styles.headerImageContainerRight}>
+                            <Image style={{aspectRatio: 1}} source={require("../../assets/images/chat2.png")} />
                         </Pressable>
-
                     </View>
-
-            </View>
-            
-                {events.map((event: any) => <Post postObject={{ ...event }} key={event.content} />)}
-            </ScrollView>
+                    {events.map((event: any) => <Post postObject={{ ...event }} key={event.content} />)}
+                </ScrollView>
+            </SafeAreaView>
         </View>
     );
 }
@@ -180,7 +180,6 @@ const styles = StyleSheet.create({
     post: {
         backgroundColor: "#ffffff",
         borderColor: "#C981EC",
-        //borderBottomWidth: 0.2,
         display: "flex",
         flexDirection: "row",
         paddingTop: "5%",
@@ -225,64 +224,51 @@ const styles = StyleSheet.create({
     },
 
     bannerContainer: {
+        //borderWidth:3,
+        //borderTopColor: "#ffffff",
+        //borderBottomColor: '#7211A2',
+        //borderRightColor: '#7211A2',
+        //borderLeftColor: '#7211A2',
         
-        borderWidth:3,
-        flexDirection: 'row',
-        // borderBottomWidth: 1,
-        borderBottomColor: '#7211A2',
-        // borderRightWidth: 1,
-        borderRightColor: '#7211A2',
-        // borderLeftWidth: 1,
-        borderLeftColor: '#7211A2',
-        alignItems: 'center',
-        justifyContent: 'space-evenly',
-        height: 110,
+        shadowColor: '#0000000',
+        shadowOffset: { width: 2, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+        
         backgroundColor: '#ffffff',
+
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-around',
+
         borderBottomLeftRadius: 30,
         borderBottomRightRadius: 30,
+          
+        paddingTop: "15%",
+        paddingBottom: "5%",
+        paddingHorizontal: "5%",
+
+        marginTop: "-13%",
+        marginBottom: "5%",
     },
 
-    bannerImageContainer: {
-        flexDirection: 'row', // Align images horizontally
-        justifyContent: 'space-evenly', // Center images horizontally
-        alignItems: 'center', // Center images vertically
-        width: '100%',
-        // position: 'absolute',
-        // zIndex:,
-      },
+    bannerImage: {
+      aspectRatio: 4,
+      width: "60%",
+      resizeMode: 'contain',
+    },
 
-      bannerImage: {
-        width: 200, // Adjust this width to fit your design
-        height: 100,
-        resizeMode: 'contain',
-        marginTop: 20,
-      },
-
-      bannerImage2: {
-        width: 30
-        , // Adjust this width to fit your design
-        height: 30,
-        resizeMode: 'contain',
-        marginTop: 20,
-        // marginHorizontal: 28, // Reduced space between images
-        
-      },
-
-      bannerImage3: {
-        width: 40, // Adjust this width to fit your design
-        height: 40,
-        resizeMode: 'contain',
-        marginTop: 20,
-        // marginHorizontal: 26, // Reduced space between images
-      },
-
-
-    bannerButton: {
-        backgroundColor: '#ffffff',
-        borderRadius: 5,
-        padding: 10,
-        alignItems: 'center',
-        justifyContent: 'center',
+    headerImageContainerLeft: {
+      width: "11%",
+      aspectRatio: 1,
+      resizeMode: 'cover',
+    },
+    
+    headerImageContainerRight: {
+      width: "8%",
+      aspectRatio: 1,
+      resizeMode: 'cover',
     },
 
     buttonText: {
@@ -332,11 +318,15 @@ const styles = StyleSheet.create({
     icon: {
         fontSize: 18,
     },
-modalOverlay: {
+    modalOverlay: {
         height: '100%',
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    centeredView: {
+        width: "90%",
+        marginHorizontal: "auto",
     },
     modalContainer: {
         width: '90%',
@@ -391,6 +381,7 @@ modalOverlay: {
         backgroundColor: "#FFFFFF",
         borderColor: "gray",
         }
+    
 })
 
 export default Tab;

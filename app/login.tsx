@@ -11,7 +11,7 @@ import {
   View,
 } from "react-native";
 import { StyleSheet } from "react-native";
-import { login } from "../get-post/add";
+import { login } from "./get-post/add";
 
 export default function Login() {
   const [username, setUsername] = React.useState("");
@@ -26,7 +26,7 @@ export default function Login() {
         <View style={styles.mainView}>
           <Image
             style={styles.bgImage}
-            source={require("../../assets/images/wave2.png")}
+            source={require("../assets/images/wave2.png")}
           />
           <View style={styles.loginInfo}>
             <Text style={styles.loginText}>Login now</Text>

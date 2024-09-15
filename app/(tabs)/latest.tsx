@@ -91,7 +91,6 @@ const styles = StyleSheet.create({
         paddingRight: "5%",
         paddingTop: "2%",
         paddingBottom: "2%",
-        // borderBottomWidth: 0.2,
     },
     notificationPFP: {
         height: Dimensions.get('window').height/16,
