@@ -11,6 +11,7 @@ export async function login(username, password) {
 }
 
 export async function modify_Profile(username, first_name, last_name, description){
+    console.log("Hello World!");
     const url=url_endpoint+`/api/`;
     const response = await fetch(url, {
         method: 'POST',
