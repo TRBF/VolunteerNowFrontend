@@ -178,7 +178,7 @@ export default function Register() {
             </View>
 
             <View style={styles.btnSubmitView}>
-              <Pressable onPress={()=>{signUp(username, password, email, fname, lname, country, date)}}>
+              <Pressable onPress={()=>{signUp(username, password, email, fname, lname, country, date), alert("I was press nigga")}}>
                 <Text style={styles.btnSubmitText}>Register</Text>
               </Pressable>
             </View>

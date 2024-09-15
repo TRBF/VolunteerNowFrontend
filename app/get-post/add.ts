@@ -55,6 +55,7 @@ export async function signUp(username, password, email, first_name, last_name, g
             gender: gender, birthday: birthday}),
     });
     const newUser = await response.json();
+    console.log(newUser);
     return newUser;
 }
 
