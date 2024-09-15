@@ -190,30 +190,37 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     borderBottomWidth: 0.6,
     borderBottomColor: "gray",
-    paddingBottom: "7%"
+    paddingBottom: "7%",
   },
   requirement: {
     color: "#333",
     fontSize: 14,
     marginBottom: 10,
   },
-    requirementV2: {
-      color: "#C981EC",
-      fontSize: 14,
-      marginBottom: 10,
-    },
-    applyNowButton: {
-      backgroundColor: "#C981EC",
-      paddingVertical: 15,
-      paddingHorizontal: 40,
-      borderRadius: 10,
-      alignItems: "center",
-      justifyContent: "center",
-    },
-    applyNowButtonText: {
-      fontSize: 18,
-      fontWeight: "bold",
-      color: "#fff",
-    },
-
+  requirementV2: {
+    color: "#C981EC",
+    fontSize: 14,
+    marginBottom: 10,
+  },
+  applyNowButton: {
+    backgroundColor: "#C981EC",
+    paddingVertical: 15,
+    paddingHorizontal: 40,
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  applyNowButtonText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#fff",
+  },
+  applyNowContainer: {
+    width: "55%", // Set the width to be smaller
+    height: "70%",
+    alignSelf: "center", // Center the container within its parent
+    paddingTop: 20, // Add padding to the top
+    paddingBottom: 20,
+  },
 });
+
