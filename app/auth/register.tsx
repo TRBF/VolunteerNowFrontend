@@ -24,6 +24,8 @@ import {
 import { Button } from "react-native-paper";
 import { DatePickerModal } from "react-native-paper-dates";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { enGB, registerTranslation } from 'react-native-paper-dates'
+registerTranslation('en-GB', enGB)
 
 const local_data = [
   {
@@ -225,6 +227,8 @@ const styles = StyleSheet.create({
     fontSize: 30,
     paddingBottom: 10,
     paddingTop: 50,
+    fontStyle: "italic",
+    color: "#7d4cb6"
   },
 
   inputView: {
@@ -237,11 +241,14 @@ const styles = StyleSheet.create({
   inputText: {
     borderWidth: 1,
     width: "90%",
-    height: 50,
-    padding: 5,
-    margin: 20,
+    height: "9%",
+    padding: "2%",
+    margin: "5%",
+    marginTop:"2%",
+    marginBottom:"2%",
     marginRight: 0,
-    borderRadius: 5,
+    borderRadius: 10,
+    borderColor: "#460069",
     color: "black",
   },
 
@@ -254,11 +261,14 @@ const styles = StyleSheet.create({
   nameText: {
     width: "43%",
     borderWidth: 1,
-    height: 50,
-    padding: 5,
-    margin: 20,
+    height: "60%",
+    padding: "2%",
+    margin: "5%",
+    marginTop:"4%",
+    marginBottom:"4%",
     marginRight: 0,
-    borderRadius: 5,
+    borderRadius: 10,
+    borderColor: "#460069",
     color: "black",
   },
 
@@ -269,6 +279,8 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "row",
     justifyContent: "space-evenly",
+    marginTop:"4%",
+    marginBottom: "4%",
   },
 
   dropdown: {
