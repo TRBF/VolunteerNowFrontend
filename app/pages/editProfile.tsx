@@ -7,6 +7,7 @@ import * as DocumentPicker from 'expo-document-picker';
 import {modify_pfp, modify_Profile} from '../get-post/add'
 import { lastDayOfMonth } from 'date-fns';
 import { uploadFile } from '../get-post/fileuploading';
+import { useContext } from 'react';
 
 export default function EditProfileScreen() {
     const navigation = useNavigation();
@@ -16,6 +17,8 @@ export default function EditProfileScreen() {
     useEffect(() => {
         navigation.setOptions({ headerShown: false });
     }, [navigation]);
+
+    const refresh = useContext(RefreshContext);
 
     const { height, width } = useWindowDimensions();
 
