@@ -56,14 +56,20 @@ export async function createUser(username, password, gender, first_name, last_na
     return newUser;
 }
 
-export async function eventGet(number) {
+export async function get_events(number) {
     const url = url_endpoint+'/api/get_events?page';
     const response = await fetch(url);
     const event = await response.json();
     return event;
 }
 
-export async function eventAdd(name, description, link_to_pfp, link_to_cover_image, edition, location, time) {
+export async function get_event(eventid) {
+    const url = url_endpoint + `/api/get_event_by_id/${eventid}`;
+    const response = await fetch(url);
+    return await response.json();
+}
+
+export async function add_event(name, description, link_to_pfp, link_to_cover_image, edition, location, time) {
     const url = url_endpoint+'/api/add_event';
     const response = await fetch(url, {
         method: 'POST',
@@ -89,4 +95,10 @@ export async function addExperiences(name, description, location, time, file:Blo
     const result = await response.json();
     if (!result.success)return [];
     return result.result;
+}
+
+export async function getExperiences(userid) {
+    const url = url_endpoint + `/api/get_experiences/${userid}`;
+    const response = await fetch(url);
+    return await response.json();
 }

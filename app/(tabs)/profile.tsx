@@ -43,14 +43,6 @@ export default function ProfileScreen() {
     const { height, width } = useWindowDimensions();
 
 
-    const experienceObject = {
-        name: name,
-        username: username,
-        firstVolunteered: firstVolunteered,
-        description: description,
-    }
-
-
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "white"}}>
           <View style = {[{height: height/100*10}, styles.header]}>
@@ -104,7 +96,7 @@ export default function ProfileScreen() {
                     <Text style={styles.description}>{description}</Text>
                 </View>
 
-                <View style={{ flexDirection: "row", justifyContent: 'space-around', alignItems: 'space-around', paddingTop: "10%" }}>
+                <View style={{ flexDirection: "row", justifyContent: 'space-around', paddingTop: "10%" }}>
                         <View style={styles.profileStatsSection}>
                             <View style={styles.profileStatsSubsection}>
                                 <Text style={styles.profileStatsSubsectionTextV4}>Age</Text>
@@ -120,7 +112,7 @@ export default function ProfileScreen() {
 
                 {/* make them some kind of tabs */}
                 <Text style={styles.recentEventText}>Most recent event</Text>
-                <ExperienceSection experience={experienceObject} />
+                <ExperienceSection />
                 <Pressable>
                     <Text style={styles.seeAllText}>See all</Text>
                 </Pressable>

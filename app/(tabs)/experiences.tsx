@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, Pressable, TextInput, ScrollView, Image, Modal, KeyboardAvoidingView, Keyboard } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View, Pressable, TextInput, ScrollView, Image, Modal, KeyboardAvoidingView, Keyboard, DevSettings } from 'react-native';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import {useWindowDimensions} from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -14,15 +14,19 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import * as DocumentPicker from 'expo-document-picker';
+import { get_event, getExperiences } from '../get-post/add';
+import { getAccountId } from '../get-post/_account';
+import { url_endpoint } from '../get-post/_config';
 
 function ExperienceSection({ experience }) {
     const { height, width } = useWindowDimensions();
     const [nameText, setNameText] = useState(experience.name);
     const [organiserText, setOrganiserText] = useState(experience.username);
     const [descriptionText, setDescriptionText] = useState(experience.description);
+    const [diplomaHash, setDiplomaHash] = useState("");
     const [startDate, setStartDate] = useState("")
     const [endDate, setEndDate] = useState("")
-    const [ visible, setVisible ] = useState(false);
+    const [visible, setVisible] = useState(false);
 
     function startDateUpdate(text: string){
         if(text.length==2 && text[1]!='/') text+='/'
@@ -42,19 +46,21 @@ function ExperienceSection({ experience }) {
     }
 
     function getDocument(){
-        DocumentPicker.getDocumentAsync({type: "image/*"})
+        DocumentPicker.getDocumentAsync({type: "image/*"}).then(result => {
+            console.log(result);
+        })
     }
 
     return (
         <Pressable onPress={() => {pressableClicked()}}>
             <View style={styles.experienceSection}>
                 <View style={{flexDirection: "column", alignItems: "baseline"}}>
-                    <Image source={require("../../assets/images/image.jpg")} resizeMode='cover' style={[styles.experienceImage, {
+                    <Image source={{uri:url_endpoint+`/assets/${diplomaHash}`}} resizeMode='cover' style={[styles.experienceImage, {
                         height: height / 12,
                         width: height / 12,
                     }]} />
                     <Text style={styles.experienceDate}>{experience.experienceStartDate}</Text>
-                    <Text style={styles.experienceDate}>{experience.hours} hours</Text>
+                    <Text style={styles.experienceDate}>{experience.days} days</Text>
                 </View>
 
                 <View style={{ width: "76%" }}>
@@ -154,14 +160,26 @@ export default function DiplomasPastExperiencesScreen() {
         setSearchText(text);
     };
 
-    const experienceObjects = [
-        { name, username, experienceStartDate, experienceEndDate, description, imageLink, hours },
-        { name, username, experienceStartDate, experienceEndDate, description, imageLink, hours},
-        { name, username, experienceStartDate, experienceEndDate, description, imageLink, hours},
-        { name, username, experienceStartDate, experienceEndDate, description, imageLink, hours},
-        { name, username, experienceStartDate, experienceEndDate, description, imageLink, hours},
-        { name, username, experienceStartDate, experienceEndDate, description, imageLink, hours},
-    ];
+    const [experiences, setExperiences] = useState([]);
+    useEffect(() => {
+        getAccountId().then(userid => 
+            getExperiences(userid).then(result => {
+                if(result.success) {
+                    setExperiences([]);
+                    for (const experience of result.result) {
+                        if(experience.EventID == null) {
+                            setExperiences([...experiences, {name: experience.Name, description: experience.Description, username: experience.Location, days: experience.Days, diploma: experience.Diploma}]);
+                        } else {
+                            get_event(experience.EventID).then(res => {
+                                if(res.success)
+                                    setExperiences([...experiences, {name: res.result.Name, description: res.result.Description, username: experience.Location, days: experience.Days, diploma: res.result.LinkToPFP}]);
+                            });
+                        }
+                    }
+                }
+            })
+        )
+    }, []);
 
 
     function startDateUpdate(text: string){
@@ -199,7 +217,7 @@ export default function DiplomasPastExperiencesScreen() {
 
                 <View style={{ flex: 1, overflow: 'visible', marginTop: 10}}>
                       <ScrollView>
-                            {experienceObjects.map((object, index) => (
+                            {experiences.map((object, index) => (
                                 (object.name.toLowerCase().startsWith(searchText.toLowerCase()) || searchText === "") ? (
                                     <ExperienceSection key={index} experience={object} />
                                 ) : null
@@ -229,7 +247,7 @@ export default function DiplomasPastExperiencesScreen() {
                                       style={styles.modalTextInput}
                                   />
                                   <TextInput
-                                      placeholder="Organisation"
+                                      placeholder="Location"
                                       placeholderTextColor={"#cfcfcf"}
                                       onChangeText={(text) => {setOrganiserText(text)}}
                                       value={organiserText}
