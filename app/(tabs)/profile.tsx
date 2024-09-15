@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Image, Text, View, Pressable, SafeAreaView, Platform, StatusBar } from 'react-native';
 import ExperienceSection from './experiences';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Link, router } from 'expo-router';
-import { useRoute } from 'expo-router';
 import { useWindowDimensions } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { differenceInYears } from 'date-fns';
+import { get_my_profile } from '../get-post/add';
 
 
 
@@ -15,12 +15,26 @@ export default function ProfileScreen() {
     let dominantTag = 8;
     let firstVolunteered = "12/03/23";
     let hours = "Untold";
-    let name = "Mihnea";
-    let lastName = "Bobo"
-    let username = "tomoioaga";
-    let description = "Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat. Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat. Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.";
-    let gender = "male";
-    let birthday = '08/07/2006'
+    const [name, setName] = useState("name");
+    const [lastName, setLastName] = useState("last name");
+    const [username, setUsername] = useState("username");
+    const [description, setDescription] = useState("description");
+    const [gender, setGender] = useState("gender");
+    const [birthday, setBirthday] = useState(new Date());
+    
+    useEffect(() => {
+        get_my_profile().then((profile) => {
+            console.log(profile);
+            if(profile.success) {
+                setName(profile.result.FirstName);
+                setLastName(profile.result.LastName);
+                setUsername(profile.result.Username);
+                setDescription(profile.result.Description);
+                setGender(profile.result.Gender);
+                setBirthday(new Date(profile.result.BirthDay * 1000));
+            }
+        });
+    }, []);
 
     const startDate = new Date('2006-07-08');
     const endDate = new Date();

@@ -11,28 +11,24 @@ export async function login(username, password) {
     console.log(result);
     return result;
 }
-export async function get_profile(profile_id) {
+export async function get_my_profile() {
     if(!isLoggedIn())
         return;
-    console.log("Hello World!");
-    const url=url_endpoint+`/api/modify_profile`;
+    const url=url_endpoint+`/api/my_profile`;
     const response = await fetch(url, {
-        method: 'POST',
+        method: 'GET',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': await getAccountToken()
-        },
-        body: JSON.stringify({Username: username, FirstName: first_name, LastName: last_name, Description: description})
+        }
     });
-    console.log("wait")
-    console.log(response);
     const result=await response.json();
-    console.log(result);
     return result;
 }
 export async function modify_Profile(username, first_name, last_name, description){
     if(!isLoggedIn())
         return;
+    console.log("hello world!");
     const url=url_endpoint+`/api/modify_profile`;
     const response = await fetch(url, {
         method: 'POST',
@@ -43,6 +39,7 @@ export async function modify_Profile(username, first_name, last_name, descriptio
         body: JSON.stringify({Username: username, FirstName: first_name, LastName: last_name, Description: description})
     });
     const result=await response.json();
+    console.log(result);
     return result;
 }
 // functie pt creare de user:

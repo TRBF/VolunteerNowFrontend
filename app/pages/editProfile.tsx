@@ -5,7 +5,6 @@ import { useWindowDimensions } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import * as DocumentPicker from 'expo-document-picker';
 import {modify_Profile} from '../get-post/add'
-import { isLoggedIn } from '../get-post/_account';
 
 export default function EditProfileScreen() {
     const navigation = useNavigation();
@@ -26,7 +25,9 @@ export default function EditProfileScreen() {
 
 
     function getDocument(){
-        DocumentPicker.getDocumentAsync({type: "image/*"})
+        DocumentPicker.getDocumentAsync({type: "image/*", multiple: false}).then(result => {
+            console.log(result.assets);
+        });
     }
 
     return (
