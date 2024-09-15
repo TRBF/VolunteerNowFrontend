@@ -45,7 +45,7 @@ export default function ProfileScreen() {
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "white"}}>
-          <View style = {[{height: height/100*10}, styles.header]}>
+          <View style = {[{height: height/100*12}, styles.header]}>
               <Link href={{
                         pathname: 'pages/settingsUser'
                     }}
