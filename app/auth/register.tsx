@@ -56,23 +56,6 @@ export default function Register() {
   const [date, setDate] = React.useState(undefined);
   const [open, setOpen] = React.useState(false);
 
-  const onDismissSingle = React.useCallback(() => {
-    setOpen(false);
-  }, [setOpen]);
-
-  const onConfirmSingle = React.useCallback(
-    (params) => {
-      setOpen(false);
-      setDate(params.date);
-    },
-    [setOpen, setDate]
-  );
-
-  const navigation = useNavigation();
-  const router = useRouter();
-  useEffect(() => {
-    navigation.setOptions({ headerShown: false });
-  }, [navigation]);
 
   return (
     <KeyboardAvoidingView
