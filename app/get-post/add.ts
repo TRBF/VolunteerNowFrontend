@@ -25,7 +25,7 @@ export async function get_my_profile() {
     const result=await response.json();
     return result;
 }
-export async function modify_Profile(username, first_name, last_name, description){
+export async function modify_Profile(username, first_name, last_name, description, gender){
     if(!isLoggedIn())
         return;
     console.log("hello world!");
@@ -36,7 +36,7 @@ export async function modify_Profile(username, first_name, last_name, descriptio
             'Content-Type': 'application/json',
             'Authorization': await getAccountToken()
         },
-        body: JSON.stringify({Username: username, FirstName: first_name, LastName: last_name, Description: description})
+        body: JSON.stringify({Username: username, FirstName: first_name, LastName: last_name, Description: description, Gender: gender})
     });
     const result=await response.json();
     console.log(result);

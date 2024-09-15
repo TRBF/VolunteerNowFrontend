@@ -55,7 +55,7 @@ export default function EditProfileScreen() {
                         </Pressable>
                     </View>
 
-                    <View contentContainerStyle={styles.container}>
+                    <View style={styles.container}>
                         <View style={styles.nameRow}>
                             <View style={styles.nameField}>
                                 <EditBar value={firstName} setValue={setFirstName} title={"First Name"} />
@@ -75,7 +75,7 @@ export default function EditProfileScreen() {
                     </View>
 
                     <View style={styles.buttonContainer}>
-                        <Pressable style={styles.button} onPress={async () => { await modify_Profile(username, firstName, secondName, description, gender, password); router.back() }}>
+                        <Pressable style={styles.button} onPress={async () => { await modify_Profile(username, firstName, secondName, description, gender); router.back() }}>
                             <Text style={styles.topProfileButton}>Save</Text>
                         </Pressable>
                     </View>
