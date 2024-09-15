@@ -1,10 +1,11 @@
 import React, {useState} from 'react';
-import { StyleSheet, Text, View, ScrollView, Pressable, Modal } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Pressable, Modal, Keyboard, TextInput } from 'react-native';
 import { Image } from 'expo-image';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Entypo from '@expo/vector-icons/Entypo';
 import {useWindowDimensions} from 'react-native';
 import events from '../../data/events';
+import GestureRecognizer from 'react-native-swipe-gestures';
 import {
   SafeAreaView,
   SafeAreaProvider,
@@ -12,6 +13,7 @@ import {
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
 import { Link } from 'expo-router';
+import { TypePredicateKind } from 'typescript';
 
 
 function Post({postObject}:any){
@@ -20,6 +22,7 @@ function Post({postObject}:any){
     const [commentClicked, setCommentClicked] = useState(false);
     const [visible, setVisible] = useState(true);
     const { height, width } = useWindowDimensions();
+    const [comment, setComment] = useState("");
 
     const usersComment = [
         { pfp: "pfp1", username: "Darius", text: "Foarte Fain, imi place foarte mult aaaaaaaaaaaaaaaaaaaaaa" },
@@ -35,10 +38,17 @@ function Post({postObject}:any){
         { pfp: "pfp11", username: "CineSunt", text: "Foarte Indiferent" },
     ];
 
+    const verticalUnits = (percentage: number) => {
+        return height/100*percentage;
+    }
+
+    const horizontalUnits = (percentage: number) => {
+        return width/100*percentage;
+    }
+
 
     const date = new Date(postObject.date)
     return(
-        //<View style = {[{backgroundColor: postObject.forProfit ? "white" : "#FBF2FF"}, styles.post]}>
         <View style = {[{marginBottom: height/(7*10)}, styles.post]}>
             <View style = {{width: "12%", aspectRatio: 1, marginRight: "4%"}}>
                 <Link href={{
@@ -100,36 +110,55 @@ function Post({postObject}:any){
                                 <Pressable onPress = {() => setCommentClicked(!commentClicked)}>
                                     <FontAwesome name={'comment-o'} style = {[{color: '#9394a5'}, styles.icon]}/>
                                 </Pressable>
-                                <Modal
-                                      animationType="slide"
-                                      visible={commentClicked}
-                                      onRequestClose={() => {
-                                          setVisible(!commentClicked);
-                                      }}>
-                                      <View style={styles.centeredView}>
-                                          <View style={styles.modalView}>
-                                              <Text style={styles.modalText}>Comments</Text>
-                                              <Pressable
-                                                  onPress={() => setCommentClicked(!commentClicked)}>
-                                                  <FontAwesome name={'close'} style = {[{color: '#9394a5'}, styles.icon]}/>
-                                              </Pressable>
-                                          </View>
-                                        <ScrollView>
-                                            {usersComment.map((comment, index) => (
-                                                <Comment
-                                                    key={index}
-                                                    pfp={comment.pfp}
-                                                    username={comment.username}
-                                                    text={comment.text}
-                                                />
-                                            ))}
-                                        </ScrollView>
-                                      </View>
-                                  </Modal>
+                                <GestureRecognizer
+                                  style={{flex: 1}}
+                                  onSwipeDown={ () => { setCommentClicked(false) } }>
+                                    <Modal
+                                        animationType="slide"
+                                        visible={commentClicked}
+                                        transparent={true}
+                                        onRequestClose={() => {
+                                            setVisible(!commentClicked);
+                                        }}>
+                                        <View style={styles.centeredView}>
+                                            <View style={styles.modalView}>
+                                                <Text style={styles.modalText}>Comments</Text>
+                                            </View>
+                                            <ScrollView>
+                                                {usersComment.map((comment, index) => (
+                                                    <Comment
+                                                        key={index}
+                                                        pfp={comment.pfp}
+                                                        username={comment.username}
+                                                        text={comment.text}
+                                                    />
+                                                ))}
+                                            </ScrollView>
+                                            <View style = {{
+                                                    display: "flex", 
+                                                    flexDirection: "row", 
+                                                    width: "94%", 
+                                                    margin: "auto", 
+                                                    paddingVertical: "1%",
+                                                    borderTopWidth: 1,
+                                                    borderBottomWidth: 1,
+                                                    borderTopColor: "#eeeeee",
+                                                    borderBottomColor: "#eeeeee",
+                                            }}>
+                                                <View style = {{width: "12%"}}>
+                                                    <Image
+                                                        source={{ uri: "https://via.placeholder.com/40x40/000000/000000" }}
+                                                        style={{ aspectRatio: 1, width: "100%", borderRadius: 40}}
+                                                    />
+                                                </View>
+                                                <TextInput placeholder = "Add comment..." style = {[styles.commentInput, {height: verticalUnits(5), width: "80%"}]}/>
+
+                                            </View>
+                                        </View>
+                                    </Modal>
+                                </GestureRecognizer>
                             </View>
-
                             <Text style = {styles.volunteersNeeded}>{postObject.volunteerCount} volunteers needed</Text>
-
                         </View>
                     </View>
                 </Pressable>
@@ -141,10 +170,12 @@ function Post({postObject}:any){
 const Comment = ({ pfp, username, text }) => {
     return (
         <View style={styles.commentContainer}>
-        <Image
-          source={{ uri: "https://via.placeholder.com/40x40/000000/000000" }}
-          style={{ width: 50, height: 50, borderRadius: 40 }}
-        />
+            <View style = {{ width: "12%" }}>
+                <Image
+                    source={{ uri: "https://via.placeholder.com/40x40/000000/000000" }}
+                    style={{ aspectRatio: 1, width: "100%", borderRadius: 40}}
+                />
+            </View>
             <View style={{flexDirection: "column", paddingLeft: "3%"}}>
                 <Text style={{fontWeight: "semibold", color:"gray"}}>@{username}</Text>
                 <Text>{text}</Text>
@@ -325,8 +356,18 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     centeredView: {
-        width: "90%",
-        marginHorizontal: "auto",
+        //backgroundColor: "#fff",
+        backgroundColor: "#f6f6f6",
+        flex: 1,
+        height: "80%",
+        marginTop:"20%",
+        borderTopRightRadius: 30,
+        borderTopLeftRadius: 30,
+        shadowColor: '#0000000',
+        shadowOffset: { width: 2, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
     },
     modalContainer: {
         width: '90%',
@@ -335,52 +376,46 @@ const styles = StyleSheet.create({
         padding: 20,
         alignItems: 'center',
         justifyContent: 'center',
-
-    },
-    modalContent: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        width: '100%',
     },
     modalText: {
         fontSize: 18,
-        marginRight: 20,
+        textAlign: "center",
+        width: "100%",
     },
-    modalTextInput: {
-        borderRadius: 15,
-        borderColor: "gray",
-        borderWidth: 1,
-        },
-        modalView: {
-            flexDirection: "row",
-            marginHorizontal: 5,
-            marginVertical: 15,
-            justifyContent: "space-between",
-           backgroundColor: 'white',
-           alignItems: 'center',
-           shadowColor: '#000',
-        },
-        buttonOpen: {
-          backgroundColor: '#F194FF',
-        },
-        buttonClose: {
-          backgroundColor: '#2196F3',
-        },
-        textStyle: {
-          color: 'white',
-          fontWeight: 'bold',
-          textAlign: 'center',
-        },
+    modalView: {
+       flexDirection: "row",
+       justifyContent: "space-between",
+       alignItems: 'center',
+       shadowColor: '#000',
+       paddingTop: "5%",
+       paddingBottom: "5%",
+       borderBottomWidth: 1,
+       borderBottomColor: "#eeeeee"
+    },
+    buttonOpen: {
+      backgroundColor: '#F194FF',
+    },
+    buttonClose: {
+      backgroundColor: '#2196F3',
+    },
+    textStyle: {
+      color: 'white',
+      fontWeight: 'bold',
+      textAlign: 'center',
+    },
     commentContainer: {
         flexDirection: "row",
-        marginHorizontal: 7,
-        marginVertical: 15,
+        marginHorizontal: "3%",
+        marginTop: "3%",
         borderRadius: 15,
-        padding: 5,
-        backgroundColor: "#FFFFFF",
+        //backgroundColor: "#fff",
+        backgroundColor: "#f6f6f6",
         borderColor: "gray",
-        }
+    },
+    commentInput: {
+        paddingLeft: "5%",
+        paddingRight: "5%",
+    },
     
 })
 

@@ -39,7 +39,7 @@ export default function ProfileScreen() {
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "white"}}>
-          <View style = {[{height: height/100*10}, styles.header]}>
+          <View style = {[{height: height/100*12}, styles.header]}>
               <Link href={{
                         pathname: 'pages/settingsUser'
                     }}
@@ -90,7 +90,7 @@ export default function ProfileScreen() {
                     <Text style={styles.description}>{description}</Text>
                 </View>
 
-                <View style={{ flexDirection: "row", justifyContent: 'space-around', alignItems: 'space-around', paddingTop: "10%" }}>
+                <View style={{ flexDirection: "row", justifyContent: 'space-around', alignItems: 'space-around', paddingTop: "10%", marginBottom: "-5%" }}>
                         <View style={styles.profileStatsSection}>
                             <View style={styles.profileStatsSubsection}>
                                 <Text style={styles.profileStatsSubsectionTextV4}>Age</Text>
@@ -105,7 +105,6 @@ export default function ProfileScreen() {
 
 
                 {/* make them some kind of tabs */}
-                <Text style={styles.recentEventText}>Most recent event</Text>
                 <ExperienceSection experience={experienceObject} />
                 <Pressable>
                     <Text style={styles.seeAllText}>See all</Text>
