@@ -166,7 +166,7 @@ const Tab = () => {
                         </Pressable>
                         <Image style={styles.bannerImage} source={require("../../assets/images/logo2.png")} />
                         <Link href={{ pathname: "pages/applicationsStatus" }} style={styles.headerImageContainerRight}>
-                            <Image style={{ aspectRatio: 1, width: 40, height: 40}} source={require("../../assets/images/chat2.png")} />
+                                <FontAwesome name={'bell'} style={{ color: '#9394a5', fontSize: 24, alignItems: "center"}} />
                         </Link>
                     </View>
                     {events.map((event: any) => <Post postObject={{ ...event }} key={event.content} />)}

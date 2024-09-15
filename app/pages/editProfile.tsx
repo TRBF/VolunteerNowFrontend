@@ -39,7 +39,7 @@ export default function EditProfileScreen() {
                     </Pressable>
                     <Text style={styles.headerTitle}>Edit Profile</Text>
                 </View>
-                <ScrollView>
+                <ScrollView style={{paddingHorizontal: "5%"}}>
                     <View style={styles.imageContainer}>
                         <Image
                             source={{ uri: 'https://via.placeholder.com/150' }}
@@ -85,14 +85,20 @@ function EditBar({ value, setValue, title, numberOfLines = 1 }) {
                 value={value}
                 onChangeText={(text) => setValue(text)}
                 placeholder={title}
-                style={[styles.textInput, { backgroundColor: '#ffffff' }]}
+                style={[
+                    styles.textInput,
+                    numberOfLines > 1 ? { textAlignVertical: 'top' } : null, // Apply textAlignVertical only if numberOfLines > 1
+                    { backgroundColor: '#ffffff' }
+                ]}
                 selectionColor="#C981EC"
                 multiline={true}
-                numberOfLines={numberOfLines || 1}
+                numberOfLines={numberOfLines}
             />
         </View>
     );
 }
+
+
 
 const styles = StyleSheet.create({
     container: {
@@ -129,6 +135,7 @@ const styles = StyleSheet.create({
         padding: 10,
     },
     button: {
+        marginTop: "8%",
         width: "32%",
     },
     topProfileButton: {
