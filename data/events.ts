@@ -115,7 +115,7 @@ const volunteering = [
         volunteerCount: 950,
         sendCount: 200,
         forProfit: 1,
-    }
+    },
 ];
 
 

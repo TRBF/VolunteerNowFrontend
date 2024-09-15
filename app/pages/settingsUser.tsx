@@ -22,7 +22,7 @@ export default function SettingsUserScreen(){
 
     return(
         <SafeAreaView>
-            <View style={[styles.header, { height: height / 100 * 9 }]}>
+            <View style={[styles.header, { height: height / 100 * 12 }]}>
                 <Pressable onPress={() => { router.back() }}>
                     <Ionicons name='chevron/ujvv -back' style={Object.assign({ color: "#9394a5" }, styles.backIcon)} />
                 </Pressable>

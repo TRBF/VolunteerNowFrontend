@@ -9,7 +9,7 @@ export default function EditProfileScreen() {
     const navigation = useNavigation();
     const router = useRouter();
     const params = useLocalSearchParams();
-    const { username, name, description } = params;
+    const { username, firstName, secondName, description } = params;
     useEffect(() => {
         navigation.setOptions({ headerShown: false });
     }, [navigation]);
@@ -18,7 +18,7 @@ export default function EditProfileScreen() {
 
     return (
         <SafeAreaView style={{flex: 1}}>
-            <View style={[styles.header, { height: height / 100 * 9 }]}>
+            <View style={[styles.header, { height: height / 100 * 12 }]}>
                 <Pressable onPress={() => { router.back() }}>
                     <Ionicons name='chevron-back' style={Object.assign({ color: "#9394a5" }, styles.backIcon)} />
                 </Pressable>
@@ -38,10 +38,10 @@ export default function EditProfileScreen() {
                 <ScrollView contentContainerStyle={styles.container}>
                     <View style={styles.nameRow}>
                         <View style={styles.nameField}>
-                            <EditBar placeholder={name} title={"First Name"} />
+                            <EditBar placeholder={firstName} title={"First Name"} />
                         </View>
                         <View style={styles.nameField}>
-                            <EditBar placeholder={name} title={"Last Name"} />
+                            <EditBar placeholder={secondName} title={"Last Name"} />
                         </View>
                     </View>
 
@@ -61,7 +61,7 @@ export default function EditProfileScreen() {
     );
 }
 
-function EditBar({ placeholder, onChangeText, title, numberOfLines }) {
+function EditBar({ placeholder, title, numberOfLines=1 }) {
     const [value, setValue] = useState(placeholder);
 
     return (
