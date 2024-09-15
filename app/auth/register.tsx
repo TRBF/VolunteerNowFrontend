@@ -11,6 +11,7 @@ import {
   View,
   ActivityIndicator,
   Pressable,
+  SafeAreaView,
 } from "react-native";
 import { StyleSheet } from "react-native";
 import {
@@ -19,6 +20,9 @@ import {
   useLocalSearchParams,
   Link,
 } from "expo-router";
+import { Button } from "react-native-paper";
+import { DatePickerModal } from "react-native-paper-dates";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 const local_data = [
   {
@@ -51,11 +55,27 @@ export default function Register() {
   const [fname, setFname] = React.useState("");
   const [lname, setLname] = React.useState("");
   const [country, setCountry] = useState("1");
-  const ages = new Array(100).fill(0);
+
+  const navigation = useNavigation();
+  const router = useRouter();
+  useEffect(() => {
+    navigation.setOptions({ headerShown: false });
+  }, [navigation]);
 
   const [date, setDate] = React.useState(undefined);
   const [open, setOpen] = React.useState(false);
 
+  const onDismissSingle = React.useCallback(() => {
+    setOpen(false);
+  }, [setOpen]);
+
+  const onConfirmSingle = React.useCallback(
+    (params) => {
+      setOpen(false);
+      setDate(params.date);
+    },
+    [setOpen, setDate]
+  );
 
   return (
     <KeyboardAvoidingView
@@ -124,7 +144,38 @@ export default function Register() {
                   setCountry(e.value);
                 }}
               />
+              <SafeAreaView>
+                <SafeAreaProvider>
+                  <View
+                    style={{
+                      justifyContent: "center",
+                      flex: 1,
+                      alignItems: "center",
+                    }}
+                  >
+                    <Button
+                      onPress={() => setOpen(true)}
+                      uppercase={false}
+                      mode="outlined"
+                    >
+                      Pick your birhday
+                    </Button>
+                    <View style={{}}>
+                      <DatePickerModal
+                        locale="en"
+                        mode="single"
+                        visible={open}
+                        onDismiss={onDismissSingle}
+                        date={date}
+                        onConfirm={onConfirmSingle}
+                        presentationStyle='pageSheet'
+                      />
+                    </View>
+                  </View>
+                </SafeAreaProvider>
+              </SafeAreaView>
             </View>
+
             <View style={styles.btnSubmitView}>
               <Pressable>
                 <Text style={styles.btnSubmitText}>Register</Text>
@@ -210,11 +261,11 @@ const styles = StyleSheet.create({
     // justifyContent: "center",
     alignItems: "center",
     width: "100%",
-    flexDirection: "row",    
+    flexDirection: "row",
+    justifyContent: "space-evenly",
   },
 
   dropdown: {
-    margin: 16,
     height: 50,
     width: 150,
     backgroundColor: "#EEEEEE",
@@ -237,6 +288,11 @@ const styles = StyleSheet.create({
   iconStyle: {
     width: 20,
     height: 20,
+  },
+
+  container2: {
+    flex: 1,
+    backgroundColor: "#F5FCFF",
   },
 
   redirectView: {
