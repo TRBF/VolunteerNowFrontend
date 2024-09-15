@@ -13,6 +13,7 @@ import {
 } from "react-native";
 import { StyleSheet } from "react-native";
 import { login } from "../get-post/add";
+import { isLoggedIn, rememberAccount } from "../get-post/_account";
 
 export default function Login() {
   const [username, setUsername] = React.useState("");
@@ -33,7 +34,7 @@ export default function Login() {
       // Handle the response based on the result
       if (result.success) {
         alert("Success, Login successful!");
-        // Navigate to another screen if necessary
+        await rememberAccount(result.result.token, result.result.userid);
       } else {
         alert("Error, Login failed. Please check your credentials.");
       }
@@ -44,6 +45,8 @@ export default function Login() {
       setLoading(false); // Set loading to false regardless of success or failure
     }
   };
+  
+  console.log(isLoggedIn());
 
   return (
     <KeyboardAvoidingView

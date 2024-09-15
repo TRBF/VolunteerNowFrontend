@@ -1,5 +1,7 @@
+import { isLoggedIn } from "./_account";
 import { url_endpoint } from "./_config";
 import { uploadFile } from "./fileuploading";
+import { getAccountToken } from "./_account";
 
 // functie pt login la users
 export async function login(username, password) {
@@ -11,16 +13,22 @@ export async function login(username, password) {
 }
 
 export async function modify_Profile(username, first_name, last_name, description){
+    if(!isLoggedIn())
+        return;
     console.log("Hello World!");
-    const url=url_endpoint+`/api/`;
+    const url=url_endpoint+`/api/modify_profile`;
     const response = await fetch(url, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            'Authorization': await getAccountToken()
         },
-        body: JSON.stringify({username: username, first_name: first_name, last_name: last_name})
+        body: JSON.stringify({Username: username, FirstName: first_name, LastName: last_name})
     });
+    console.log("wait")
+    console.log(response);
     const result=await response.json();
+    console.log(result);
     return result;
 }
 // functie pt creare de user:
