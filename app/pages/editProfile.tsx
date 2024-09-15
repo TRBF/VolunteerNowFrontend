@@ -4,13 +4,8 @@ import { useNavigation, useRouter, useLocalSearchParams } from "expo-router";
 import { useWindowDimensions } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import * as DocumentPicker from 'expo-document-picker';
-import {modify_Profile} from '../get-post/add'
-import { lastDayOfMonth } from 'date-fns';
-import {signUp} from '../get-post/add'
+import {modify_Profile} from '../get-post/add';
 import { SelectCountry } from "react-native-element-dropdown";
-import { Button } from "react-native-paper";
-import { DatePickerModal } from "react-native-paper-dates";
-import { SafeAreaProvider } from "react-native-safe-area-context";
 const local_data = [
     {
       value: "1",
@@ -39,7 +34,7 @@ export default function EditProfileScreen() {
     const navigation = useNavigation();
     const router = useRouter();
     const params = useLocalSearchParams();
-    const { usernameH, firstNameH, secondNameH, descriptionH, genderH, passwordH } = params;
+    const { usernameH, firstNameH, secondNameH, descriptionH, genderH} = params;
     useEffect(() => {
         navigation.setOptions({ headerShown: false });
     }, [navigation]);
@@ -50,7 +45,7 @@ export default function EditProfileScreen() {
     const [firstName, setFirstName] = useState(firstNameH)
     const [secondName, setSecondName] = useState(secondNameH)
     const [description, setDescription] = useState(descriptionH)
-    const [country, setCountry] = useState("1")
+    const [country, setCountry] = useState(genderH)
 
     function getDocument(){
         DocumentPicker.getDocumentAsync({type: "image/*", multiple: false}).then(result => {
@@ -119,7 +114,7 @@ export default function EditProfileScreen() {
                     </View>
 
                     <View style={styles.buttonContainer}>
-                        <Pressable style={styles.button} onPress={async () => { await modify_Profile(username, firstName, secondName, description, country); router.back(), alert("Ai dat save deja homalaule") }}>
+                        <Pressable style={styles.button} onPress={async () => { await modify_Profile(username, firstName, secondName, description, country); router.back(), alert("Ai dat save deja homalaule"), setShoudRefresh(true) }}>
                             <Text style={styles.topProfileButton}>Save</Text>
                         </Pressable>
                     </View>

@@ -11,6 +11,7 @@ import { get_my_profile } from '../get-post/add';
 
 
 export default function ProfileScreen() {
+    const [ShouldRefresh, setShouldRefresh]= useState(true);
     let volunteerCount = 3;
     let dominantTag = 8;
     let firstVolunteered = "12/03/23";
@@ -57,7 +58,7 @@ export default function ProfileScreen() {
                       <Link
                           href={{
                               pathname: 'pages/editProfile',
-                              params: { usernameH: username, firstNameH: name, secondNameH: lastName, descriptionH: description }
+                              params: { usernameH: username, firstNameH: name, secondNameH: lastName, descriptionH: description, setShouldRefresh: setShouldRefresh }
                           }}
                       >
                           <FontAwesome name={'edit'} style={[{ color: '#9394a5'}, styles.icon]} />
