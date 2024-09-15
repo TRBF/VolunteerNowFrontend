@@ -4,14 +4,15 @@ import { useNavigation, useRouter, useLocalSearchParams } from "expo-router";
 import { useWindowDimensions } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import * as DocumentPicker from 'expo-document-picker';
-import {modify_Profile} from '../get-post/add'
+import {modify_pfp, modify_Profile} from '../get-post/add'
 import { lastDayOfMonth } from 'date-fns';
+import { uploadFile } from '../get-post/fileuploading';
 
 export default function EditProfileScreen() {
     const navigation = useNavigation();
     const router = useRouter();
     const params = useLocalSearchParams();
-    const { usernameH, firstNameH, secondNameH, descriptionH } = params;
+    const { usernameH, firstNameH, secondNameH, descriptionH, pfpH } = params;
     useEffect(() => {
         navigation.setOptions({ headerShown: false });
     }, [navigation]);
@@ -22,11 +23,59 @@ export default function EditProfileScreen() {
     const [firstName, setFirstName] = useState(firstNameH)
     const [secondName, setSecondName] = useState(secondNameH)
     const [description, setDescription] = useState(descriptionH)
+    const [profileURL, setProfileURL] = useState(pfpH)
+    const [profilePictureModified, setProfilePictureModified] = useState(null)
 
     function getDocument(){
         DocumentPicker.getDocumentAsync({type: "image/*", multiple: false}).then(result => {
-            console.log(result.assets);
+            setProfileURL(result.assets[0].uri);
+            setProfilePictureModified(result.assets[0]);
         });
+    }
+
+    function dataURItoBlob(dataURI) {
+    // convert base64 to raw binary data held in a string
+    // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
+    var byteString = atob(dataURI.split(',')[1]);
+
+    // separate out the mime component
+    var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
+
+    // write the bytes of the string to an ArrayBuffer
+    var ab = new ArrayBuffer(byteString.length);
+
+    // create a view into the buffer
+    var ia = new Uint8Array(ab);
+
+    // set the bytes of the buffer to the correct values
+    for (var i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+    }
+
+    // write the ArrayBuffer to a blob, and you're done
+    var blob = new Blob([ab], {type: mimeString});
+    return blob;
+
+    }
+
+    async function checkPicture() {
+        if(profilePictureModified == null) {
+            return;
+        }
+        console.log("upload new pfp");
+        console.log(profilePictureModified);
+        const pictureToUpload = {
+            uri: profilePictureModified.uri,
+            name: profilePictureModified.name,
+            type: profilePictureModified.mimeType
+        };
+        // const response = await fetch(profilePictureModified.uri);
+        // const blob = await response.blob();
+        // console.log(blob.size);
+        // console.log(blob.type);
+        console.log(await uploadFile(pictureToUpload));
+        
+        
     }
 
     return (
@@ -45,7 +94,7 @@ export default function EditProfileScreen() {
                 <ScrollView style={{paddingHorizontal: "5%"}}>
                     <View style={styles.imageContainer}>
                         <Image
-                            source={{ uri: 'https://via.placeholder.com/150' }}
+                            source={{ uri: profileURL }}
                             style={styles.profileImage}
                         />
                         <Pressable onPress={() => { getDocument() }}>
@@ -53,7 +102,7 @@ export default function EditProfileScreen() {
                         </Pressable>
                     </View>
 
-                    <View contentContainerStyle={styles.container}>
+                    <View style={styles.container}>
                         <View style={styles.nameRow}>
                             <View style={styles.nameField}>
                                 <EditBar value={firstName} setValue={setFirstName} title={"First Name"} />
@@ -70,7 +119,7 @@ export default function EditProfileScreen() {
                     </View>
 
                     <View style={styles.buttonContainer}>
-                        <Pressable style={styles.button} onPress={async () => { await modify_Profile(username, firstName, secondName, description); router.back() }}>
+                        <Pressable style={styles.button} onPress={async () => { await checkPicture(); await modify_Profile(username, firstName, secondName, description); router.back() }}>
                             <Text style={styles.topProfileButton}>Save</Text>
                         </Pressable>
                     </View>

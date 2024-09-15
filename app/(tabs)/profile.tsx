@@ -7,6 +7,7 @@ import { useWindowDimensions } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { differenceInYears } from 'date-fns';
 import { get_my_profile } from '../get-post/add';
+import { url_endpoint } from '../get-post/_config';
 
 
 
@@ -21,6 +22,7 @@ export default function ProfileScreen() {
     const [description, setDescription] = useState("description");
     const [gender, setGender] = useState("gender");
     const [birthday, setBirthday] = useState(new Date());
+    const [pfpURL, setPfpURL] = useState("https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png");
     
     useEffect(() => {
         get_my_profile().then((profile) => {
@@ -32,6 +34,10 @@ export default function ProfileScreen() {
                 setDescription(profile.result.Description);
                 setGender(profile.result.Gender);
                 setBirthday(new Date(profile.result.Birthday * 1000));
+                if(profile.result.LinkToPFP == null)
+                    setPfpURL("https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png");
+                else
+                    setPfpURL(url_endpoint + `/assets/${profile.result.LinkToPFP}`);
             }
         });
     }, []);
@@ -42,7 +48,7 @@ export default function ProfileScreen() {
 
     const { height, width } = useWindowDimensions();
 
-
+    console.log(pfpURL);
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "white"}}>
           <View style = {[{height: height/100*12}, styles.header]}>
@@ -57,7 +63,7 @@ export default function ProfileScreen() {
                       <Link
                           href={{
                               pathname: 'pages/editProfile',
-                              params: { usernameH: username, firstNameH: name, secondNameH: lastName, descriptionH: description }
+                              params: { usernameH: username, firstNameH: name, secondNameH: lastName, descriptionH: description, pfpH: pfpURL }
                           }}
                       >
                           <FontAwesome name={'edit'} style={[{ color: '#9394a5'}, styles.icon]} />
@@ -68,7 +74,7 @@ export default function ProfileScreen() {
               <View style={styles.circlePfp}></View>
                 <View style={styles.profileTopSection}>
                     <View style={styles.containerPfp}>
-                        <Image source={require("../../assets/images/image.jpg")} style={styles.profilePicture} resizeMode='cover' />
+                        <Image source={{uri: "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png"}} style={styles.profilePicture} resizeMode='cover' />
                     </View>
                     {/* pfp + stats (no. of volunteers, dominant tag, volunteering since) */}
                     <View style={{ flexDirection: "row" }}>

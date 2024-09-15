@@ -25,6 +25,19 @@ export async function get_my_profile() {
     const result=await response.json();
     return result;
 }
+export async function modify_pfp(picture_hash) {
+    if(!isLoggedIn())
+        return;
+    const url = url_endpoint+`/api/modify_profile`;
+    const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Authorization': await getAccountToken()
+        },
+        body: JSON.stringify({LinkToPFP: picture_hash})
+    });
+    return await response.json();
+}
 export async function modify_Profile(username, first_name, last_name, description){
     if(!isLoggedIn())
         return;
