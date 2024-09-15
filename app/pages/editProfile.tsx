@@ -1,11 +1,10 @@
 import { useParams } from 'expo-router';
 import React, { useState, useEffect } from 'react';
-import { ScrollView, StyleSheet, Text, View, TextInput, Pressable, Image, SafeAreaView, Platform, StatusBar } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, TextInput, Pressable, Image, SafeAreaView, Platform, StatusBar, KeyboardAvoidingView, Keyboard } from 'react-native';
 import { useNavigation, useRouter, useLocalSearchParams } from "expo-router";
 import { useWindowDimensions } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import * as DocumentPicker from 'expo-document-picker';
-
 
 export default function EditProfileScreen() {
     const navigation = useNavigation();
@@ -23,54 +22,58 @@ export default function EditProfileScreen() {
     const [secondName, setSecondName] = useState(secondNameH)
     const [description, setDescription] = useState(descriptionH)
 
-
-
     function getDocument(){
-        DocumentPicker.getDocumentAsync({type: "image/*"})
+        DocumentPicker.getDocumentAsync({type: "image/*"});
     }
 
     return (
-        <SafeAreaView style={{flex: 1}}>
-            <View style={[styles.header, { height: height / 100 * 12 }]}>
-                <Pressable onPress={() => { router.back() }}>
-                    <Ionicons name='chevron-back' style={Object.assign({ color: "#9394a5" }, styles.backIcon)} />
-                </Pressable>
-                <Text style={styles.headerTitle}>Edit Profile</Text>
-            </View>
-            <ScrollView>
-                <View style={styles.imageContainer}>
-                    <Image
-                        source={{ uri: 'https://via.placeholder.com/150' }}
-                        style={styles.profileImage}
-                    />
-                    <Pressable onPress= {() => {getDocument()}}>
-                        <Text style={styles.modifyButtonText}>Change Profile Image</Text>
+        <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            style={{ flex: 1 }}
+            keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0} // Adjust this value as needed
+        >
+            <SafeAreaView style={{ flex: 1 }}>
+                <View style={[styles.header, { height: height / 100 * 12 }]}>
+                    <Pressable onPress={() => { router.back() }}>
+                        <Ionicons name='chevron-back' style={[{ color: "#9394a5" }, styles.backIcon]} />
                     </Pressable>
+                    <Text style={styles.headerTitle}>Edit Profile</Text>
                 </View>
-
-                <ScrollView contentContainerStyle={styles.container}>
-                    <View style={styles.nameRow}>
-                        <View style={styles.nameField}>
-                            <EditBar value={firstName} setValue={setFirstName} title={"First Name"} />
-                        </View>
-                        <View style={styles.nameField}>
-                            <EditBar value={secondName} setValue={setSecondName} title={"Last Name"} />
-                        </View>
+                <ScrollView>
+                    <View style={styles.imageContainer}>
+                        <Image
+                            source={{ uri: 'https://via.placeholder.com/150' }}
+                            style={styles.profileImage}
+                        />
+                        <Pressable onPress={() => { getDocument() }}>
+                            <Text style={styles.modifyButtonText}>Change Profile Image</Text>
+                        </Pressable>
                     </View>
 
-                    <View style={styles.editContainer}>
-                        <EditBar value={username} setValue={setUsername} title={"Username"} />
+                    <View contentContainerStyle={styles.container}>
+                        <View style={styles.nameRow}>
+                            <View style={styles.nameField}>
+                                <EditBar value={firstName} setValue={setFirstName} title={"First Name"} />
+                            </View>
+                            <View style={styles.nameField}>
+                                <EditBar value={secondName} setValue={setSecondName} title={"Last Name"} />
+                            </View>
+                        </View>
+
+                        <View style={styles.editContainer}>
+                            <EditBar value={username} setValue={setUsername} title={"Username"} />
+                        </View>
+                        <EditBar value={description} setValue={setDescription} title={"Description"} numberOfLines={6} />
                     </View>
-                    <EditBar value={description} setValue={setDescription} title={"Description"} numberOfLines={6} />
+
+                    <View style={styles.buttonContainer}>
+                        <Pressable style={styles.button} onPress={() => { router.back() }}>
+                            <Text style={styles.topProfileButton}>Save</Text>
+                        </Pressable>
+                    </View>
                 </ScrollView>
-
-                <View style={styles.buttonContainer}>
-                    <Pressable style={styles.button}>
-                        <Text style={styles.topProfileButton}>Save</Text>
-                    </Pressable>
-                </View>
-            </ScrollView>
-        </SafeAreaView>
+            </SafeAreaView>
+        </KeyboardAvoidingView>
     );
 }
 
@@ -81,7 +84,7 @@ function EditBar({ value, setValue, title, numberOfLines = 1 }) {
             <TextInput
                 value={value}
                 onChangeText={(text) => setValue(text)}
-                placeholder={value}
+                placeholder={title}
                 style={[styles.textInput, { backgroundColor: '#ffffff' }]}
                 selectionColor="#C981EC"
                 multiline={true}
@@ -90,7 +93,6 @@ function EditBar({ value, setValue, title, numberOfLines = 1 }) {
         </View>
     );
 }
-
 
 const styles = StyleSheet.create({
     container: {
@@ -162,7 +164,7 @@ const styles = StyleSheet.create({
         paddingLeft: "4%",
         paddingRight: "6%",
         backgroundColor: "#ffffff",
-        paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0, // Adjusts for the status bar on Android
+        paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
     },
     headerTitle: {
         fontSize: 16,

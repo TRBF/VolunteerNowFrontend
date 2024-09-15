@@ -1,43 +1,94 @@
-import React, { useState } from 'react';
-import { ScrollView, StyleSheet, Text, View, Pressable, TextInput, SafeAreaView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { ScrollView, StyleSheet, Text, View, Pressable, TextInput, SafeAreaView, Platform, StatusBar } from 'react-native';
 import { useWindowDimensions } from 'react-native';
+import { useNavigation, useRouter, useLocalSearchParams } from "expo-router";
+import Ionicons from '@expo/vector-icons/Ionicons';
 
-export default function FormApply(){
-      const questions = [
+export default function FormApply() {
+    const navigation = useNavigation();
+    const router = useRouter();
+    const params = useLocalSearchParams();
+    const { width, height } = useWindowDimensions();
+
+    // Initialize answers state as an empty array
+    const [answers, setAnswers] = useState([]);
+
+    const questions = [
         {"Why do you want to volunteer?": "long"},
         {"What relevant experience do you have?": "long"},
         {"Which post would you like to apply for?": "short"},
-      ]
+    ];
 
-    return(
-        <SafeAreaView style={{flex: 1, backgroundColor: "white"}}>
-              <ScrollView>
-                    {questions.map((question:any) => <Question question = {{...question}}/>)}
+    useEffect(() => {
+        navigation.setOptions({ headerShown: false });
+    }, [navigation]);
+
+    // Function to handle input changes
+    const handleInputChange = (index, text) => {
+        setAnswers(prevAnswers => {
+            const newAnswers = [...prevAnswers];
+            newAnswers[index] = text;
+            return newAnswers;
+        });
+    };
+
+    return (
+        <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
+            <View style={[styles.header, { height: height / 100 * 12 }]}>
+                <Pressable onPress={() => { router.back() }}>
+                    <Ionicons name='chevron-back' style={Object.assign({ color: "#9394a5" }, styles.backIcon)} />
+                </Pressable>
+                <Text style={styles.headerTitle}>Application</Text>
+            </View>
+            <ScrollView style={{ paddingTop: "5%", paddingHorizontal: "5%" }}>
+                {questions.map((question, index) => (
+                    <Question
+                        key={index}
+                        index={index}
+                        question={Object.keys(question)[0]}
+                        type={Object.values(question)[0]}
+                        onInputChange={handleInputChange}
+                        answers={answers}
+                    />
+                ))}
             </ScrollView>
-          </SafeAreaView>
-        );
-    }
-
-
-function Question({question}) {
-    const {height, width} = useWindowDimensions();
-    const title = Object.keys(question)[0]
-    const type = Object.values(question)[0]
-
-    let shortAnswer = <TextInput style = {[{height: height/(7*4)}, styles.shortAnswer]}/>
-    let longAnswer = <TextInput multiline = { true } style = {[{height: height/7}, styles.longAnswer]}/>
-
-    let input: any;
-    if(type == "short") input = shortAnswer;
-    if(type == "long") input = longAnswer;
-
-    return(
-      <View style = {[{marginBottom: height/(7*4)},styles.question]}>
-          <Text style = {styles.questionText}>{ title }</Text>
-          { input }
-      </View>
-    )
+        </SafeAreaView>
+    );
 }
+
+
+
+function Question({ index, question, type, onInputChange, answers }) {
+    const { height } = useWindowDimensions();
+
+    // Define the TextInput for short and long answers
+    let shortAnswer = (
+        <TextInput
+            style={[{ height: height / (7 * 4) }, styles.shortAnswer]}
+            value={answers[index] || ''}
+            onChangeText={(text) => onInputChange(index, text)}
+        />
+    );
+    let longAnswer = (
+        <TextInput
+            multiline={true}
+            style={[{ height: height / 7 }, styles.longAnswer]}
+            value={answers[index] || ''}
+            onChangeText={(text) => onInputChange(index, text)}
+        />
+    );
+
+    // Choose which TextInput to render based on the type
+    let input = type === "short" ? shortAnswer : longAnswer;
+
+    return (
+        <View style={[{ marginBottom: height / (7 * 4) }, styles.question]}>
+            <Text style={styles.questionText}>{question}</Text>
+            {input}
+        </View>
+    );
+}
+
 
 const styles = StyleSheet.create({
         question: {
@@ -53,7 +104,7 @@ const styles = StyleSheet.create({
             borderColor: "#7211a2b3",
             borderWidth: 1,
             borderRadius: 5,
-            padding: 14,
+            paddingHorizontal: 14,
         },
         longAnswer: {
             width: "100%",
@@ -64,5 +115,22 @@ const styles = StyleSheet.create({
             display: "flex",
             textAlignVertical: "top",
             padding: 14,
+        },
+      header: {
+            width: "100%",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            paddingLeft: "4%",
+            paddingRight: "6%",
+            backgroundColor: "#ffffff",
+            paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+        },
+        headerTitle: {
+            fontSize: 16,
+            fontWeight: "bold",
+        },
+        backIcon: {
+            fontSize: 30,
         },
     })

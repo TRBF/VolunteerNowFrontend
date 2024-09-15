@@ -165,9 +165,9 @@ const Tab = () => {
                             <Image style={{aspectRatio: 1, borderRadius: 50}} source={require("../../assets/images/image.jpg")} />
                         </Pressable>
                         <Image style={styles.bannerImage} source={require("../../assets/images/logo2.png")} />
-                        <Pressable onPress={handleSecondImagePress} style = {styles.headerImageContainerRight}>
-                            <Image style={{aspectRatio: 1}} source={require("../../assets/images/chat2.png")} />
-                        </Pressable>
+                        <Link href={{ pathname: "pages/applicationsStatus" }} style={styles.headerImageContainerRight}>
+                            <Image style={{ aspectRatio: 1, width: 40, height: 40}} source={require("../../assets/images/chat2.png")} />
+                        </Link>
                     </View>
                     {events.map((event: any) => <Post postObject={{ ...event }} key={event.content} />)}
                 </ScrollView>
@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
     },
 
     postInfo: {
-        width:"85%", 
+        width:"85%",
         fontFamily: "Roboto",
     },
 
@@ -205,7 +205,7 @@ const styles = StyleSheet.create({
         width: "95%",
         justifyContent: "space-between",
         fontFamily: "Roboto",
-    },  
+    },
 
     authorName: {
         fontWeight: "700",
@@ -216,11 +216,11 @@ const styles = StyleSheet.create({
     },
 
     authorUsername: {
-        color: "#9394a5", 
+        color: "#9394a5",
     },
 
     timeElapsed: {
-        color: "#9394a5", 
+        color: "#9394a5",
     },
 
     bannerContainer: {
@@ -229,13 +229,13 @@ const styles = StyleSheet.create({
         //borderBottomColor: '#7211A2',
         //borderRightColor: '#7211A2',
         //borderLeftColor: '#7211A2',
-        
+
         shadowColor: '#0000000',
         shadowOffset: { width: 2, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5,
-        
+
         backgroundColor: '#ffffff',
 
         flexDirection: 'row',
@@ -244,7 +244,7 @@ const styles = StyleSheet.create({
 
         borderBottomLeftRadius: 30,
         borderBottomRightRadius: 30,
-          
+
         paddingTop: "15%",
         paddingBottom: "5%",
         paddingHorizontal: "5%",
@@ -264,7 +264,7 @@ const styles = StyleSheet.create({
       aspectRatio: 1,
       resizeMode: 'cover',
     },
-    
+
     headerImageContainerRight: {
       width: "8%",
       aspectRatio: 1,
