@@ -1,56 +1,92 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, Pressable, ScrollView, Image, ImageBackground, Dimensions } from 'react-native';
+import { StyleSheet, View, Text, Pressable, ScrollView, Image, Dimensions, Platform, StatusBar } from 'react-native';
 import { Link } from 'expo-router'
-import companies from '../../data/companies';
-import {useWindowDimensions} from 'react-native';
-import events from "../../data/events"
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-let notificationsAsc = events.map((x)=>(x));
-let notificationsDesc = events.map((x)=>(x));
 
-
-notificationsAsc.sort((a, b) => b.date - a.date);
-notificationsDesc.sort((a, b) => a.date - b.date);
-
-function Notification({notification}:any){
-    const postDate = new Date(notification.date)
-    return(
-        <Pressable style = {styles.notification}>
-            <Image source = {{uri: notification.profilePicture}} style = {styles.notificationPFP} resizeMode = "cover"/>
-            <View style = {styles.notificationInfo}>
-                <View style = {styles.orgInfo}>
-                    <Text style = {styles.notificationName}>{notification.name}</Text>
-                    <Text style = {styles.notificationUsername}>{notification.username}</Text>
-                </View>
-                <Text style = {styles.notificationDate}>{postDate.toLocaleDateString()}</Text>
-            </View>
-        </Pressable>
-    ) 
+function verticalUnits (num:number){
+    const height = Dimensions.get("window").height;
+    return height/100*num;
 }
 
+function horizontalUnits (num:number){
+    const width = Dimensions.get("window").width;
+    return width/100*num;
+}
+
+function Callout({ callout }) {
+
+    const startDate: Date = callout.startDate;  
+
+    return (
+        <View style={styles.calloutSection}>
+            <View style={{flexDirection: "column", alignItems: "flex-start", justifyContent: "center"}}>
+                <Image source={{uri:"https://yt3.googleusercontent.com/v6i9aPzHM2BA6oIOGA-k3vsUxpeeQpl3qM9PCgYyQeqkoXQ-83byoLYCV5jaOAx4GHhfW7NjVg=s160-c-k-c0x00ffffff-no-rj"}} resizeMode='cover' style={[styles.calloutImage, {
+                    height: verticalUnits(8.3),
+                    width: verticalUnits(8.3),
+                }]} />
+            </View>
+
+            <View style={{ width: "76%" }}>
+                <View style={styles.calloutIdentifiers}>
+                    <Text style={styles.calloutName}>{callout.name}</Text>
+                    <Text style={styles.calloutUsername}>@{callout.username}</Text>
+                </View>
+                <Text style={styles.calloutDescription}>{callout.description}</Text>
+            </View>
+        </View>
+    );
+}
 
 const Tab = () => {
-    const [tab, setTab] = useState("unread");
+
+    const [sendDate, setSendDate] = useState(new Date());
+
+    const callouts = [
+          {
+              name: "Untold",
+              username: "untold",
+              description: "This is a test event, this event is obviously and test and should not be used as anything but a test, it is a test event, got it?",
+              startDate: sendDate,
+              days: 5,
+          }, 
+          {
+              name: "Untold",
+              username: "untold",
+              description: "This is a test event, this event is obviously and test and should not be used as anything but a test, it is a test event, got it?",
+              startDate: sendDate,
+              days: 5,
+          },
+          {
+              name: "Untold",
+              username: "untold",
+              description: "This is a test event, this event is obviously and test and should not be used as anything but a test, it is a test event, got it?",
+              startDate: sendDate,
+              days: 5,
+          },
+          {
+              name: "Untold",
+              username: "untold",
+              description: "This is a test event, this event is obviously and test and should not be used as anything but a test, it is a test event, got it?",
+              startDate: sendDate,
+              days: 5,
+          },
+    ]
 
     return(
         <View style = {{height: "100%", backgroundColor: "#ffffff"}}>
             <SafeAreaView style = {{backgroundColor: "#ffffff"}}>
-                <ScrollView style = {styles.mainSection}>
-                    <View style = {styles.header}>
-                        <Pressable onPress = {() => setTab("unread")} style = {[styles.tabButton, tab=="unread" ? styles.tabActive : styles.tabInactive]}><Text style = {styles.tabButtonText}>Unread</Text></Pressable>
-                        <Pressable onPress = {() => setTab("read")} style = {[styles.tabButton, tab=="read" ? styles.tabActive : styles.tabInactive]}><Text style = {styles.tabButtonText}>Read</Text></Pressable>
+                <ScrollView>
+
+                    <View style = { styles.header }>
+                        <Text style = { styles.headerTitle }>Callouts</Text>
                     </View>
-                    {
-                        tab=="unread" ? 
-                        <ScrollView style = {styles.notificationsSection}>
-                                {notificationsAsc.map((notification:any) => <Notification notification = {notification}/>)}
-                        </ScrollView>
-                        :
-                        <ScrollView style = {styles.notificationsSection}>
-                                {notificationsDesc.map((notification:any) => <Notification notification = {notification}/>)}
-                        </ScrollView>
-                    }
+
+                    <ScrollView style = {{width: "100%"}} contentContainerStyle = {{flexDirection:"column", alignItems: "center"}}>
+                            {callouts.map((callout:any) => <Callout callout = {callout}/>)}
+                            <View style = {{height: verticalUnits(10), width: "100%"}}></View>
+                    </ScrollView>
+
                 </ScrollView>
             </SafeAreaView>
         </View>
@@ -58,100 +94,66 @@ const Tab = () => {
 }
 
 const styles = StyleSheet.create({
-    whitebg: {
-        backgroundColor: "white",
-    },
-    mainSection: {
-        backgroundColor: "white"
-    },
-    exploreText: {
-        width: "100%",
-        height: "100%",
-        textAlign: "center",
-        paddingTop: "40%",
-        paddingLeft: "10%",
-        paddingRight: "10%",
-        fontSize: 18, 
-        fontWeight: "300",
-        backgroundColor: "#FFF",
-    },
-    profilePicture: {
-        width: 100,
-        height: 100,
-    },
-    notificationsSection: {
-        height: "100%",
-    },
-    notification: {
-        display: "flex",
-        width: "100%",
-        flexDirection: "row",
-        justifyContent: "flex-start",
-        paddingLeft: "5%",
-        paddingRight: "5%",
-        paddingTop: "2%",
-        paddingBottom: "2%",
-    },
-    notificationPFP: {
-        height: Dimensions.get('window').height/16,
-        width: Dimensions.get('window').height/16,
-        marginRight: "5%",
-        borderRadius: 50,
-    },
-    notificationName: {
-        color: "#000",
-        fontWeight: "600",
-        fontSize: 15,
-    },
-
-    notificationUsername: {
-    },
-    
-    notificationInfo: {
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-between",
-        width: "80%",
-    },
-    orgInfo: {
-        display: "flex",
-        flexDirection: "column",
-    },
-    notificationDate: {
+    icon:{
+        fontSize: 20,
+        paddingHorizontal: '1%',
     },
     header: {
+        width: "100%",
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "#ffffff",
+        height: verticalUnits(6),
+    },
+    headerTitle: {
+        fontSize: 16,
+        fontWeight: "bold",
+    },
+    backIcon: {
+        fontSize: 30,
+    },
+    calloutSection: {
         display: "flex",
         flexDirection: "row",
-        alignItems: "center",
-        height: 50,
-        width: "100%",
-        marginBottom: "5%",
+        width: "94%",
+        paddingHorizontal: "3%",
+        paddingVertical: verticalUnits(1.5),
+        marginTop: verticalUnits(1),
+        borderRadius: 15,
+        backgroundColor: "#FFFFFF",
+        shadowColor: '#0000000',
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
     },
-    tabActive: {
-        borderBottomColor: "#7211A2"
+    calloutImage: {
+        borderRadius: 10,
+        marginRight: "5%",
+        marginBottom: "12%",
     },
-    tabInactive: {
-        borderBottomColor: "#fff"
+    calloutName: {
+        color: "#000000",
     },
-    filterButton: {
-
-    }, 
-    tabButton: {
-        width:"50%",
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        borderBottomWidth: 3,
-        paddingTop: "3%",
-        paddingBottom: "3%",
+    calloutUsername: {
+        color: "#9394a5",
     },
-    tabButtonText: {
+    calloutDate: {
+        color: "#9394a5",
+        fontSize: 12,
+        //marginLeft: "5%",
+        width: "80%",
         textAlign: "center",
-        color: "#7211A2",
-        fontWeight: "600",
-    }
-
-    
+    },
+    calloutDescription: {
+        color: "#000000",
+    },
+    calloutIdentifiers: {
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        width: "80%",
+        marginBottom: "2%",
+    },
 }) 
 
 

@@ -35,10 +35,15 @@ export default function FormApply() {
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
             <View style={[styles.header, { height: height / 100 * 12 }]}>
+
                 <Pressable onPress={() => { router.back() }}>
                     <Ionicons name='chevron-back' style={Object.assign({ color: "#9394a5" }, styles.backIcon)} />
                 </Pressable>
+
                 <Text style={styles.headerTitle}>Application</Text>
+
+                <View></View>
+                  
             </View>
             <ScrollView style={{ paddingTop: "5%", paddingHorizontal: "5%" }}>
                 {questions.map((question, index) => (
@@ -51,8 +56,8 @@ export default function FormApply() {
                         answers={answers}
                     />
                 ))}
-                <Pressable style={{alignItems: "center", marginTop:"10%"}} onPress={() => {router.back()}}>
-                    <Text style={{color: "#C981EC", fontSize: 16, fontWeight: "bold"}}>Apply</Text>
+                <Pressable style={styles.applyButton} onPress={() => {router.back()}}>
+                    <Text style={styles.applyButtonText}>Apply</Text>
                 </Pressable>
             </ScrollView>
         </SafeAreaView>
@@ -64,12 +69,13 @@ export default function FormApply() {
 function Question({ index, question, type, onInputChange, answers }) {
     const { height } = useWindowDimensions();
 
-    // Define the TextInput for short and long answers
     let shortAnswer = (
         <TextInput
             style={[{ height: height / (7 * 4) }, styles.shortAnswer]}
             value={answers[index] || ''}
             onChangeText={(text) => onInputChange(index, text)}
+            selectionColor = "#C981EC"
+            
         />
     );
     let longAnswer = (
@@ -78,10 +84,10 @@ function Question({ index, question, type, onInputChange, answers }) {
             style={[{ height: height / 7 }, styles.longAnswer]}
             value={answers[index] || ''}
             onChangeText={(text) => onInputChange(index, text)}
+            selectionColor = "#C981EC"
         />
     );
 
-    // Choose which TextInput to render based on the type
     let input = type === "short" ? shortAnswer : longAnswer;
 
     return (
@@ -98,26 +104,28 @@ const styles = StyleSheet.create({
     
     },
     questionText: {
-        fontSize: 15,
+        fontSize: 16,
         marginBottom: 14,
+        color: "#7211A2",
+        fontWeight: "bold",
     },
     shortAnswer: {
         width: "100%",
         backgroundColor: "#fbf2ff",
         borderColor: "#7211a2b3",
-        borderWidth: 1,
         borderRadius: 5,
         paddingHorizontal: 14,
+        color: "#7211A2",
     },
     longAnswer: {
         width: "100%",
         backgroundColor: "#fbf2ff",
         borderColor: "#7211a2b3",
-        borderWidth: 1,
         borderRadius: 5,
         display: "flex",
         textAlignVertical: "top",
         padding: 14,
+        color: "#7211A2",
     },
     header: {
           width: "100%",
@@ -125,7 +133,7 @@ const styles = StyleSheet.create({
           justifyContent: "space-between",
           alignItems: "center",
           paddingLeft: "4%",
-          paddingRight: "6%",
+          paddingRight: "11%",
           backgroundColor: "#ffffff",
           paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
     },
@@ -136,4 +144,16 @@ const styles = StyleSheet.create({
     backIcon: {
         fontSize: 30,
     },
-    })
+    applyButtonText: {
+        fontSize: 18,
+        fontWeight: "bold",
+        color: "#fff",
+    },
+    applyButton: {
+        width: "55%", // Set the width to be smaller
+        height: "70%",
+        alignSelf: "center", // Center the container within its parent
+        paddingTop: 20, // Add padding to the top
+        paddingBottom: 20,
+    },
+})

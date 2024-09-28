@@ -3,13 +3,11 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { Tabs } from 'expo-router';
+import React from 'react';
 
 export default function TabLayout() {
   return (
-    <Tabs screenOptions={{ tabBarActiveTintColor: '#7211A2', tabBarInactiveTintColor: "#000", tabBarStyle: {
-        elevation: 0,
-        
-        }, 
+    <Tabs screenOptions={{ tabBarActiveTintColor: '#7211A2', tabBarInactiveTintColor: "#000", tabBarStyle: {elevation: 0,}, tabBarHideOnKeyboard: true, 
     }}>
       <Tabs.Screen
         name="index"

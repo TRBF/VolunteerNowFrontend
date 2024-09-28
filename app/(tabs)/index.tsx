@@ -1,20 +1,23 @@
 import React, {useState} from 'react';
-import { StyleSheet, Text, View, ScrollView, Pressable, Modal, Keyboard, TextInput } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Pressable, Modal, TextInput, Dimensions } from 'react-native';
 import { Image } from 'expo-image';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Entypo from '@expo/vector-icons/Entypo';
 import {useWindowDimensions} from 'react-native';
 import events from '../../data/events';
 import GestureRecognizer from 'react-native-swipe-gestures';
-import {
-  SafeAreaView,
-  SafeAreaProvider,
-  SafeAreaInsetsContext,
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Link } from 'expo-router';
-import { TypePredicateKind } from 'typescript';
 
+function verticalUnits (num:number){
+    const height = Dimensions.get("window").height;
+    return height/100*num;
+}
+
+function horizontalUnits (num:number){
+    const width = Dimensions.get("window").width;
+    return width/100*num;
+}
 
 function Post({postObject}:any){
     const [shareClicked, setShareClicked] = useState(false);
@@ -97,72 +100,75 @@ function Post({postObject}:any){
 
 
                             <View style = {styles.rightButtons}>
-                            {/*
-                                <Pressable onPress = {() => setSaveClicked(!saveClicked)}>
-                                    <FontAwesome name='bookmark' style = {Object.assign({color: saveClicked ? "yellow" : "#9394a5"}, styles.icon)}/>
-                                </Pressable> */}
+                                <Pressable style = {{flexDirection: 'row'}} onPress = {() => setHeartClicked(!heartClicked)}>
+                                    <FontAwesome name={heartClicked ? 'heart' : 'heart-o'} style = {[{color: heartClicked ? '#7211A2' : '#9394a5', marginRight: '5%'}, styles.icon]}/>
+                                    <Text style = {{color: heartClicked ? '#7211A2' : '#9394a5', textAlignVertical: 'center'}}>123</Text>
+                                </Pressable>
+                                <Pressable  style = {{flexDirection: 'row'}} onPress = {() => setCommentClicked(!commentClicked)}>
+                                    <FontAwesome name={'comment-o'} style = {[{color: '#9394a5', marginRight: '5%'}, styles.icon]}/>
+                                    <Text style = {{color: heartClicked ? '#7211A2' : '#9394a5', textAlignVertical: 'center'}}>123</Text>
+                                </Pressable>
                                 <Pressable onPress = {() => setShareClicked(!shareClicked)}>
                                     <FontAwesome name={shareClicked ? 'send' : 'send-o'} style = {[{color: '#9394a5'}, styles.icon]}/>
                                 </Pressable>
-                                <Pressable onPress = {() => setHeartClicked(!heartClicked)}>
-                                    <FontAwesome name={heartClicked ? 'heart' : 'heart-o'} style = {[{color: '#9394a5'}, styles.icon]}/>
-                                </Pressable>
-                                <Pressable onPress = {() => setCommentClicked(!commentClicked)}>
-                                    <FontAwesome name={'comment-o'} style = {[{color: '#9394a5'}, styles.icon]}/>
-                                </Pressable>
-                                <GestureRecognizer
-                                  style={{flex: 1}}
-                                  onSwipeDown={ () => { setCommentClicked(false) } }>
-                                    <Modal
-                                        animationType="slide"
-                                        visible={commentClicked}
-                                        transparent={true}
-                                        onRequestClose={() => {
-                                            setVisible(!commentClicked);
-                                        }}>
-                                        <View style={styles.centeredView}>
-                                            <View style={styles.modalView}>
-                                                <Text style={styles.modalText}>Comments</Text>
-                                            </View>
-                                            <ScrollView>
-                                                {usersComment.map((comment, index) => (
-                                                    <Comment
-                                                        key={index}
-                                                        pfp={comment.pfp}
-                                                        username={comment.username}
-                                                        text={comment.text}
-                                                    />
-                                                ))}
-                                            </ScrollView>
-                                            <View style = {{
-                                                    display: "flex", 
-                                                    flexDirection: "row", 
-                                                    width: "94%", 
-                                                    margin: "auto", 
-                                                    paddingVertical: "1%",
-                                                    borderTopWidth: 1,
-                                                    borderBottomWidth: 1,
-                                                    borderTopColor: "#eeeeee",
-                                                    borderBottomColor: "#eeeeee",
-                                            }}>
-                                                <View style = {{width: "12%"}}>
-                                                    <Image
-                                                        source={{ uri: "https://via.placeholder.com/40x40/000000/000000" }}
-                                                        style={{ aspectRatio: 1, width: "100%", borderRadius: 40}}
-                                                    />
-                                                </View>
-                                                <TextInput placeholder = "Add comment..." style = {[styles.commentInput, {height: verticalUnits(5), width: "80%"}]}/>
-
-                                            </View>
-                                        </View>
-                                    </Modal>
-                                </GestureRecognizer>
                             </View>
                             <Text style = {styles.volunteersNeeded}>{postObject.volunteerCount} volunteers needed</Text>
                         </View>
                     </View>
                 </Pressable>
             </Link>
+            <GestureRecognizer
+                style={{flex: 1}}
+                onSwipeDown={ () => { setCommentClicked(false) } }>
+                  <Modal
+                      animationType="slide"
+                      visible={commentClicked}
+                      transparent={true}
+                      onRequestClose={() => {
+                          setVisible(!commentClicked);
+                      }}>
+                      <View style={styles.centeredView}>
+                          <View style={styles.modalView}>
+                              <View style = {{width: "14%", height: verticalUnits(0.8), backgroundColor:"#dedede", borderRadius: 50, marginBottom: verticalUnits(1)}}></View>
+                              <Text style={styles.modalText}>Comments</Text>
+                          </View>
+                          <ScrollView>
+                              {usersComment.map((comment, index) => (
+                                  <Comment
+                                      key={index}
+                                      pfp={comment.pfp}
+                                      username={comment.username}
+                                      text={comment.text}
+                                  />
+                              ))}
+                          </ScrollView>
+                          <View style = {{
+                                  display: "flex", 
+                                  flexDirection: "row", 
+                                  width: "94%", 
+                                  margin: "auto", 
+                                  paddingVertical: "1%",
+                                  borderTopWidth: 1,
+                                  borderBottomWidth: 1,
+                                  borderTopColor: "#eeeeee",
+                                  borderBottomColor: "#eeeeee",
+                          }}>
+                              <View style = {{width: "12%"}}>
+                                  <Image
+                                      source={{ uri: "https://via.placeholder.com/40x40/000000/000000" }}
+                                      style={{ aspectRatio: 1, width: "100%", borderRadius: 40}}
+                                  />
+                              </View>
+                              <TextInput 
+                                  placeholder = "Add comment..." 
+                                  style = {[styles.commentInput, {height: verticalUnits(5), width: "80%"}]}
+                                  returnKeyType = "send"/>
+
+                          </View>
+                      </View>
+                  </Modal>
+               </GestureRecognizer>
+
         </View>
     )
 }
@@ -185,22 +191,31 @@ const Comment = ({ pfp, username, text }) => {
 }
 
 const Tab = () => {
-    const handleSecondImagePress = () => console.log('Second image pressed');
-
     return (
         <View style={{ backgroundColor: '#ffffff', }}>
             <SafeAreaView>
                 <ScrollView style={{ backgroundColor: "#ffffff" }}>
+
                     <View style={styles.bannerContainer}>
-                        <Pressable onPress={handleSecondImagePress} style = {styles.headerImageContainerLeft}>
-                            <Image style={{aspectRatio: 1, borderRadius: 50}} source={require("../../assets/images/image.jpg")} />
-                        </Pressable>
-                        <Image style={styles.bannerImage} source={require("../../assets/images/logo2.png")} />
-                        <Link href={{ pathname: "pages/applicationsStatus" }} style={styles.headerImageContainerRight}>
-                                <FontAwesome name={'bell'} style={{ color: '#9394a5', fontSize: 26, alignItems: "center"}} />
+                    
+                        <Link href={{
+                            pathname: "profile",
+                        }} asChild>
+                            <Pressable style = {styles.headerImageContainerLeft}>
+                                <Image style={{aspectRatio: 1, borderRadius: 50}} source={require("../../assets/images/chira_pfp.jpeg")} />
+                            </Pressable>
                         </Link>
+
+                        <Image style={styles.bannerImage} source={require("../../assets/images/logo2.png")} />
+
+                        <Link href={{ pathname: "pages/applicationsStatus" }} style={styles.headerImageContainerRight}>
+                            <Entypo name={'documents'} style={{ color: '#7211A2', fontSize: 26, alignItems: "center"}} />
+                        </Link>
+
                     </View>
+
                     {events.map((event: any) => <Post postObject={{ ...event }} key={event.content} />)}
+
                 </ScrollView>
             </SafeAreaView>
         </View>
@@ -327,7 +342,7 @@ const styles = StyleSheet.create({
         flexDirection:"row",
         justifyContent:"space-between",
         alignItems:"center",
-        width:"95%",
+        width:"98%",
     },
 
     postImage: {
@@ -343,7 +358,6 @@ const styles = StyleSheet.create({
         display: "flex",
         flexDirection: "row",
         justifyContent: "space-between",
-        gap: 10, 
     },
 
     icon: {
@@ -351,21 +365,18 @@ const styles = StyleSheet.create({
     },
     modalOverlay: {
         height: '100%',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
         justifyContent: 'center',
         alignItems: 'center',
     },
     centeredView: {
-        //backgroundColor: "#fff",
-        backgroundColor: "#f6f6f6",
+        backgroundColor: "#fcfcfc",
         flex: 1,
         height: "80%",
         marginTop:"20%",
         borderTopRightRadius: 30,
         borderTopLeftRadius: 30,
         shadowColor: '#0000000',
-        shadowOffset: { width: 2, height: 2 },
-        shadowOpacity: 0.25,
+        shadowOpacity: 0.55,
         shadowRadius: 3.84,
         elevation: 5,
     },
@@ -383,20 +394,13 @@ const styles = StyleSheet.create({
         width: "100%",
     },
     modalView: {
-       flexDirection: "row",
+       flexDirection: "column",
        justifyContent: "space-between",
        alignItems: 'center',
-       shadowColor: '#000',
        paddingTop: "5%",
        paddingBottom: "5%",
        borderBottomWidth: 1,
-       borderBottomColor: "#eeeeee"
-    },
-    buttonOpen: {
-      backgroundColor: '#F194FF',
-    },
-    buttonClose: {
-      backgroundColor: '#2196F3',
+       borderBottomColor: "#eeeeee",
     },
     textStyle: {
       color: 'white',
@@ -408,8 +412,7 @@ const styles = StyleSheet.create({
         marginHorizontal: "3%",
         marginTop: "3%",
         borderRadius: 15,
-        //backgroundColor: "#fff",
-        backgroundColor: "#f6f6f6",
+        backgroundColor: "#fcfcfc",
         borderColor: "gray",
     },
     commentInput: {

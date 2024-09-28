@@ -33,6 +33,7 @@ function SearchBar({ placeholder, onChangeText }) {
             style={[{ color: "white", backgroundColor: focus ? "#C981EC" : "#FBF2FF", marginTop: "4%"}, styles.searchBar]}
             selectionColor="#C981EC"
             placeholderTextColor={"#e3b5f7"}
+            returnKeyType='search'
         />
     );
 }

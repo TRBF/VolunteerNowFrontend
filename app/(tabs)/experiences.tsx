@@ -1,23 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Pressable, TextInput, ScrollView, Image, Modal, KeyboardAvoidingView, Keyboard, DevSettings } from 'react-native';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, Pressable, TextInput, ScrollView, Image, Modal, KeyboardAvoidingView, Keyboard, Dimensions } from 'react-native';
 import {useWindowDimensions} from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import {
-  SafeAreaView,
-  SafeAreaProvider,
-  SafeAreaInsetsContext,
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
-import { LinearGradient } from 'expo-linear-gradient';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import * as DocumentPicker from 'expo-document-picker';
-import { deleteExperience, get_event, getExperiences } from '../get-post/add';
-import { getAccountId } from '../get-post/_account';
+import { deleteExperience } from '../get-post/add';
 import { url_endpoint } from '../get-post/_config';
-import { router } from 'expo-router';
+
+function verticalUnits (num:number){
+    const height = Dimensions.get("window").height;
+    return height/100*num;
+}
+
+function horizontalUnits (num:number){
+    const width = Dimensions.get("window").width;
+    return width/100*num;
+}
 
 function ExperienceSection({ experience }) {
     const { height, width } = useWindowDimensions();
@@ -58,9 +57,9 @@ function ExperienceSection({ experience }) {
         <Pressable onPress={() => {pressableClicked()}}>
             <View style={styles.experienceSection}>
                 <View style={{flexDirection: "column", alignItems: "baseline"}}>
-                    <Image source={{uri:url_endpoint+`/assets/${diplomaHash}`}} resizeMode='cover' style={[styles.experienceImage, {
-                        height: height / 12,
-                        width: height / 12,
+                    <Image source={{uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZQFgSilp0Kmrx1T5QWLuNOz-H5Bdz4zC1_w&s"}} resizeMode='cover' style={[styles.experienceImage, {
+                        height: verticalUnits(8.3),
+                        width: verticalUnits(8.3),
                     }]} />
                     <Text style={styles.experienceDate}>{experience.experienceStartDate}</Text>
                     <Text style={styles.experienceDate}>{experience.days} days</Text>
@@ -163,26 +162,25 @@ export default function DiplomasPastExperiencesScreen() {
         setSearchText(text);
     };
 
-    const [experiences, setExperiences] = useState([]);
-    useEffect(() => {
-        getAccountId().then(userid => 
-            getExperiences(userid).then(result => {
-                if(result.success) {
-                    setExperiences([]);
-                    for (const experience of result.result) {
-                        if(experience.EventID == null) {
-                            setExperiences([...experiences, {id: experience.ID, name: experience.Name, description: experience.Description, username: experience.Location, days: experience.Days, diploma: experience.Diploma}]);
-                        } else {
-                            get_event(experience.EventID).then(res => {
-                                if(res.success)
-                                    setExperiences([...experiences, {id: experience.ID, name: res.result.Name, description: res.result.Description, username: experience.Location, days: experience.Days, diploma: res.result.LinkToPFP}]);
-                            });
-                        }
-                    }
-                }
-            })
-        )
-    }, []);
+    const experiences = [{
+      "experienceStartDate": experienceStartDate,
+      "experienceEndDate": experienceEndDate,
+      "name": name,
+      "username": username,
+      "description": description,
+      "imageLink": imageLink,
+      "hours": hours
+    },
+    {
+      "experienceStartDate": experienceStartDate,
+      "experienceEndDate": experienceEndDate,
+      "name": "Voluntariat Test",
+      "username": username,
+      "description": description,
+      "imageLink": imageLink,
+      "hours": hours
+    },
+    ]
 
 
     function startDateUpdate(text: string){
@@ -198,7 +196,6 @@ export default function DiplomasPastExperiencesScreen() {
     }
 
     function pressableClicked(){
-        console.log('eee')
         if(Keyboard.isVisible()) Keyboard.dismiss()
         else setVisible(!visible)
     }
@@ -216,10 +213,11 @@ export default function DiplomasPastExperiencesScreen() {
                     value={searchText}
                     style={styles.searchBar}
                     placeholderTextColor={"#e3b5f7"}
+                    returnKeyType='search'
                 />
 
                 <View style={{ flex: 1, overflow: 'visible', marginTop: 10}}>
-                      <ScrollView>
+                      <ScrollView contentContainerStyle = {{alignItems: "center"}}>
                             {experiences.map((object, index) => (
                                 (object.name.toLowerCase().startsWith(searchText.toLowerCase()) || searchText === "") ? (
                                     <ExperienceSection key={index} experience={object} />
@@ -301,25 +299,64 @@ export default function DiplomasPastExperiencesScreen() {
 
 
 const styles = StyleSheet.create({
+    //experienceSection: {
+    //    display: "flex",
+    //    flexDirection: "row",
+    //    width: "96%",
+    //    padding: "3%",
+    //    marginTop: "5%",
+    //    marginHorizontal: "2%",
+    //    borderRadius: 15,
+    //    backgroundColor: "#FFFFFF",
+    //    shadowColor: '#0000000',
+    //    shadowOffset: { width: 2, height: 2 },
+    //    shadowOpacity: 0.25,
+    //    shadowRadius: 3.84,
+    //    elevation: 5,
+    //    zIndex: 1,
+    //},
+    //experienceImage: {
+    //    borderRadius: 10,
+    //    marginRight: "5%",
+    //},
+    //experienceName: {
+    //    color: "#000000",
+    //},
+    //experienceUsername: {
+    //    color: "#9394a5",
+    //},
+    //experienceDate: {
+    //    color: "#9394a5",
+    //    fontSize: 12,
+    //},
+    //experienceDescription: {
+    //    color: "#000000",
+    //},
+    //experienceIdentifiers: {
+    //    display: "flex",
+    //    flexDirection: "column",
+    //    justifyContent: "space-between",
+    //    width: "80%",
+    //    marginBottom: "2%",
+    //}   
     experienceSection: {
         display: "flex",
         flexDirection: "row",
-        width: "96%",
-        padding: "3%",
-        marginTop: "5%",
-        marginHorizontal: "2%",
+        width: "94%",
+        paddingHorizontal: "3%",
+        paddingVertical: verticalUnits(1.5),
+        marginTop: verticalUnits(2),
         borderRadius: 15,
         backgroundColor: "#FFFFFF",
         shadowColor: '#0000000',
-        shadowOffset: { width: 2, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5,
-        zIndex: 1,
     },
     experienceImage: {
         borderRadius: 10,
         marginRight: "5%",
+        marginBottom: "12%",
     },
     experienceName: {
         color: "#000000",
@@ -330,6 +367,9 @@ const styles = StyleSheet.create({
     experienceDate: {
         color: "#9394a5",
         fontSize: 12,
+        //marginLeft: "5%",
+        width: "80%",
+        textAlign: "center",
     },
     experienceDescription: {
         color: "#000000",
@@ -341,6 +381,7 @@ const styles = StyleSheet.create({
         width: "80%",
         marginBottom: "2%",
     },
+
     container: {
         width: "100%",
         height: "100%",
@@ -394,19 +435,8 @@ const styles = StyleSheet.create({
         color: "#FFFFFF",
     },
     searchBar: {
-        //height: 40,
-        //borderRadius: 20,
-        //paddingLeft: 10,
-        //marginHorizontal: 10,
-        //backgroundColor: "#ffffff",
         marginTop: "5%",
         marginBottom: "2%",
-        //shadowColor: '#000000',
-        //shadowOffset: { width: 2, height: 2 },
-        //shadowOpacity: 0.25,
-        //shadowRadius: 3.84,
-        //elevation: 5,
-        //zIndex: 3,
         backgroundColor: "#FBF2FF",
         borderRadius: 30,
         width: "90%",
