@@ -1,8 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { ScrollView, StyleSheet, Text, View, Pressable, TextInput, SafeAreaView, Platform, StatusBar } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, Pressable, TextInput, SafeAreaView, Platform, StatusBar, Dimensions } from 'react-native';
 import { useWindowDimensions } from 'react-native';
 import { useNavigation, useRouter, useLocalSearchParams } from "expo-router";
 import Ionicons from '@expo/vector-icons/Ionicons';
+
+function verticalUnits (num:number){
+    const height = Dimensions.get("window").height;
+    return height/100*num;
+}
+
+function horizontalUnits (num:number){
+    const width = Dimensions.get("window").width;
+    return width/100*num;
+}
 
 export default function FormApply() {
     const navigation = useNavigation();
@@ -34,6 +44,7 @@ export default function FormApply() {
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
+
             <View style={[styles.header, { height: height / 100 * 12 }]}>
 
                 <Pressable onPress={() => { router.back() }}>
@@ -45,7 +56,8 @@ export default function FormApply() {
                 <View></View>
                   
             </View>
-            <ScrollView style={{ paddingTop: "5%", paddingHorizontal: "5%" }}>
+
+            <ScrollView style={{ paddingTop: verticalUnits(5), paddingHorizontal: "5%" }}>
                 {questions.map((question, index) => (
                     <Question
                         key={index}
@@ -56,10 +68,13 @@ export default function FormApply() {
                         answers={answers}
                     />
                 ))}
-                <Pressable style={styles.applyButton} onPress={() => {router.back()}}>
-                    <Text style={styles.applyButtonText}>Apply</Text>
+
+                <Pressable style={styles.sendPressable} onPress={() => {router.back()}}>
+                    <Text style={styles.sendText}>Send Application</Text>
                 </Pressable>
+
             </ScrollView>
+
         </SafeAreaView>
     );
 }
@@ -71,7 +86,7 @@ function Question({ index, question, type, onInputChange, answers }) {
 
     let shortAnswer = (
         <TextInput
-            style={[{ height: height / (7 * 4) }, styles.shortAnswer]}
+            style={styles.shortAnswer}
             value={answers[index] || ''}
             onChangeText={(text) => onInputChange(index, text)}
             selectionColor = "#C981EC"
@@ -81,7 +96,7 @@ function Question({ index, question, type, onInputChange, answers }) {
     let longAnswer = (
         <TextInput
             multiline={true}
-            style={[{ height: height / 7 }, styles.longAnswer]}
+            style={styles.longAnswer}
             value={answers[index] || ''}
             onChangeText={(text) => onInputChange(index, text)}
             selectionColor = "#C981EC"
@@ -110,6 +125,7 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
     },
     shortAnswer: {
+        height: verticalUnits(4),
         width: "100%",
         backgroundColor: "#fbf2ff",
         borderColor: "#7211a2b3",
@@ -118,6 +134,7 @@ const styles = StyleSheet.create({
         color: "#7211A2",
     },
     longAnswer: {
+        height: verticalUnits(16),
         width: "100%",
         backgroundColor: "#fbf2ff",
         borderColor: "#7211a2b3",
@@ -128,14 +145,14 @@ const styles = StyleSheet.create({
         color: "#7211A2",
     },
     header: {
-          width: "100%",
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "center",
-          paddingLeft: "4%",
-          paddingRight: "11%",
-          backgroundColor: "#ffffff",
-          paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+        width: "100%",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        paddingLeft: "4%",
+        paddingRight: "11%",
+        backgroundColor: "#ffffff",
+        paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
     },
     headerTitle: {
         fontSize: 16,
@@ -144,16 +161,20 @@ const styles = StyleSheet.create({
     backIcon: {
         fontSize: 30,
     },
-    applyButtonText: {
+    sendText: {
         fontSize: 18,
         fontWeight: "bold",
         color: "#fff",
+        backgroundColor: "#C981EC",
+        paddingVertical: verticalUnits(2),
+        marginTop: verticalUnits(12),
+        marginBottom: verticalUnits(2),
+        borderRadius: 10,
+        textAlign: "center",
+        textAlignVertical: "center",
     },
-    applyButton: {
+    sendPressable: {
         width: "55%", // Set the width to be smaller
-        height: "70%",
         alignSelf: "center", // Center the container within its parent
-        paddingTop: 20, // Add padding to the top
-        paddingBottom: 20,
     },
 })

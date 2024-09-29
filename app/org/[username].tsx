@@ -1,26 +1,31 @@
-import React, { useState } from 'react';
-import { ScrollView, StyleSheet, Text, View, Pressable } from 'react-native';
-import { Image } from 'expo-image';
-import { useLocalSearchParams, useNavigation } from 'expo-router';
-import { useEffect } from 'react';
-import { useWindowDimensions } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { ScrollView, StyleSheet, Image, Text, View, SafeAreaView, Platform, StatusBar, Dimensions, Pressable } from 'react-native';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { Link, router, useLocalSearchParams, useNavigation } from 'expo-router';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import Entypo from '@expo/vector-icons/Entypo';
-import { Link, router } from 'expo-router';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import events from '../../data/events'
 
-function Experience({ experience }) {
-    const { height, width } = useWindowDimensions();
+function verticalUnits (num:number){
+    const height = Dimensions.get("window").height;
+    return height/100*num;
+}
+
+function horizontalUnits (num:number){
+    const width = Dimensions.get("window").width;
+    return width/100*num;
+}
+
+function PastExperience({ experience }) {
+    const startDate: Date = experience.startDate;
 
     return (
         <View style={styles.experienceSection}>
-            <View style={{flexDirection: "column", alignItems: "baseline"}}>
-                <Image source={require("../../assets/images/image.jpg")} resizeMode='cover' style={[styles.experienceImage, {
-                    height: height / 12,
-                    width: height / 12,
+            <View style={{flexDirection: "column", alignItems: "flex-start"}}>
+                <Image source={{uri:"https://yt3.googleusercontent.com/v6i9aPzHM2BA6oIOGA-k3vsUxpeeQpl3qM9PCgYyQeqkoXQ-83byoLYCV5jaOAx4GHhfW7NjVg=s160-c-k-c0x00ffffff-no-rj"}} resizeMode='cover' style={[styles.experienceImage, {
+                    height: verticalUnits(8.3),
+                    width: verticalUnits(8.3),
                 }]} />
-                    <Text style={styles.experienceDate}>{experience.firstVolunteered}</Text>
+                <Text style={styles.experienceDate}>{startDate.getDay()}.{startDate.getMonth()}.{startDate.getFullYear()}</Text>
+                <Text style={styles.experienceDate}>{experience.days} days</Text>
             </View>
 
             <View style={{ width: "76%" }}>
@@ -29,58 +34,86 @@ function Experience({ experience }) {
                     <Text style={styles.experienceUsername}>@{experience.username}</Text>
                 </View>
                 <Text style={styles.experienceDescription}>{experience.description}</Text>
-                {/* description (shortened) */}
-
             </View>
         </View>
     );
 }
 
-export default function Tab() {
+export default function OrganiserPage() {
     const navigation = useNavigation();
-    const { height, width } = useWindowDimensions();
     useEffect(() => {
         navigation.setOptions({ headerShown: false });
     }, [navigation]);
-
     let volunteerCount = 3;
-    let dominantTag = 7;
-    let firstVolunteered = "12/03/23";
-    let hours = "Untold";
-    let name = "Mihnea";
-    let username = "tomoioaga";
-    let description = "Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat. Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat. Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.";
-    let bannerLink = "https://static4.libertatea.ro/wp-content/uploads/2023/10/untold-2024-e1696503120515.jpg"
+    let dominantTag = 8;
+    let hours = "Music";
+    const [name, setName] = useState("Untold");
+    const [username, setUsername] = useState("untold");
+    const [description, setDescription] = useState("Aceasta este descrierea lui Alex Chira, un băiat foarte pasionat de ceea ce face, care se implică oriunde poate!");
+    const [birthday, setBirthday] = useState(new Date());
 
-    const experienceObject = {
-        name: name,
-        username: username,
-        firstVolunteered: firstVolunteered,
-        description: description,
-    }
+    const experienceListPlaceholder = [
+          {
+              name: "Untold",
+              username: "untold",
+              description: "This is a test event, this event is obviously and test and should not be used as anything but a test, it is a test event, got it?",
+              startDate: birthday,
+              days: 5,
+          }, 
+          {
+              name: "Untold",
+              username: "untold",
+              description: "This is a test event, this event is obviously and test and should not be used as anything but a test, it is a test event, got it?",
+              startDate: birthday,
+              days: 5,
+          },
+          {
+              name: "Untold",
+              username: "untold",
+              description: "This is a test event, this event is obviously and test and should not be used as anything but a test, it is a test event, got it?",
+              startDate: birthday,
+              days: 5,
+          },
+          {
+              name: "Untold",
+              username: "untold",
+              description: "This is a test event, this event is obviously and test and should not be used as anything but a test, it is a test event, got it?",
+              startDate: birthday,
+              days: 5,
+          },
+    ]
+
 
     return (
-        <View style={{ flex: 1, backgroundColor: "white"}}>
-            <SafeAreaView style = {{ flex: 1 }}>
-              <View style = {[{height: height/100*7}, styles.header]}>
-                  <Pressable onPress={ () => {router.back()} }>
-                      <Ionicons name='chevron-back' style = {Object.assign({color: "#9394a5"}, styles.backIcon)}/>
-                  </Pressable>
-                  <Text style = { styles.headerTitle }>{ username }</Text>
-                  <Entypo name='dots-three-horizontal' style = {Object.assign({color: "#9394a5"}, styles.settingsIcon)}/>
-              </View>
-            <ScrollView style={{ flex: 1}}>
-              <Image style={styles.circlePfp} source = {{uri: bannerLink}}/>
-                <View style={styles.profileTopSection }>
+        <SafeAreaView style={{ flex: 1, backgroundColor: "white"}}>
+
+            <View style = {styles.header}>
+
+                <Pressable onPress={() => {router.back()}}>
+                      <Ionicons name='chevron-back' style={[{ color: '#9394a5' }, styles.icon]} />
+                </Pressable>
+                
+
+                <Text style = { styles.headerTitle }>@{ username }</Text>
+
+                <Ionicons name={'chevron-back'} style={[{ color: '#fff'}, styles.icon]} />
+
+
+            </View>
+            <ScrollView style={{ flex: 1 }} contentContainerStyle = {{ flexDirection: 'column', alignItems: 'center' }}>
+
+                <Image style={styles.banner} source = {{uri: "https://viacluj.tv/wp-content/uploads/2022/08/untold-3.jpg"}}></Image>
+
+                <View style={styles.profileTopSection}>
                     <View style={styles.containerPfp}>
-                        <Image source={require("../../assets/images/image.jpg")} style={styles.profilePicture} resizeMode='cover' />
+                        <Image source={{uri: "https://yt3.googleusercontent.com/v6i9aPzHM2BA6oIOGA-k3vsUxpeeQpl3qM9PCgYyQeqkoXQ-83byoLYCV5jaOAx4GHhfW7NjVg=s160-c-k-c0x00ffffff-no-rj"}} style={styles.profilePicture} resizeMode='cover' />
                     </View>
                     {/* pfp + stats (no. of volunteers, dominant tag, volunteering since) */}
                     <View style={{ flexDirection: "row" }}>
                         <View style={styles.profileStatsSection}>
                             <View style={styles.profileStatsSubsection}>
                                 <Text style={styles.profileStatsSubsectionText}>{volunteerCount}</Text>
-                                <Text style={styles.profileStatsSubsectionTextV2}>organised</Text>
+                                <Text style={styles.profileStatsSubsectionTextV2}>opportunities</Text>
                             </View>
                             <View style={styles.profileStatsSubsection}>
                                 <Text style={styles.profileStatsSubsectionText}>{dominantTag}</Text>
@@ -88,56 +121,49 @@ export default function Tab() {
                             </View>
                             <View style={styles.profileStatsSubsection}>
                                 <Text style={styles.profileStatsSubsectionText}>{hours}</Text>
-                                <Text style={styles.profileStatsSubsectionTextV2}>latest event</Text>
+                                <Text style={styles.profileStatsSubsectionTextV2}>genre</Text>
                             </View>
                         </View>
                     </View>
                 </View>
+
                 <View style={styles.profileInfoSection}>
-                    <View style={styles.identifiers}>
+                    <View style = {styles.identificationData}>
                         <Text style={styles.name}>{name}</Text>
                         <Text style={styles.username}>@{username}</Text>
                     </View>
                     <Text style={styles.description}>{description}</Text>
                 </View>
-                
-                <Experience experience={{...experienceObject}} />
-                {events.map((experience:any) => <Experience experience = {{...experience}}/>)}
-                
-                <Pressable>
-                    <Text style={styles.seeAllText}>See all</Text>
-                </Pressable>
+
+                {/*<View style={{ flexDirection: "row", justifyContent: 'space-around', paddingTop: "10%" }}>
+                    <View style={styles.profileStatsSection}>
+                        <View style={styles.profileStatsSubsection}>
+                            <Text style={styles.profileStatsSubsectionTextV4}>Age</Text>
+                            <Text style={styles.profileStatsSubsectionTextV3}>{yearsDifference}</Text>
+                        </View>
+                        <View style={styles.profileStatsSubsection}>
+                            <Text style={styles.profileStatsSubsectionTextV4}>Gender</Text>
+                            <Text style={styles.profileStatsSubsectionTextV3}>{gender}</Text>
+                        </View>
+                    </View>
+                </View>*/}
+
+                {experienceListPlaceholder.map((object, index) => (<PastExperience key={index} experience={object} />))}
+
+                <View style = {{height: "5%", width:"100%", backgroundColor: "transparent"}}>
+                    <Text style = {{color: "transparent"}}>Nothing to see here!</Text>
+                </View>
+
             </ScrollView>
-            </SafeAreaView>
-        </View>
+        </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
-  header: {
-        width: "100%",
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-        paddingLeft: "4%",
-        paddingRight: "6%",
-        backgroundColor: "#ffffff",
-    },
-    headerTitle: {
-        fontSize: 16,
-        fontWeight: "bold",
-    },
-    backIcon: {
-        fontSize: 30,
-    },
-    settingsIcon: {
-
-    },
     profileStatsSection: {
         display: "flex",
         flexDirection: "row",
-        justifyContent: "space-between",
+        justifyContent: "space-around",
         alignItems: "center",
         width: "100%",
     },
@@ -145,9 +171,7 @@ const styles = StyleSheet.create({
         display: "flex",
         flexDirection: "column",
         width: "33%",
-        justifyContent: "flex-start",
-        alignSelf: "flex-start",
-        marginBottom: "5%",
+        marginBottom: verticalUnits(1),
     },
     profileStatsSubsectionText: {
         color: "#000000",
@@ -163,29 +187,46 @@ const styles = StyleSheet.create({
         textAlign: "center",
         flexWrap: "wrap",
     },
+    profileStatsSubsectionTextV3: {
+        color: "#000000",
+        fontWeight: "800",
+        fontSize: 14,
+        textAlign: "center",
+        flexWrap: "wrap",
+    },
+    profileStatsSubsectionTextV4: {
+        color: 'rgba(114, 17, 162, .7)',
+        fontWeight: "600",
+        fontSize: 20,
+        textAlign: "center",
+        flexWrap: "wrap",
+    },
     profilePicture: {
-        height: 125,
-        width: 125,
+        width: "100%",
+        height: "100%",
         borderRadius: 100,
         justifyContent: "center",
         alignItems: "center",
         marginBottom: "5%",
     },
-    circlePfp: {
-        width: "100%",
+    banner: {
+        backgroundColor: 'rgba(114, 17, 162, .7)',
+        aspectRatio: 1,
         position: "absolute",
-        height: 100,
+        height: verticalUnits(15),  
+        width: "100%",
         top: 0,
         left: 0,
     },
     containerPfp: {
-        shadowColor: "#000000",
-        shadowOffset: { width: 0, height: 2 },
-        elevation: 10,
+        shadowColor: "rgba(114, 17, 162, .7)",
+        elevation: 20,
         marginBottom: "5%",
         borderRadius: 100,
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
+        width: "45%",
+        aspectRatio: 1,
     },
     profileTopSection: {
         display: "flex",
@@ -210,10 +251,10 @@ const styles = StyleSheet.create({
         width: "90%",
         margin: "auto",
         marginLeft: "5%",
-
+    
         paddingTop: "6%",
         paddingBottom: "6%",
-
+    
         textAlign: "center",
         borderRadius: 15,
         color: "#FFFFFF",
@@ -252,41 +293,41 @@ const styles = StyleSheet.create({
         color: "#FFFFFF",
     },
     profileInfoSection: {
+        marginTop: verticalUnits(3.5),
+        paddingBottom: verticalUnits(5),
+        paddingHorizontal: "8%",
         width: "100%",
-        paddingRight: "5%",
-        paddingLeft: "5%",
     },
     name: {
         color: "#000000",
         fontWeight: "600",
         marginRight: "2%",
+        fontSize: 16,
+        textAlignVertical: 'center',
     },
     username: {
         color: "#9394a5",
+        textAlignVertical: 'center',
     },
     description: {
         color: "#000000"
     },
-    identifiers: {
+    identificationData: {
         display: "flex",
         justifyContent: "flex-start",
         flexDirection: "row",
-        width: "100%",
-        marginTop: "5%",
+        marginBottom: verticalUnits(1),
     },
     experienceSection: {
         display: "flex",
         flexDirection: "row",
-        width: "96%",
-        padding: "3%",
-        marginTop: "5%",
-        marginHorizontal: "2%",
-        borderWidth: 1,
-        borderColor: 'gray',
+        width: "94%",
+        paddingHorizontal: "3%",
+        paddingVertical: verticalUnits(1.5),
+        marginTop: verticalUnits(2),
         borderRadius: 15,
         backgroundColor: "#FFFFFF",
         shadowColor: '#0000000',
-        shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5,
@@ -294,6 +335,7 @@ const styles = StyleSheet.create({
     experienceImage: {
         borderRadius: 10,
         marginRight: "5%",
+        marginBottom: "12%",
     },
     experienceName: {
         color: "#000000",
@@ -303,6 +345,10 @@ const styles = StyleSheet.create({
     },
     experienceDate: {
         color: "#9394a5",
+        fontSize: 12,
+        //marginLeft: "5%",
+        width: "80%",
+        textAlign: "center",
     },
     experienceDescription: {
         color: "#000000",
@@ -327,7 +373,6 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: "semibold",
         marginLeft: "3%",
-        marginTop: "5%"
     },
     seeAllText: {
         fontWeight: "800",
@@ -335,5 +380,28 @@ const styles = StyleSheet.create({
         marginLeft: "3%",
         marginTop: "2%",
         color: 'rgba(114, 17, 162, .8)',
+    },
+    icon:{
+        fontSize: 30,
+        paddingHorizontal: '1%',
+    },
+    header: {
+        width: "100%",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        paddingLeft: "4%",
+        paddingRight: "6%",
+        backgroundColor: "#ffffff",
+        height: verticalUnits(12),
+        paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0, // Adjusts for the status bar on Android
+    },
+    headerTitle: {
+        fontSize: 16,
+        fontWeight: "bold",
+        paddingLeft: "3%",
+    },
+    backIcon: {
+        fontSize: 30,
     },
 })

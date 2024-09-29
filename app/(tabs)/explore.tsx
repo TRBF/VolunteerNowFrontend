@@ -52,21 +52,25 @@ const Tab = () => {
         <SafeAreaView style={{ backgroundColor: "#ffffff", flex: 1 }}>
             <Pressable onPress = {Keyboard.dismiss} style = {{height: "100%", width: "100%"}}>
                 <View style={styles.mainView}>
+                    
                     <SearchBar
                         placeholder="Search"
                         onChangeText={async (value:string) => {
                             setSearch(value);
-                            setResults(await request(value));
-                        }}
+                            setResults(await request(value));}
+                            }
                     />
 
                     <Text style={[search ? { display: "none" } : { display: "flex" }, styles.exploreText]}>
+
                         Type something above to start searching for volunteering opportunities!
+
                     </Text>
+                    
                     <ScrollView style={[!search ? { display: "none" } : { display: "flex" }, styles.resultsSection]}>
-                        {
-                            results.map((company) => <Result company={company} />)
-                        }
+
+                        { results.map((company) => <Result company={company} />) }
+
                     </ScrollView>
                 </View>
             </Pressable>

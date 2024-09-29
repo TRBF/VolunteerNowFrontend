@@ -106,7 +106,7 @@ function Post({postObject}:any){
                                 </Pressable>
                                 <Pressable  style = {{flexDirection: 'row'}} onPress = {() => setCommentClicked(!commentClicked)}>
                                     <FontAwesome name={'comment-o'} style = {[{color: '#9394a5', marginRight: '5%'}, styles.icon]}/>
-                                    <Text style = {{color: heartClicked ? '#7211A2' : '#9394a5', textAlignVertical: 'center'}}>123</Text>
+                                    <Text style = {{color: '#9394a5', textAlignVertical: 'center'}}>123</Text>
                                 </Pressable>
                                 <Pressable onPress = {() => setShareClicked(!shareClicked)}>
                                     <FontAwesome name={shareClicked ? 'send' : 'send-o'} style = {[{color: '#9394a5'}, styles.icon]}/>

@@ -71,6 +71,7 @@ function ExperienceSection({ experience }) {
                         <Text style={styles.experienceUsername}>@{experience.username}</Text>
                     </View>
                     <Text style={styles.experienceDescription}>{experience.description}</Text>
+                    {experience.diploma ? <Text style = {styles.attestedText}>Attested by diploma</Text> : <View></View>}
                 </View>
                 <Modal
                     animationType="slide"
@@ -169,7 +170,8 @@ export default function DiplomasPastExperiencesScreen() {
       "username": username,
       "description": description,
       "imageLink": imageLink,
-      "hours": hours
+      "hours": hours,
+      "diploma": 1,
     },
     {
       "experienceStartDate": experienceStartDate,
@@ -178,7 +180,8 @@ export default function DiplomasPastExperiencesScreen() {
       "username": username,
       "description": description,
       "imageLink": imageLink,
-      "hours": hours
+      "hours": hours,
+      "diploma": 0,
     },
     ]
 
@@ -594,5 +597,10 @@ const styles = StyleSheet.create({
     modalText: {
       fontSize: 16,
       fontWeight: "normal",
+    },
+    attestedText: {
+        marginTop: verticalUnits(1),
+        color: 'rgba(114, 17, 162, .7)', 
+        fontStyle: 'italic'
     }
 });

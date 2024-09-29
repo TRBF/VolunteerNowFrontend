@@ -2,9 +2,7 @@ import React, { useState } from 'react';
 import { ScrollView, StyleSheet, Image, Text, View, SafeAreaView, Platform, StatusBar, Dimensions } from 'react-native';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Link } from 'expo-router';
-import { useWindowDimensions } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { differenceInYears } from 'date-fns';
 
 function verticalUnits (num:number){
     const height = Dimensions.get("window").height;
@@ -36,6 +34,7 @@ function PastExperience({ experience }) {
                     <Text style={styles.experienceUsername}>@{experience.username}</Text>
                 </View>
                 <Text style={styles.experienceDescription}>{experience.description}</Text>
+                {experience.diploma ? <Text style = {styles.attestedText}>Attested by diploma</Text> : <View></View>}
             </View>
         </View>
     );
@@ -45,16 +44,12 @@ export default function ProfileScreen() {
     let volunteerCount = 3;
     let dominantTag = 8;
     let hours = "Untold";
-    let yearsDifference = 16;
     const [name, setName] = useState("Chira");
     const [lastName, setLastName] = useState("Alexandru");
     const [username, setUsername] = useState("alex_c");
     const [description, setDescription] = useState("Aceasta este descrierea lui Alex Chira, un băiat foarte pasionat de ceea ce face, care se implică oriunde poate!");
     const [gender, setGender] = useState("gender");
     const [birthday, setBirthday] = useState(new Date());
-
-    const endDate = new Date();
-    console.log(birthday);
 
     const experienceListPlaceholder = [
           {
@@ -63,6 +58,7 @@ export default function ProfileScreen() {
               description: "This is a test event, this event is obviously and test and should not be used as anything but a test, it is a test event, got it?",
               startDate: birthday,
               days: 5,
+              diploma: 0,
           }, 
           {
               name: "Untold",
@@ -70,6 +66,7 @@ export default function ProfileScreen() {
               description: "This is a test event, this event is obviously and test and should not be used as anything but a test, it is a test event, got it?",
               startDate: birthday,
               days: 5,
+              diploma: 1,
           },
           {
               name: "Untold",
@@ -77,6 +74,7 @@ export default function ProfileScreen() {
               description: "This is a test event, this event is obviously and test and should not be used as anything but a test, it is a test event, got it?",
               startDate: birthday,
               days: 5,
+              diploma: 0,
           },
           {
               name: "Untold",
@@ -84,6 +82,7 @@ export default function ProfileScreen() {
               description: "This is a test event, this event is obviously and test and should not be used as anything but a test, it is a test event, got it?",
               startDate: birthday,
               days: 5,
+              diploma: 0,
           },
     ]
 
@@ -411,5 +410,10 @@ const styles = StyleSheet.create({
     },
     backIcon: {
         fontSize: 30,
+    },
+    attestedText: {
+        marginTop: verticalUnits(1),
+        color: 'rgba(114, 17, 162, .7)', 
+        fontStyle: 'italic'
     },
 })

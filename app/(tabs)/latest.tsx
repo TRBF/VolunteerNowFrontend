@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         backgroundColor: "#ffffff",
-        height: verticalUnits(6),
+        height: verticalUnits(8),
     },
     headerTitle: {
         fontSize: 16,
