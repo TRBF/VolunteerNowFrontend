@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ScrollView, StyleSheet, Image, Text, View, SafeAreaView, Platform, StatusBar, Dimensions } from 'react-native';
+import { ScrollView, Pressable, StyleSheet, Image, Text, View, SafeAreaView, Platform, StatusBar, Dimensions } from 'react-native';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Link } from 'expo-router';
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -18,25 +18,30 @@ function PastExperience({ experience }) {
     const startDate: Date = experience.startDate;
 
     return (
-        <View style={styles.experienceSection}>
-            <View style={{flexDirection: "column", alignItems: "flex-start"}}>
-                <Image source={{uri:"https://yt3.googleusercontent.com/v6i9aPzHM2BA6oIOGA-k3vsUxpeeQpl3qM9PCgYyQeqkoXQ-83byoLYCV5jaOAx4GHhfW7NjVg=s160-c-k-c0x00ffffff-no-rj"}} resizeMode='cover' style={[styles.experienceImage, {
-                    height: verticalUnits(8.3),
-                    width: verticalUnits(8.3),
-                }]} />
-                <Text style={styles.experienceDate}>{startDate.getDay()}.{startDate.getMonth()}.{startDate.getFullYear()}</Text>
-                <Text style={styles.experienceDate}>{experience.days} days</Text>
-            </View>
-
-            <View style={{ width: "76%" }}>
-                <View style={styles.experienceIdentifiers}>
-                    <Text style={styles.experienceName}>{experience.name}</Text>
-                    <Text style={styles.experienceUsername}>@{experience.username}</Text>
+        <Link href={{
+            pathname: 'org/[username]',
+            params: { username: experience.username },
+        }} asChild>
+            <Pressable style={styles.experienceSection}>
+                <View style={{flexDirection: "column", alignItems: "flex-start"}}>
+                    <Image source={{uri:"https://yt3.googleusercontent.com/v6i9aPzHM2BA6oIOGA-k3vsUxpeeQpl3qM9PCgYyQeqkoXQ-83byoLYCV5jaOAx4GHhfW7NjVg=s160-c-k-c0x00ffffff-no-rj"}} resizeMode='cover' style={[styles.experienceImage, {
+                        height: verticalUnits(8.3),
+                        width: verticalUnits(8.3),
+                    }]} />
+                    <Text style={styles.experienceDate}>{startDate.getDay()}.{startDate.getMonth()}.{startDate.getFullYear()}</Text>
+                    <Text style={styles.experienceDate}>{experience.days} days</Text>
                 </View>
-                <Text style={styles.experienceDescription}>{experience.description}</Text>
-                {experience.diploma ? <Text style = {styles.attestedText}>Attested by diploma</Text> : <View></View>}
-            </View>
-        </View>
+
+                <View style={{ width: "76%" }}>
+                    <View style={styles.experienceIdentifiers}>
+                        <Text style={styles.experienceName}>{experience.name}</Text>
+                        <Text style={styles.experienceUsername}>@{experience.username}</Text>
+                    </View>
+                    <Text style={styles.experienceDescription}>{experience.description}</Text>
+                    {experience.diploma ? <Text style = {styles.attestedText}>Attested by diploma</Text> : <View></View>}
+                </View>
+            </Pressable>
+        </Link>
     );
 }
 

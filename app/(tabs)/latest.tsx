@@ -19,22 +19,27 @@ function Callout({ callout }) {
     const startDate: Date = callout.startDate;  
 
     return (
-        <View style={styles.calloutSection}>
-            <View style={{flexDirection: "column", alignItems: "flex-start", justifyContent: "center"}}>
-                <Image source={{uri:"https://yt3.googleusercontent.com/v6i9aPzHM2BA6oIOGA-k3vsUxpeeQpl3qM9PCgYyQeqkoXQ-83byoLYCV5jaOAx4GHhfW7NjVg=s160-c-k-c0x00ffffff-no-rj"}} resizeMode='cover' style={[styles.calloutImage, {
-                    height: verticalUnits(8.3),
-                    width: verticalUnits(8.3),
-                }]} />
-            </View>
-
-            <View style={{ width: "76%" }}>
-                <View style={styles.calloutIdentifiers}>
-                    <Text style={styles.calloutName}>{callout.name}</Text>
-                    <Text style={styles.calloutUsername}>@{callout.username}</Text>
+        <Link href={{
+            pathname: 'org/[username]',
+            params: { username: callout.username },
+        }} asChild>
+            <Pressable style={styles.calloutSection}>
+                <View style={{flexDirection: "column", alignItems: "flex-start", justifyContent: "center"}}>
+                    <Image source={{uri:"https://yt3.googleusercontent.com/v6i9aPzHM2BA6oIOGA-k3vsUxpeeQpl3qM9PCgYyQeqkoXQ-83byoLYCV5jaOAx4GHhfW7NjVg=s160-c-k-c0x00ffffff-no-rj"}} resizeMode='cover' style={[styles.calloutImage, {
+                        height: verticalUnits(8.3),
+                        width: verticalUnits(8.3),
+                    }]} />
                 </View>
-                <Text style={styles.calloutDescription}>{callout.description}</Text>
-            </View>
-        </View>
+
+                <View style={{ width: "76%" }}>
+                    <View style={styles.calloutIdentifiers}>
+                        <Text style={styles.calloutName}>{callout.name}</Text>
+                        <Text style={styles.calloutUsername}>@{callout.username}</Text>
+                    </View>
+                    <Text style={styles.calloutDescription}>{callout.description}</Text>
+                </View>
+            </Pressable>
+        </Link>
     );
 }
 

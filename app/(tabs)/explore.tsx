@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, TextInput, ScrollView, Pressable, Image, Modal, ImageBackground, Dimensions, Keyboard } from 'react-native';
+import { Link } from 'expo-router';
 import {
   SafeAreaView,
   SafeAreaProvider,
@@ -10,15 +11,20 @@ import { search_event, search_organisers, search_volunteers } from '../get-post/
 
 function Result({ company }) {
     return (
-        <Pressable>
-            <View style={styles.result}>
-                <Image source={ company.LinkToPFP ? { uri: company.LinkToPFP } : null } style={ styles.resultPFP } resizeMode="cover" />
-                <View style={ styles.resultInfo }>
-                    <Text style={ styles.resultName }>{ !company.Name ? company.FirstName + " " + company.LastName : company.Name }</Text>
-                    { company.Username && <Text style={ styles.resultUsername }>@{ company.Username }</Text> }
+        <Link href={{
+            pathname: 'org/[username]',
+            params: { username: company.username },
+        }} asChild>
+            <Pressable>
+                <View style={styles.result}>
+                    <Image source={ company.LinkToPFP ? { uri: company.LinkToPFP } : null } style={ styles.resultPFP } resizeMode="cover" />
+                    <View style={ styles.resultInfo }>
+                        <Text style={ styles.resultName }>{ !company.Name ? company.FirstName + " " + company.LastName : company.Name }</Text>
+                        { company.Username && <Text style={ styles.resultUsername }>@{ company.Username }</Text> }
+                    </View>
                 </View>
-            </View>
-        </Pressable>
+            </Pressable>
+        </Link>
     );
 }
 

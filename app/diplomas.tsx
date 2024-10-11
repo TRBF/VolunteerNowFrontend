@@ -5,7 +5,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import ExperienceSection from './(tabs)/experiences';
 
 
-function DiplomaSection({diploma}: any){
+function DiplomaSection(){
     const [modalVisible, setModalVisible] = useState(false);
 
     const handleEdit = () => {
@@ -16,18 +16,18 @@ function DiplomaSection({diploma}: any){
         return;
         }
 
-    const {height, width} = useWindowDimensions();
+    const { height } = useWindowDimensions();
     return(
         <View style = {styles.diplomaSection}>
-            <Image source={require("../assets/images/image.jpg")} resizeMode='cover' style = {[styles.experienceImage, {
+            <Image source={require("../assets/images/image.jpg")} resizeMode='cover' style = {{
                 height: height/12,
                 width: height/12,
-            }]}/>
-            <Image source={require("../assets/images/image.jpg")} resizeMode='cover' style = {[styles.experienceImage, {
+            }}/>
+            <Image source={require("../assets/images/image.jpg")} resizeMode='cover' style = {{
                 height: height/4,
                 width: "90%",
                 marginTop: 10,
-            }]}/>
+            }}/>
 
             <View style={{flexDirection: "row", justifyContent: "center"}}>
                 <TouchableOpacity onPress={() => setModalVisible(true)} style={{marginRight: 10}}>
@@ -54,7 +54,7 @@ function DiplomaSection({diploma}: any){
                                 <Text style={styles.closeButtonText}>Close</Text>
                             </TouchableOpacity>
 
-                            <TouchableOpacity onPress={handleEdit()} style={styles.closeButton}>
+                            <TouchableOpacity onPress={() => handleEdit()} style={styles.closeButton}>
                                 <Text style={styles.closeButtonText}>Edit</Text>
                             </TouchableOpacity>
                         </View>
@@ -113,7 +113,7 @@ export default function DiplomasPastExperiencesScreen() {
 
             <View style={{ flex: 1 }}>
                 {tab === "experiences" &&
-                    <ScrollView style={styles.scrollViewPadding}>
+                    <ScrollView>
                         {experienceObjects.map((object, index) => (
                             (object.name.toLowerCase().startsWith(searchText.toLowerCase()) || searchText === "") ? (
                                 <ExperienceSection key={index} experience={object} />
