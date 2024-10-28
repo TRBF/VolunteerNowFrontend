@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    padding: "2%",
+    padding: "3%",
     paddingTop: 0,
   },
 
@@ -173,7 +173,7 @@ const styles = StyleSheet.create({
   inputText: {
     marginTop: "5%",
     backgroundColor: "#FBF2FF",
-    borderRadius: 30,
+    borderRadius: 10,
     borderColor: 'rgba(114, 17, 162, .8)',
     borderWidth: 1,
     width: "90%",

@@ -84,12 +84,13 @@ export default function Register() {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.container}
     >
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.mainView}>
-        <Image
+              <Image
             style={styles.bgImage}
             source={require("../../assets/images/wave2nologo.png")}
           />
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.mainView}>
+
           <Text style={styles.registerText}> Register </Text>
           {/* forms section */}
           <View style={styles.inputView}>
@@ -225,6 +226,8 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "space-evenly",
     alignItems: "center",
+    paddingHorizontal: "3%",
+    paddingVertical: "5%",
   },
   registerText: {
     fontSize: 40,
@@ -250,22 +253,21 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3, 
     shadowRadius: 15, 
     elevation: 10, 
-    marginHorizontal: "10%",
-
   },
 
   bgImage: {
     resizeMode: "cover",
-    height: "40%", 
+    height: "40%",
     width: "100%",
-    position: 'absolute', 
+    position: 'absolute',
+    zIndex: -1, // Add this line
   },
 
 
   inputText: {
     marginTop: "5%",
     backgroundColor: "#FBF2FF",
-    borderRadius: 30,
+    borderRadius: 10,
     borderColor: 'rgba(114, 17, 162, .8)',
     borderWidth: 1,
     width: "90%",
@@ -293,7 +295,7 @@ const styles = StyleSheet.create({
   nameText: {
     marginTop: "5%",
     backgroundColor: "#FBF2FF",
-    borderRadius: 30,
+    borderRadius: 10,
     borderColor: 'rgba(114, 17, 162, .8)',
     borderWidth: 1,
     width: "40%",
