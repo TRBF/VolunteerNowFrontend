@@ -11,11 +11,13 @@ import {
   View,
   ActivityIndicator,
   Pressable,
+  ScrollView,
 } from "react-native";
 import { StyleSheet } from "react-native";
 import { login } from "../get-post/add";
 import { isLoggedIn, rememberAccount } from "../get-post/_account";
 import { Link, router, useNavigation, useRouter } from "expo-router";
+import { LinearGradient } from 'expo-linear-gradient'; // Import LinearGradient
 
 export default function Login() {
   const [username, setUsername] = React.useState("");
@@ -62,38 +64,52 @@ export default function Login() {
       style={styles.container}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <ScrollView>
         <View style={styles.mainView}>
           <Image
             style={styles.bgImage}
             source={require("../../assets/images/wave2.png")}
           />
           <View style={styles.loginInfo}>
-            <Text style={styles.loginText}>Login now</Text>
-            <TextInput
-              value={username}
-              onChangeText={setUsername}
-              style={styles.inputText}
-              placeholder="username"
-              placeholderTextColor="black"
-            />
-            <TextInput
-              value={password}
-              onChangeText={setPassword}
-              style={styles.inputText}
-              placeholder="password"
-              secureTextEntry={true}
-              placeholderTextColor="black"
-            />
+              <View style={styles.loginCard3D}> 
+
+                <Text style={styles.loginText}>Log In</Text>
+                <TextInput
+                  value={username}
+                  onChangeText={setUsername}
+                  style={styles.inputText}
+                  placeholder="username"
+                  placeholderTextColor="black"
+                />
+                <TextInput
+                  value={password}
+                  onChangeText={setPassword}
+                  style={styles.inputText}
+                  placeholder="password"
+                  secureTextEntry={true}
+                  placeholderTextColor="black"
+                />
+                <View style={{marginTop:" 3%", marginRight: "5%", alignSelf: "flex-end"}}>
+                  <Link
+                  href={{
+                    pathname: "/auth/forgotPassword"
+                  }}
+                  >
+                    <Text style={styles.forgotPasswordText}>Forgot password</Text>
+                  </Link>
+              </View>
+
+
+            </View>
+
 
             {/* Display loading spinner when loading */}
             {loading ? (
               <ActivityIndicator size="large" color="#0000ff" />
             ) : (
-              <View style={styles.btnView}>
-                <Pressable onPress={handleLogin}>
-                  <Text style={styles.btnText}>Login</Text>
-                </Pressable>
-              </View>
+            <Pressable style={styles.button} onPress={() => { /* Add login action */ }}>
+                <Text style={styles.buttonText}>Login</Text>
+            </Pressable>
             )}
             <View style={styles.viewSignUp}>
               <Text style={styles.textSignUp}>Don't have an account?</Text>
@@ -109,6 +125,7 @@ export default function Login() {
             </View>
           </View>
         </View>
+        </ScrollView>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
   );
@@ -129,63 +146,102 @@ const styles = StyleSheet.create({
 
   bgImage: {
     resizeMode: "cover",
-    height: "40%",
+    height: "40%", 
     width: "100%",
+    position: 'absolute', 
   },
 
   loginInfo: {
-    marginTop: -10,
+    marginTop: "62%",
     width: "100%",
-    height: "auto",
     zIndex: 1,
     display: "flex",
     flexDirection: "column",
-    alignItems: "flex-start",
+    alignItems: "center",
     padding: "2%",
     paddingTop: 0,
   },
 
   loginText: {
     fontSize: 40,
-    fontStyle: "italic",
-    padding: "10%",
+    fontWeight: "bold",
+    textAlign: "center",
     paddingTop: 0,
+    marginBottom: "10%"
   },
 
   inputText: {
+    marginTop: "5%",
+    backgroundColor: "#FBF2FF",
+    borderRadius: 30,
+    borderColor: 'rgba(114, 17, 162, .8)',
     borderWidth: 1,
     width: "90%",
-    height: 50,
-    padding: 5,
-    margin: 20,
-    marginRight: 0,
-    borderRadius: 5,
-    color: "black",
+    alignSelf: "center",
+    padding: 10,
+    color: "#7211A2",
+    shadowColor: '#C981EC',
+    shadowOffset: {
+      width: 2,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3,
+    elevation: 5,
   },
 
   viewSignUp: {
-    padding: 10,
-    // justifyContent: "center",
-    // alignContent: "center",
     alignItems: "center",
-    width: "100%",
   },
   btnView: {
-    marginTop: 12,
-    marginLeft: 10,
     backgroundColor: "white",
   },
 
   btnText: {
     color: "#7d4cb6",
     fontSize: 15,
-    paddingTop: 10,
   },
 
   textSignUp: {
     paddingTop: 30,
     fontSize: 15,
   },
+
+  loginCard3D: {
+    backgroundColor: "white",
+    width: "100%",
+    paddingVertical: "15%",
+    borderRadius: 20, 
+    shadowColor: '#7211A2', 
+    shadowOffset: {
+      width: 0,
+      height: 20, 
+    },
+    shadowOpacity: 0.3, 
+    shadowRadius: 15, 
+    elevation: 10, 
+  },
+
+  button: {
+    backgroundColor: 'rgba(114, 17, 162, .8)',
+    borderRadius: 10, 
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    alignSelf: 'center',
+    marginTop: "10%", 
+  },
+  
+  buttonText: {
+    color: 'white', 
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  
+  forgotPasswordText: {
+    color: "#7d4cb6",
+    fontSize: 13,
+  }
+  
 });
 
 // culori:

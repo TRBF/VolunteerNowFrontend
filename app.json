@@ -18,7 +18,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.anonymous.VolunteerNow"
     },
     "web": {
       "favicon": "./assets/favicon.png",
@@ -29,7 +30,9 @@
       [
         "expo-font",
         {
-          "fonts": ["node_modules/@expo-google-fonts/roboto/Roboto_400Regular.ttf"]
+          "fonts": [
+            "node_modules/@expo-google-fonts/roboto/Roboto_400Regular.ttf"
+          ]
         }
       ]
     ],

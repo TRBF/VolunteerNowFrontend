@@ -24,6 +24,7 @@ import {
 import { Button } from "react-native-paper";
 import { DatePickerModal } from "react-native-paper-dates";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { LinearGradient } from 'expo-linear-gradient';
 
 const local_data = [
   {
@@ -85,9 +86,29 @@ export default function Register() {
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.mainView}>
-          <Text style={styles.registerText}> Register Now </Text>
+        <Image
+            style={styles.bgImage}
+            source={require("../../assets/images/wave2nologo.png")}
+          />
+          <Text style={styles.registerText}> Register </Text>
           {/* forms section */}
           <View style={styles.inputView}>
+          <View style={styles.nameView}>
+              <TextInput
+                value={fname}
+                onChangeText={setFname}
+                style={styles.nameText}
+                placeholder="first name"
+                placeholderTextColor="black"
+              />
+              <TextInput
+                value={lname}
+                onChangeText={setLname}
+                style={styles.nameText}
+                placeholder="last name"
+                placeholderTextColor="black"
+              />
+            </View>
             <TextInput
               value={username}
               onChangeText={setUsername}
@@ -110,22 +131,6 @@ export default function Register() {
               placeholder="email"
               placeholderTextColor="black"
             />
-            <View style={styles.nameView}>
-              <TextInput
-                value={fname}
-                onChangeText={setFname}
-                style={styles.nameText}
-                placeholder="first name"
-                placeholderTextColor="black"
-              />
-              <TextInput
-                value={lname}
-                onChangeText={setLname}
-                style={styles.nameText}
-                placeholder="last name"
-                placeholderTextColor="black"
-              />
-            </View>
             <View style={styles.genderAgeView}>
               <SelectCountry
                 style={styles.dropdown}
@@ -179,7 +184,7 @@ export default function Register() {
               </SafeAreaView>
             </View>
 
-            <View style={styles.btnSubmitView}>
+            <View style={styles.button}>
               <Pressable onPress={()=>{signUp(username, password, email, fname, lname, country == "1" ? "Male" : (country == "2" ? "Female" : "Other"), Math.floor(date.getTime() / 1000) + 1).then(result => {
                 if(result.success) router.back();
                 else alert("Error signing up: " + result.error);
@@ -222,9 +227,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   registerText: {
-    fontSize: 30,
+    fontSize: 40,
+    fontWeight: "bold",
     paddingBottom: 10,
     paddingTop: 50,
+    color: 'rgba(114, 17, 162, .8)',
   },
 
   inputView: {
@@ -232,37 +239,79 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-evenly",
+    backgroundColor: "white",
+    paddingVertical: "10%",
+    borderRadius: 20, 
+    shadowColor: '#7211A2', 
+    shadowOffset: {
+      width: 0,
+      height: 20, 
+    },
+    shadowOpacity: 0.3, 
+    shadowRadius: 15, 
+    elevation: 10, 
+    marginHorizontal: "10%",
+
   },
 
+  bgImage: {
+    resizeMode: "cover",
+    height: "40%", 
+    width: "100%",
+    position: 'absolute', 
+  },
+
+
   inputText: {
+    marginTop: "5%",
+    backgroundColor: "#FBF2FF",
+    borderRadius: 30,
+    borderColor: 'rgba(114, 17, 162, .8)',
     borderWidth: 1,
     width: "90%",
-    height: 50,
-    padding: 5,
-    margin: 20,
-    marginRight: 0,
-    borderRadius: 5,
-    color: "black",
+    alignSelf: "center",
+    padding: 10,
+    color: "#7211A2",
+    shadowColor: '#C981EC',
+    shadowOffset: {
+      width: 2,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3,
+    elevation: 5,
   },
 
   nameView: {
     display: "flex",
     width: "100%",
     flexDirection: "row",
+    justifyContent: "space-around"
+
   },
 
   nameText: {
-    width: "43%",
+    marginTop: "5%",
+    backgroundColor: "#FBF2FF",
+    borderRadius: 30,
+    borderColor: 'rgba(114, 17, 162, .8)',
     borderWidth: 1,
-    height: 50,
-    padding: 5,
-    margin: 20,
-    marginRight: 0,
-    borderRadius: 5,
-    color: "black",
+    width: "40%",
+    alignSelf: "center",
+    padding: 10,
+    color: "#7211A2",
+    shadowColor: '#C981EC',
+    shadowOffset: {
+      width: 2,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3,
+    elevation: 5,
   },
 
   genderAgeView: {
+    marginTop: "5%",
     display: "flex",
     // justifyContent: "center",
     alignItems: "center",
@@ -315,13 +364,25 @@ const styles = StyleSheet.create({
   },
 
   btnSubmitText: {
-    color: "#7d4cb6",
-    fontSize: 15,
-    paddingTop: 10,
+    color: "#FFFFFF",
+    fontSize: 20,
+    fontWeight: "bold",
   },
 
   btnLogin: {
     paddingTop: 20,
     color: "#7d4cb6",
+  },
+  button: {
+    backgroundColor: 'rgba(114, 17, 162, .8)',
+    borderRadius: 10, 
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+    marginTop: "10%", 
+    fontWeight: "bold",
+    fontSize: 20,
+    alignSelf: "center",
+    width: "30%"
   },
 });
