@@ -53,7 +53,6 @@ export default function forgotPassword() {
                             onChangeText={setEmail}
                             style={styles.inputText}
                             placeholder="email"
-                            secureTextEntry={true}
                             placeholderTextColor="black"
                     />
                     <Pressable onPress={() => {setSubmit(verifyEmailExists())}}>
@@ -76,15 +75,11 @@ const styles =StyleSheet.create({
       },
     inputText: {
         marginTop: "5%",
-        backgroundColor: "#FBF2FF",
+        backgroundColor: "#FFFFFF",
         borderRadius: 10,
-        borderColor: 'rgba(114, 17, 162, .8)',
-        borderWidth: 1,
         width: "90%",
         alignSelf: "center",
         padding: 10,
-        color: "#7211A2",
-        shadowColor: '#C981EC',
         shadowOffset: {
           width: 2,
           height: 2,
@@ -99,7 +94,8 @@ const styles =StyleSheet.create({
         flexDirection: "row",
         justifyContent: "flex-end",
         alignSelf: "flex-end",
-        marginRight: "10%",
+        marginRight: "8%",
+        marginTop: "2%",
       },
     bgImage: {
         resizeMode: "cover",

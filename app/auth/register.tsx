@@ -1,4 +1,4 @@
-import {signUp} from '../get-post/add'
+import { signUp } from '../get-post/add';
 import React, { useEffect, useState } from "react";
 import { SelectCountry } from "react-native-element-dropdown";
 import {
@@ -27,27 +27,9 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { LinearGradient } from 'expo-linear-gradient';
 
 const local_data = [
-  {
-    value: "1",
-    lable: "Male",
-    // image: {
-    //   uri: "https://www.vigcenter.com/public/all/images/default-image.jpg",
-    // },
-  },
-  {
-    value: "2",
-    lable: "Female",
-    // image: {
-    //   uri: "https://www.vigcenter.com/public/all/images/default-image.jpg",
-    // },
-  },
-  {
-    value: "3",
-    lable: "Other",
-    // image: {
-    //   uri: "https://www.vigcenter.com/public/all/images/default-image.jpg",
-    // },
-  },
+  { value: "1", lable: "Male" },
+  { value: "2", lable: "Female" },
+  { value: "3", lable: "Other" },
 ];
 
 export default function Register() {
@@ -60,6 +42,7 @@ export default function Register() {
 
   const navigation = useNavigation();
   const router = useRouter();
+  
   useEffect(() => {
     navigation.setOptions({ headerShown: false });
   }, [navigation]);
@@ -80,135 +63,142 @@ export default function Register() {
   );
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={styles.container}
-    >
-              <Image
-            style={styles.bgImage}
-            source={require("../../assets/images/wave2nologo.png")}
-          />
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.mainView}>
-
-          <Text style={styles.registerText}> Register </Text>
-          {/* forms section */}
-          <View style={styles.inputView}>
-          <View style={styles.nameView}>
+    <>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={styles.container}
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={styles.mainView}>
+            <Text style={styles.registerText}> Register </Text>
+            {/* forms section */}
+            <View style={styles.inputView}>
+              <View style={styles.nameView}>
+                <TextInput
+                  value={fname}
+                  onChangeText={setFname}
+                  style={styles.nameText}
+                  placeholder="first name"
+                  placeholderTextColor="black"
+                />
+                <TextInput
+                  value={lname}
+                  onChangeText={setLname}
+                  style={styles.nameText}
+                  placeholder="last name"
+                  placeholderTextColor="black"
+                />
+              </View>
               <TextInput
-                value={fname}
-                onChangeText={setFname}
-                style={styles.nameText}
-                placeholder="first name"
+                value={username}
+                onChangeText={setUsername}
+                style={styles.inputText}
+                placeholder="username"
                 placeholderTextColor="black"
               />
               <TextInput
-                value={lname}
-                onChangeText={setLname}
-                style={styles.nameText}
-                placeholder="last name"
+                value={password}
+                onChangeText={setPassword}
+                style={styles.inputText}
+                placeholder="password"
+                secureTextEntry={true}
                 placeholderTextColor="black"
               />
-            </View>
-            <TextInput
-              value={username}
-              onChangeText={setUsername}
-              style={styles.inputText}
-              placeholder="username"
-              placeholderTextColor="black"
-            />
-            <TextInput
-              value={password}
-              onChangeText={setPassword}
-              style={styles.inputText}
-              placeholder="password"
-              secureTextEntry={true}
-              placeholderTextColor="black"
-            />
-            <TextInput
-              value={email}
-              onChangeText={setEmail}
-              style={styles.inputText}
-              placeholder="email"
-              placeholderTextColor="black"
-            />
-            <View style={styles.genderAgeView}>
-              <SelectCountry
-                style={styles.dropdown}
-                selectedTextStyle={styles.selectedTextStyle}
-                placeholderStyle={styles.placeholderStyle}
-                imageStyle={styles.imageStyle}
-                iconStyle={styles.iconStyle}
-                maxHeight={200}
-                value={country}
-                data={local_data}
-                valueField="value"
-                labelField="lable"
-                imageField="image"
-                placeholder="Select gender"
-                //   searchPlaceholder="Search..."
-                onChange={(e) => {
-                  setCountry(e.value);
-                }}
+              <TextInput
+                value={email}
+                onChangeText={setEmail}
+                style={styles.inputText}
+                placeholder="email"
+                placeholderTextColor="black"
               />
-              <SafeAreaView>
-                <SafeAreaProvider>
-                  <View
-                    style={{
-                      justifyContent: "center",
-                      flex: 1,
-                      alignItems: "center",
-                    }}
-                  >
-                    <Button
-                      onPress={() => setOpen(true)}
-                      uppercase={false}
-                      mode="outlined"
+              <View style={styles.genderAgeView}>
+                <SelectCountry
+                  style={styles.dropdown}
+                  selectedTextStyle={styles.selectedTextStyle}
+                  placeholderStyle={styles.placeholderStyle}
+                  imageStyle={styles.imageStyle}
+                  iconStyle={styles.iconStyle}
+                  maxHeight={200}
+                  value={country}
+                  data={local_data}
+                  valueField="value"
+                  labelField="lable"
+                  imageField="image"
+                  placeholder="Select gender"
+                  onChange={(e) => {
+                    setCountry(e.value);
+                  }}
+                />
+                <SafeAreaView>
+                  <SafeAreaProvider>
+                    <View
+                      style={{
+                        justifyContent: "center",
+                        flex: 1,
+                        alignItems: "center",
+                      }}
                     >
-                      Pick your birhday
-                    </Button>
-                    <View style={{}}>
-                      <DatePickerModal
-                        locale="en"
-                        mode="single"
-                        visible={open}
-                        onDismiss={onDismissSingle}
-                        date={date}
-                        onConfirm={onConfirmSingle}
-                        presentationStyle='pageSheet'
-                        startYear={(new Date()).getFullYear()-100}
-                        endYear={(new Date()).getFullYear()}
-                      />
+                      <Button
+                        onPress={() => setOpen(true)}
+                        uppercase={false}
+                        mode="outlined"
+                      >
+                        Pick your birthday
+                      </Button>
+                      <View>
+                        <DatePickerModal
+                          locale="en"
+                          mode="single"
+                          visible={open}
+                          onDismiss={onDismissSingle}
+                          date={date}
+                          onConfirm={onConfirmSingle}
+                          presentationStyle="pageSheet"
+                          startYear={new Date().getFullYear() - 100}
+                          endYear={new Date().getFullYear()}
+                        />
+                      </View>
                     </View>
-                  </View>
-                </SafeAreaProvider>
-              </SafeAreaView>
-            </View>
+                  </SafeAreaProvider>
+                </SafeAreaView>
+              </View>
 
-            <View style={styles.button}>
-              <Pressable onPress={()=>{signUp(username, password, email, fname, lname, country == "1" ? "Male" : (country == "2" ? "Female" : "Other"), Math.floor(date.getTime() / 1000) + 1).then(result => {
-                if(result.success) router.back();
-                else alert("Error signing up: " + result.error);
-              })}}>
-                <Text style={styles.btnSubmitText}>Register</Text>
-              </Pressable>
+              <View style={styles.button}>
+                <Pressable
+                  onPress={() => {
+                    signUp(
+                      username,
+                      password,
+                      email,
+                      fname,
+                      lname,
+                      country == "1"
+                        ? "Male"
+                        : country == "2"
+                        ? "Female"
+                        : "Other",
+                      Math.floor(date.getTime() / 1000) + 1
+                    ).then((result) => {
+                      if (result.success) router.back();
+                      else alert("Error signing up: " + result.error);
+                    });
+                  }}
+                >
+                  <Text style={styles.btnSubmitText}>Register</Text>
+                </Pressable>
+              </View>
             </View>
           </View>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
 
-          {/* redirect section */}
-          <View style={styles.redirectView}>
-            <Text>Already have an account?</Text>
-            <Link
-              href={{
-                pathname: "/(tabs)/login",
-              }}
-            >
-              <Text style={styles.btnLogin}>Login</Text>
-            </Link>
-          </View>
-        </View>
-      </TouchableWithoutFeedback>
-    </KeyboardAvoidingView>
+      <View style={styles.redirectView}>
+        <Text style={{fontSize: 15}}>Already have an account?</Text>
+        <Link href={{ pathname: "/(tabs)/login" }}>
+          <Text style={styles.btnLogin}>Login</Text>
+        </Link>
+      </View>
+    </>
   );
 }
 
@@ -243,7 +233,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "space-evenly",
     backgroundColor: "white",
-    paddingVertical: "10%",
+    paddingVertical: "5%",
     borderRadius: 20, 
     shadowColor: '#7211A2', 
     shadowOffset: {
@@ -255,33 +245,20 @@ const styles = StyleSheet.create({
     elevation: 10, 
   },
 
-  bgImage: {
-    resizeMode: "cover",
-    height: "40%",
-    width: "100%",
-    position: 'absolute',
-    zIndex: -1, // Add this line
-  },
-
-
   inputText: {
-    marginTop: "5%",
-    backgroundColor: "#FBF2FF",
+    marginTop: "8%",
+    backgroundColor: "#FFFFFF",
     borderRadius: 10,
-    borderColor: 'rgba(114, 17, 162, .8)',
-    borderWidth: 1,
     width: "90%",
     alignSelf: "center",
     padding: 10,
-    color: "#7211A2",
-    shadowColor: '#C981EC',
     shadowOffset: {
       width: 2,
       height: 2,
     },
     shadowOpacity: 0.25,
-    shadowRadius: 3,
-    elevation: 5,
+    shadowRadius: 10,
+    elevation: 8,
   },
 
   nameView: {
@@ -289,33 +266,27 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "row",
     justifyContent: "space-around"
-
   },
 
   nameText: {
     marginTop: "5%",
-    backgroundColor: "#FBF2FF",
+    backgroundColor: "#FFFFFF",
     borderRadius: 10,
-    borderColor: 'rgba(114, 17, 162, .8)',
-    borderWidth: 1,
     width: "40%",
     alignSelf: "center",
     padding: 10,
-    color: "#7211A2",
-    shadowColor: '#C981EC',
     shadowOffset: {
       width: 2,
       height: 2,
     },
     shadowOpacity: 0.25,
     shadowRadius: 3,
-    elevation: 5,
+    elevation: 8,
   },
 
   genderAgeView: {
     marginTop: "5%",
     display: "flex",
-    // justifyContent: "center",
     alignItems: "center",
     width: "100%",
     flexDirection: "row",
@@ -347,22 +318,13 @@ const styles = StyleSheet.create({
     height: 20,
   },
 
-  container2: {
-    flex: 1,
-    backgroundColor: "#F5FCFF",
-  },
-
   redirectView: {
+    backgroundColor: "white",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "space-around",
-  },
-
-  btnSubmitView: {
-    marginTop: 12,
-    marginLeft: 20,
-    backgroundColor: "white",
+    paddingBottom: "20%"
   },
 
   btnSubmitText: {
@@ -373,6 +335,7 @@ const styles = StyleSheet.create({
 
   btnLogin: {
     paddingTop: 20,
+    fontSize: 15,
     color: "#7d4cb6",
   },
   button: {

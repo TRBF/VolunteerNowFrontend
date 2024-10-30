@@ -18,6 +18,7 @@ import { login } from "../get-post/add";
 import { isLoggedIn, rememberAccount } from "../get-post/_account";
 import { Link, router, useNavigation, useRouter } from "expo-router";
 import { LinearGradient } from 'expo-linear-gradient'; // Import LinearGradient
+import { useFonts, Poppins_400Regular, Poppins_700Bold } from '@expo-google-fonts/poppins';
 
 export default function Login() {
   const [username, setUsername] = React.useState("");
@@ -58,6 +59,12 @@ export default function Login() {
   
   console.log(isLoggedIn());
 
+  const [fontsLoaded] = useFonts({
+    Poppins_400Regular,
+    Poppins_700Bold,
+  });
+
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -68,7 +75,7 @@ export default function Login() {
         <View style={styles.mainView}>
           <Image
             style={styles.bgImage}
-            source={require("../../assets/images/wave2.png")}
+            source={require("../../assets/images/logo2.png")}
           />
           <View style={styles.loginInfo}>
               <View style={styles.loginCard3D}> 
@@ -79,7 +86,7 @@ export default function Login() {
                   onChangeText={setUsername}
                   style={styles.inputText}
                   placeholder="username"
-                  placeholderTextColor="black"
+                  placeholderTextColor="#B0B0B0"
                 />
                 <TextInput
                   value={password}
@@ -87,30 +94,26 @@ export default function Login() {
                   style={styles.inputText}
                   placeholder="password"
                   secureTextEntry={true}
-                  placeholderTextColor="black"
+                  placeholderTextColor="#B0B0B0"
                 />
-                <View style={{marginTop:" 3%", marginRight: "5%", alignSelf: "flex-end"}}>
+                  {loading ? (
+                    <ActivityIndicator size="large" color="#0000ff" />
+                  ) : (
+                  <Pressable style={styles.button} onPress={() => { /* Add login action */ }}>
+                      <Text style={styles.buttonText}>Login</Text>
+                  </Pressable>
+                  )}
+                <View style={{marginTop:" 3%", alignSelf: "center"}}>
                   <Link
                   href={{
                     pathname: "/auth/forgotPassword"
                   }}
                   >
-                    <Text style={styles.forgotPasswordText}>Forgot password</Text>
+                    <Text style={styles.forgotPasswordText}>Forgot password?</Text>
                   </Link>
               </View>
-
-
             </View>
 
-
-            {/* Display loading spinner when loading */}
-            {loading ? (
-              <ActivityIndicator size="large" color="#0000ff" />
-            ) : (
-            <Pressable style={styles.button} onPress={() => { /* Add login action */ }}>
-                <Text style={styles.buttonText}>Login</Text>
-            </Pressable>
-            )}
             <View style={styles.viewSignUp}>
               <Text style={styles.textSignUp}>Don't have an account?</Text>
               <View style={styles.btnView}>
@@ -145,21 +148,22 @@ const styles = StyleSheet.create({
   },
 
   bgImage: {
-    resizeMode: "cover",
-    height: "40%", 
-    width: "100%",
-    position: 'absolute', 
+    resizeMode: "contain",  
+    height: "30%",         
+    width: "80%",          
+    alignSelf: "center",   
+    marginTop: "5%",      
+    position: "absolute"  
   },
 
   loginInfo: {
-    marginTop: "62%",
     width: "100%",
     zIndex: 1,
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     padding: "3%",
-    paddingTop: 0,
+    marginTop: "50%",
   },
 
   loginText: {
@@ -167,30 +171,28 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     paddingTop: 0,
-    marginBottom: "10%"
+    marginBottom: "5%",
+    color: 'rgba(114, 17, 162, .8)',
   },
 
   inputText: {
-    marginTop: "5%",
-    backgroundColor: "#FBF2FF",
+    marginTop: "8%",
+    backgroundColor: "#FFFFFF",
     borderRadius: 10,
-    borderColor: 'rgba(114, 17, 162, .8)',
-    borderWidth: 1,
     width: "90%",
     alignSelf: "center",
     padding: 10,
-    color: "#7211A2",
-    shadowColor: '#C981EC',
     shadowOffset: {
       width: 2,
       height: 2,
     },
     shadowOpacity: 0.25,
-    shadowRadius: 3,
-    elevation: 5,
+    shadowRadius: 10,
+    elevation: 8,
   },
 
   viewSignUp: {
+    paddingTop: "7%",
     alignItems: "center",
   },
   btnView: {
@@ -217,29 +219,29 @@ const styles = StyleSheet.create({
       width: 0,
       height: 20, 
     },
-    shadowOpacity: 0.3, 
-    shadowRadius: 15, 
-    elevation: 10, 
+    shadowOpacity: 0.5, 
+    shadowRadius: 30, 
+    elevation: 15, 
   },
 
   button: {
     backgroundColor: 'rgba(114, 17, 162, .8)',
-    borderRadius: 10, 
+    borderRadius: 15, 
     paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingHorizontal: 70,
     alignSelf: 'center',
     marginTop: "10%", 
   },
   
   buttonText: {
     color: 'white', 
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: 'bold',
   },
   
   forgotPasswordText: {
     color: "#7d4cb6",
-    fontSize: 13,
+    fontSize: 14,
   }
   
 });
