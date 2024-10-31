@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ScrollView, Pressable, StyleSheet, Image, Text, View, SafeAreaView, Platform, StatusBar, Dimensions } from 'react-native';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Link } from 'expo-router';
@@ -46,15 +46,23 @@ function PastExperience({ experience }) {
 }
 
 export default function ProfileScreen() {
-    let volunteerCount = 3;
-    let dominantTag = 8;
-    let hours = "Untold";
+    
+    const [id, setId] = useState(1); // needs to be changed based on what's stored on the device
+
     const [name, setName] = useState("Chira");
     const [lastName, setLastName] = useState("Alexandru");
     const [username, setUsername] = useState("alex_c");
     const [description, setDescription] = useState("Aceasta este descrierea lui Alex Chira, un băiat foarte pasionat de ceea ce face, care se implică oriunde poate!");
     const [gender, setGender] = useState("gender");
     const [birthday, setBirthday] = useState(new Date());
+    const [volunteerCount, setVolunteerCount] = useState(0);
+    const [hours, setVolunteeringHours] = useState(0);
+    const [mostFrequented, setMostFrequented] = useState("UNTOLD");
+    const [experienceIDList, setExperienceIDList] = useState([]);
+    const [experienceList, setExperienceList] = useState([]);
+    const [pfpLink, setPfpLink] = useState("");
+
+    const [isLoading, setLoading] = useState(true); 
 
     const experienceListPlaceholder = [
           {
@@ -91,10 +99,38 @@ export default function ProfileScreen() {
           },
     ]
 
+    const getProfile = async () => {
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/api/get_volunteer_by_id/${ id }/?format=json`);
+            const json = await response.json();
 
+            setName(json.first_name);
+            setLastName(json.last_name);
+            setUsername(json.username);
+            setDescription(json.description);
+            setGender(json.gender);
+            setExperienceIDList(json.experiences);
+            console.log("WE HAVE EXPERIENCES:" + json.experiences);
+            console.log(json.experiences);
+            setPfpLink(json.link_to_pfp);
+
+            for (let i = 0; i<experienceIDList.length; i++){
+                console.log(i);
+            }
+
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+       getProfile();
+    }, []);
+    
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: "white"}}>
-
             <View style = {styles.header}>
 
                 <Link href={{pathname: 'pages/settingsUser'}}>
@@ -112,13 +148,14 @@ export default function ProfileScreen() {
                 </Link>
 
             </View>
+            {!isLoading &&
             <ScrollView style={{ flex: 1 }} contentContainerStyle = {{ flexDirection: 'column', alignItems: 'center' }}>
 
                 <View style={styles.circlePfp}></View>
 
                 <View style={styles.profileTopSection}>
                     <View style={styles.containerPfp}>
-                        <Image source={require("../../assets/images/chira_pfp.jpeg")} style={styles.profilePicture} resizeMode='cover' />
+                        <Image source={{uri: pfpLink}} style={styles.profilePicture} resizeMode='cover' />
                     </View>
                     {/* pfp + stats (no. of volunteers, dominant tag, volunteering since) */}
                     <View style={{ flexDirection: "row" }}>
@@ -128,11 +165,11 @@ export default function ProfileScreen() {
                                 <Text style={styles.profileStatsSubsectionTextV2}>participations</Text>
                             </View>
                             <View style={styles.profileStatsSubsection}>
-                                <Text style={styles.profileStatsSubsectionText}>{dominantTag}</Text>
-                                <Text style={styles.profileStatsSubsectionTextV2}>diplomas</Text>
+                                <Text style={styles.profileStatsSubsectionText}>{hours}</Text>
+                                <Text style={styles.profileStatsSubsectionTextV2}>hours volunteered</Text>
                             </View>
                             <View style={styles.profileStatsSubsection}>
-                                <Text style={styles.profileStatsSubsectionText}>{hours}</Text>
+                                <Text style={styles.profileStatsSubsectionText}>{mostFrequented}</Text>
                                 <Text style={styles.profileStatsSubsectionTextV2}>most frequented</Text>
                             </View>
                         </View>
@@ -147,26 +184,14 @@ export default function ProfileScreen() {
                     <Text style={styles.description}>{description}</Text>
                 </View>
 
-                {/*<View style={{ flexDirection: "row", justifyContent: 'space-around', paddingTop: "10%" }}>
-                    <View style={styles.profileStatsSection}>
-                        <View style={styles.profileStatsSubsection}>
-                            <Text style={styles.profileStatsSubsectionTextV4}>Age</Text>
-                            <Text style={styles.profileStatsSubsectionTextV3}>{yearsDifference}</Text>
-                        </View>
-                        <View style={styles.profileStatsSubsection}>
-                            <Text style={styles.profileStatsSubsectionTextV4}>Gender</Text>
-                            <Text style={styles.profileStatsSubsectionTextV3}>{gender}</Text>
-                        </View>
-                    </View>
-                </View>*/}
-
-                {experienceListPlaceholder.map((object, index) => (<PastExperience key={index} experience={object} />))}
+                {experienceList.map((object, index) => (<PastExperience key={index} experience={object} />))}
 
                 <View style = {{height: "5%", width:"100%", backgroundColor: "transparent"}}>
                     <Text style = {{color: "transparent"}}>Nothing to see here!</Text>
                 </View>
 
             </ScrollView>
+            }
         </SafeAreaView>
     );
 }
