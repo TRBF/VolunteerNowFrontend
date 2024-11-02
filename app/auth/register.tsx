@@ -1,4 +1,4 @@
-import {signUp} from '../get-post/add'
+import {signUp} from '../requests/logsign'
 import React, { useEffect, useState } from "react";
 import { SelectCountry } from "react-native-element-dropdown";
 import {

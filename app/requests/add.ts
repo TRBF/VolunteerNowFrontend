@@ -3,14 +3,6 @@ import { url_endpoint } from "./_config";
 import { uploadFile } from "./fileuploading";
 import { getAccountToken } from "./_account";
 
-// functie pt login la users
-export async function login(username, password) {
-    const url = url_endpoint+`/api/login?username=${username}&password=${password}`;
-    const response = await fetch(url);
-    const result = await response.json();
-    console.log(result);
-    return result;
-}
 export async function get_my_profile() {
     if(!isLoggedIn())
         return;
@@ -41,22 +33,6 @@ export async function modify_Profile(username, first_name, last_name, descriptio
     const result=await response.json();
     console.log(result);
     return result;
-}
-// functie pt creare de user:
-export async function signUp(username, password, email, first_name, last_name, gender, birthday) {
-    const url = url_endpoint+'/api/register';
-    const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-        'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({username: username, password: password,
-            email: email, first_name: first_name, last_name: last_name, 
-            gender: gender, birthday: birthday}),
-    });
-    const newUser = await response.json();
-    console.log(newUser);
-    return newUser;
 }
 
 export async function get_events(number) {

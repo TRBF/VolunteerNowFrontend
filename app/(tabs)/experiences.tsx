@@ -5,8 +5,8 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as DocumentPicker from 'expo-document-picker';
-import { deleteExperience } from '../get-post/add';
-import { url_endpoint } from '../get-post/_config';
+import { deleteExperience } from '../requests/add';
+import { url_endpoint } from '../requests/_config';
 
 function verticalUnits (num:number){
     const height = Dimensions.get("window").height;
@@ -23,7 +23,6 @@ function ExperienceSection({ experience }) {
     const [nameText, setNameText] = useState(experience.name);
     const [organiserText, setOrganiserText] = useState(experience.username);
     const [descriptionText, setDescriptionText] = useState(experience.description);
-    const [diplomaHash, setDiplomaHash] = useState(experience.diploma);
     const [startDate, setStartDate] = useState("")
     const [endDate, setEndDate] = useState("")
     const [visible, setVisible] = useState(false);

@@ -15,7 +15,8 @@ function horizontalUnits (num:number){
 }
 
 function PastExperience({ experience }) {
-    const startDate: Date = experience.startDate;
+    const startDate: Date = new Date(experience.time);
+    const textLimit = 96;
 
     return (
         <Link href={{
@@ -24,20 +25,20 @@ function PastExperience({ experience }) {
         }} asChild>
             <Pressable style={styles.experienceSection}>
                 <View style={{flexDirection: "column", alignItems: "flex-start"}}>
-                    <Image source={{uri:"https://yt3.googleusercontent.com/v6i9aPzHM2BA6oIOGA-k3vsUxpeeQpl3qM9PCgYyQeqkoXQ-83byoLYCV5jaOAx4GHhfW7NjVg=s160-c-k-c0x00ffffff-no-rj"}} resizeMode='cover' style={[styles.experienceImage, {
+                    <Image source={{uri:experience.link_to_pfp}} resizeMode='cover' style={[styles.experienceImage, {
                         height: verticalUnits(8.3),
                         width: verticalUnits(8.3),
                     }]} />
                     <Text style={styles.experienceDate}>{startDate.getDay()}.{startDate.getMonth()}.{startDate.getFullYear()}</Text>
-                    <Text style={styles.experienceDate}>{experience.days} days</Text>
+                    {/* <Text style={styles.experienceDate}>{experience.days} days</Text> */}
                 </View>
 
                 <View style={{ width: "76%" }}>
                     <View style={styles.experienceIdentifiers}>
                         <Text style={styles.experienceName}>{experience.name}</Text>
-                        <Text style={styles.experienceUsername}>@{experience.username}</Text>
+                        <Text style={styles.experienceLocation}>{experience.location}</Text>
                     </View>
-                    <Text style={styles.experienceDescription}>{experience.description}</Text>
+                    <Text style={styles.experienceDescription}>{experience.description.length > textLimit ? experience.description.slice(0, textLimit)+"..." :experience.description}</Text>
                     {experience.diploma ? <Text style = {styles.attestedText}>Attested by diploma</Text> : <View></View>}
                 </View>
             </Pressable>
@@ -58,50 +59,14 @@ export default function ProfileScreen() {
     const [volunteerCount, setVolunteerCount] = useState(0);
     const [hours, setVolunteeringHours] = useState(0);
     const [mostFrequented, setMostFrequented] = useState("UNTOLD");
-    const [experienceIDList, setExperienceIDList] = useState([]);
     const [experienceList, setExperienceList] = useState([]);
     const [pfpLink, setPfpLink] = useState("");
 
     const [isLoading, setLoading] = useState(true); 
 
-    const experienceListPlaceholder = [
-          {
-              name: "Untold",
-              username: "untold",
-              description: "This is a test event, this event is obviously and test and should not be used as anything but a test, it is a test event, got it?",
-              startDate: birthday,
-              days: 5,
-              diploma: 0,
-          }, 
-          {
-              name: "Untold",
-              username: "untold",
-              description: "This is a test event, this event is obviously and test and should not be used as anything but a test, it is a test event, got it?",
-              startDate: birthday,
-              days: 5,
-              diploma: 1,
-          },
-          {
-              name: "Untold",
-              username: "untold",
-              description: "This is a test event, this event is obviously and test and should not be used as anything but a test, it is a test event, got it?",
-              startDate: birthday,
-              days: 5,
-              diploma: 0,
-          },
-          {
-              name: "Untold",
-              username: "untold",
-              description: "This is a test event, this event is obviously and test and should not be used as anything but a test, it is a test event, got it?",
-              startDate: birthday,
-              days: 5,
-              diploma: 0,
-          },
-    ]
-
     const getProfile = async () => {
         try {
-            const response = await fetch(`http://127.0.0.1:8000/api/get_volunteer_by_id/${ id }/?format=json`);
+            let response = await fetch(`http://192.168.1.218:8000/api/get_volunteer_by_id/${ id }?format=json`);
             const json = await response.json();
 
             setName(json.first_name);
@@ -109,14 +74,12 @@ export default function ProfileScreen() {
             setUsername(json.username);
             setDescription(json.description);
             setGender(json.gender);
-            setExperienceIDList(json.experiences);
-            console.log("WE HAVE EXPERIENCES:" + json.experiences);
-            console.log(json.experiences);
             setPfpLink(json.link_to_pfp);
 
-            for (let i = 0; i<experienceIDList.length; i++){
-                console.log(i);
-            }
+            response = await fetch(`http://192.168.1.218:8000/api/get_user_opportunities/${ id }?format=json`)
+            const opportunities = await response.json()
+
+            setExperienceList([...opportunities]);
 
         } catch (error) {
             console.error(error);
@@ -331,7 +294,7 @@ const styles = StyleSheet.create({
     },
     profileInfoSection: {
         marginTop: verticalUnits(3.5),
-        paddingBottom: verticalUnits(5),
+        paddingBottom: verticalUnits(3),
         paddingHorizontal: "8%",
         width: "100%",
     },
@@ -377,7 +340,7 @@ const styles = StyleSheet.create({
     experienceName: {
         color: "#000000",
     },
-    experienceUsername: {
+    experienceLocation: {
         color: "#9394a5",
     },
     experienceDate: {

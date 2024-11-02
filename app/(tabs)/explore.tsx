@@ -7,20 +7,21 @@ import {
   SafeAreaInsetsContext,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
-import { search_event, search_organisers, search_volunteers } from '../get-post/search';
+import { searchUniversal } from '../requests/search';
+import { url_endpoint } from '../requests/_config';
 
-function Result({ company }) {
+function Result({ user }) {
     return (
         <Link href={{
-            pathname: 'org/[username]',
-            params: { username: company.username },
+            pathname: user.name ? 'org/[username]' : 'volunteer/[username]',
+            params: { username: user.username },
         }} asChild>
             <Pressable>
                 <View style={styles.result}>
-                    <Image source={ company.LinkToPFP ? { uri: company.LinkToPFP } : null } style={ styles.resultPFP } resizeMode="cover" />
+                    <Image source={ user.link_to_pfp ? { uri: user.link_to_pfp } : null } style={ styles.resultPFP } resizeMode="cover" />
                     <View style={ styles.resultInfo }>
-                        <Text style={ styles.resultName }>{ !company.Name ? company.FirstName + " " + company.LastName : company.Name }</Text>
-                        { company.Username && <Text style={ styles.resultUsername }>@{ company.Username }</Text> }
+                        <Text style={ styles.resultName }>{ !user.name ? user.first_name + " " + user.last_name : user.name }</Text>
+                        { user.Username && <Text style={ styles.resultUsername }>@{ user.username }</Text> }
                     </View>
                 </View>
             </Pressable>
@@ -47,12 +48,10 @@ function SearchBar({ placeholder, onChangeText }) {
 const Tab = () => {
     const [search, setSearch] = useState("");
     const [results, setResults] = useState([{
-        Name: "",
-        Username: "",
-        LinkToPFP: "",
+        name: "",
+        username: "",
+        link_to_pfp: "",
     }]);
-
-    //const [organisersFilter, setOrganisersFilter] = useState(true)
 
     return (
         <SafeAreaView style={{ backgroundColor: "#ffffff", flex: 1 }}>
@@ -64,7 +63,8 @@ const Tab = () => {
                         onChangeText={async (value:string) => {
                             setSearch(value);
                             setResults(await request(value));}
-                            }
+                            
+                        }
                     />
 
                     <Text style={[search ? { display: "none" } : { display: "flex" }, styles.exploreText]}>
@@ -75,7 +75,7 @@ const Tab = () => {
                     
                     <ScrollView style={[!search ? { display: "none" } : { display: "flex" }, styles.resultsSection]}>
 
-                        { results.map((company) => <Result company={company} />) }
+                        { Array.isArray(results) ? results.map((user) => <Result user={user}/>) : <Result user={results}/> }
 
                     </ScrollView>
                 </View>
@@ -169,16 +169,14 @@ const request = async (query: string) => {
     if (!query) return []; // Return empty array if search query is empty
 
     try {
-        // Execute all search functions asynchronously
-        const [eventResults, organiserResults, volunteerResults] = await Promise.all([
-            search_event(query),
-            search_organisers(query),
-            search_volunteers(query)
-        ]);
-
-        // Combine the results (optional)
-        const combinedResults = [...eventResults, ...organiserResults, ...volunteerResults];
-        return combinedResults;
+        let result = await searchUniversal(query);
+        let res = []
+        if(Array.isArray(result[0])) res.concat(result[0])
+        else if(Object.keys(result[0]).length!=0) res.push(result[0])
+        if(Array.isArray(result[1])) res.concat(result[1])
+        else if(Object.keys(result[1]).length!=0) res.push(result[1])
+        console.log(res)
+        return res;
     } catch (error) {
         console.error("Error fetching search results: ", error);
         return [];

@@ -4,7 +4,7 @@ import { useNavigation, useRouter, useLocalSearchParams } from "expo-router";
 import { useWindowDimensions } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import * as DocumentPicker from 'expo-document-picker';
-import {modify_Profile} from '../get-post/add'
+import {modify_Profile} from '../requests/add'
 
 function verticalUnits (num:number){
     const height = Dimensions.get("window").height;
