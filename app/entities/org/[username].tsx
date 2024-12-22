@@ -1,7 +1,7 @@
+
 import React, { useState, useEffect } from "react";
 import {
   ScrollView,
-  Pressable,
   StyleSheet,
   Image,
   Text,
@@ -9,104 +9,92 @@ import {
   SafeAreaView,
   Platform,
   StatusBar,
-  Dimensions,
+  Pressable,
 } from "react-native";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { Link } from "expo-router";
+import { router, useLocalSearchParams, useNavigation } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { url_endpoint } from "../apistuff/_config";
-import { verticalUnits } from "../jmecheriis/ddunits";
+import { url_endpoint } from "../../apistuff/_config";
+import { verticalUnits } from "../../jmecheriis/ddunits";
 
 function PastExperience({ experience }) {
-  const startDate: Date = new Date(experience.time);
   const textLimit = 96;
 
-  return (
-    <Link
-      href={{
-        pathname: "entities/org/[username]",
-        params: { username: experience.username },
-      }}
-      asChild
-    >
-      <Pressable style={styles.experienceSection}>
-        <View style={{ flexDirection: "column", alignItems: "flex-start" }}>
-          <Image
-            source={{ uri: url_endpoint + "/api" + experience.profile_picture }}
-            resizeMode="cover"
-            style={[
-              styles.experienceImage,
-              {
-                height: verticalUnits(8.3),
-                width: verticalUnits(8.3),
-              },
-            ]}
-          />
-          <Text style={styles.experienceDate}>
-            {startDate.getDay()}.{startDate.getMonth()}.
-            {startDate.getFullYear()}
-          </Text>
-          {/* <Text style={styles.experienceDate}>{experience.days} days</Text> */}
-        </View>
+  console.log("Experience: ", experience);
+  if (!experience.name) return <View></View>;
 
-        <View style={{ width: "76%" }}>
-          <View style={styles.experienceIdentifiers}>
-            <Text style={styles.experienceName}>{experience.name}</Text>
-            <Text style={styles.experienceLocation}>{experience.location}</Text>
-          </View>
-          <Text style={styles.experienceDescription}>
-            {experience.description.length > textLimit
-              ? experience.description.slice(0, textLimit) + "..."
-              : experience.description}
-          </Text>
-          {experience.diploma ? (
-            <Text style={styles.attestedText}>Attested by diploma</Text>
-          ) : (
-            <View></View>
-          )}
+  return (
+    <View style={styles.experienceSection}>
+      <View style={{ flexDirection: "column", alignItems: "flex-start" }}>
+        <Image
+          source={{ uri: experience.link_to_pfp }}
+          resizeMode="cover"
+          style={[
+            styles.experienceImage,
+            {
+              height: verticalUnits(8.3),
+              width: verticalUnits(8.3),
+            },
+          ]}
+        />
+        {/*<Text style={styles.experienceDate}>{startDate.getDay()}.{startDate.getMonth()}.{startDate.getFullYear()}</Text>*/}
+        <Text style={styles.experienceDate}>{experience.days} days</Text>
+      </View>
+
+      <View style={{ width: "76%" }}>
+        <View style={styles.experienceIdentifiers}>
+          <Text style={styles.experienceName}>{experience.name}</Text>
+          <Text style={styles.experienceUsername}>{experience.location}</Text>
         </View>
-      </Pressable>
-    </Link>
+        <Text style={styles.experienceDescription}>
+          {experience.description.length > textLimit
+            ? experience.description.slice(0, textLimit) + "..."
+            : experience.description}
+        </Text>
+      </View>
+    </View>
   );
 }
 
-export default function VolunteerProfile() {
-  const [id, setId] = useState(1); // needs to be changed based on what's stored on the device
-
-  const [name, setName] = useState("Chira");
-  const [lastName, setLastName] = useState("Alexandru");
-  const [username, setUsername] = useState("alex_c");
+export default function VolunteerPage() {
+  const navigation = useNavigation();
+  useEffect(() => {
+    navigation.setOptions({ headerShown: false });
+  }, [navigation]);
+  let volunteerCount = 3;
+  let dominantTag = 8;
+  let hours = "Music";
+  const [first_name, setFirstName] = useState("Tudor");
+  const [last_name, setLastName] = useState("Balan");
+  const [name, setName] = useState("Balan");
   const [description, setDescription] = useState(
-    "Alex is passionate about computer science and sports. He is very competitive and likes to learn new things everyday. He loves to code and also play football with his friends."
+    "Aceasta este descrierea lui Alex Chira, un băiat foarte pasionat de ceea ce face, care se implică oriunde poate!"
   );
-  const [volunteerCount, setVolunteerCount] = useState(14);
-  const [hours, setVolunteeringHours] = useState(78);
-  const [mostFrequented, setMostFrequented] = useState("UNTOLD");
-  const [experienceList, setExperienceList] = useState([{}, {}]);
-  const [pfpLink, setPfpLink] = useState("");
-
+  const [birthday, setBirthday] = useState(new Date());
+  const [pfpLink, setPFPLink] = useState("");
+  const [coverLink, setCoverLink] = useState("");
+  const [experienceList, setExperienceList] = useState([]);
+  const { username } = useLocalSearchParams();
   const [isLoading, setLoading] = useState(true);
 
   async function getProfile() {
     try {
       let response = await fetch(
-        `${url_endpoint}/api/get_user_by_id/${id}?format=json`
+        `${url_endpoint}/api/get_volunteer_by_username/${username}?format=json`
       );
       const json = await response.json();
 
-      //setName(json.first_name);
-      //setLastName(json.last_name);
-      setUsername(json.username);
-      //setDescription(json.description);
-      setPfpLink(json.profile_picture);
-      console.log(url_endpoint + "/api" + json.profile_picture);
+      setName(json.name);
+      setDescription(json.description);
+      setPFPLink(json.link_to_pfp);
+      setCoverLink(json.link_to_cover_image);
 
       response = await fetch(
-        `${url_endpoint}/api/get_user_opportunities/${id}?format=json`
+        `${url_endpoint}/api/get_user_opportunities/${json.id}?format=json`
       );
       const opportunities = await response.json();
 
-      setExperienceList([...opportunities]);
+      if (Array.isArray(opportunities)) setExperienceList([...opportunities]);
+      else setExperienceList([opportunities]);
     } catch (error) {
       console.error(error);
     } finally {
@@ -121,31 +109,24 @@ export default function VolunteerProfile() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
       <View style={styles.header}>
-        <Link href={{ pathname: "pages/settingsUser" }}>
-          <FontAwesome
-            name={"cog"}
-            style={[{ color: "#9394a5" }, styles.icon]}
-          />
-        </Link>
-
-        <Text style={styles.headerTitle}>@{username}</Text>
-
-        <Link
-          href={{
-            pathname: "pages/editProfile",
-            params: {
-              usernameH: username,
-              firstNameH: name,
-              secondNameH: lastName,
-              descriptionH: description,
-            },
+        <Pressable
+          onPress={() => {
+            setLoading(true);
+            router.back();
           }}
         >
           <Ionicons
-            name={"pencil"}
+            name="chevron-back"
             style={[{ color: "#9394a5" }, styles.icon]}
           />
-        </Link>
+        </Pressable>
+
+        <Text style={styles.headerTitle}>@{username}</Text>
+
+        <Ionicons
+          name={"chevron-back"}
+          style={[{ color: "#fff" }, styles.icon]}
+        />
       </View>
       {!isLoading && (
         <ScrollView
@@ -155,12 +136,13 @@ export default function VolunteerProfile() {
             alignItems: "center",
           }}
         >
-          <View style={styles.circlePfp}></View>
+          {/*<View style={styles.banner}></View>*/}
+          <Image style={styles.banner} source={{ uri: coverLink }}></Image>
 
           <View style={styles.profileTopSection}>
             <View style={styles.containerPfp}>
               <Image
-                source={{ uri: url_endpoint + "/api" + pfpLink }}
+                source={{ uri: pfpLink }}
                 style={styles.profilePicture}
                 resizeMode="cover"
               />
@@ -173,22 +155,18 @@ export default function VolunteerProfile() {
                     {volunteerCount}
                   </Text>
                   <Text style={styles.profileStatsSubsectionTextV2}>
-                    participations
+                    opportunities
                   </Text>
                 </View>
                 <View style={styles.profileStatsSubsection}>
                   <Text style={styles.profileStatsSubsectionText}>{hours}</Text>
                   <Text style={styles.profileStatsSubsectionTextV2}>
-                    hours volunteered
+                    volunteers
                   </Text>
                 </View>
                 <View style={styles.profileStatsSubsection}>
-                  <Text style={styles.profileStatsSubsectionText}>
-                    {mostFrequented}
-                  </Text>
-                  <Text style={styles.profileStatsSubsectionTextV2}>
-                    most frequented
-                  </Text>
+                  <Text style={styles.profileStatsSubsectionText}>{hours}</Text>
+                  <Text style={styles.profileStatsSubsectionTextV2}>genre</Text>
                 </View>
               </View>
             </View>
@@ -196,13 +174,24 @@ export default function VolunteerProfile() {
 
           <View style={styles.profileInfoSection}>
             <View style={styles.identificationData}>
-              <Text style={styles.name}>
-                {name} {lastName}
-              </Text>
+              <Text style={styles.name}>{name}</Text>
               <Text style={styles.username}>@{username}</Text>
             </View>
             <Text style={styles.description}>{description}</Text>
           </View>
+
+          {/*<View style={{ flexDirection: "row", justifyContent: 'space-around', paddingTop: "10%" }}>
+                    <View style={styles.profileStatsSection}>
+                        <View style={styles.profileStatsSubsection}>
+                            <Text style={styles.profileStatsSubsectionTextV4}>Age</Text>
+                            <Text style={styles.profileStatsSubsectionTextV3}>{yearsDifference}</Text>
+                        </View>
+                        <View style={styles.profileStatsSubsection}>
+                            <Text style={styles.profileStatsSubsectionTextV4}>Gender</Text>
+                            <Text style={styles.profileStatsSubsectionTextV3}>{gender}</Text>
+                        </View>
+                    </View>
+                </View>*/}
 
           {experienceList.map((object, index) => (
             <PastExperience key={index} experience={object} />
@@ -273,7 +262,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: "5%",
   },
-  circlePfp: {
+  banner: {
     backgroundColor: "rgba(114, 17, 162, .7)",
     aspectRatio: 1,
     position: "absolute",
@@ -358,7 +347,7 @@ const styles = StyleSheet.create({
   },
   profileInfoSection: {
     marginTop: verticalUnits(3.5),
-    paddingBottom: verticalUnits(3),
+    paddingBottom: verticalUnits(5),
     paddingHorizontal: "8%",
     width: "100%",
   },
@@ -404,7 +393,7 @@ const styles = StyleSheet.create({
   experienceName: {
     color: "#000000",
   },
-  experienceLocation: {
+  experienceUsername: {
     color: "#9394a5",
   },
   experienceDate: {
@@ -446,7 +435,7 @@ const styles = StyleSheet.create({
     color: "rgba(114, 17, 162, .8)",
   },
   icon: {
-    fontSize: 20,
+    fontSize: 30,
     paddingHorizontal: "1%",
   },
   header: {
@@ -467,11 +456,6 @@ const styles = StyleSheet.create({
   },
   backIcon: {
     fontSize: 30,
-  },
-  attestedText: {
-    marginTop: verticalUnits(1),
-    color: "rgba(114, 17, 162, .7)",
-    fontStyle: "italic",
   },
 });
 

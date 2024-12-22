@@ -1,31 +1,17 @@
 import React, { useEffect } from 'react';
-import { ScrollView, StyleSheet, Text, View, Pressable, SafeAreaView, Platform, StatusBar, Dimensions } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, Pressable, SafeAreaView, Platform, StatusBar } from 'react-native';
 import { Link } from 'expo-router';
 import { useNavigation, useRouter } from "expo-router";
-import { useWindowDimensions } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
-
-function verticalUnits (num:number){
-    const height = Dimensions.get("window").height;
-    return height/100*num;
-}
-
-function horizontalUnits (num:number){
-    const width = Dimensions.get("window").width;
-    return width/100*num;
-}
+import { verticalUnits } from '../../jmecheriis/ddunits';
 
 
 export default function SettingsUserScreen(){
-  //const [isEnabled, setIsEnabled] = useState(false);
-  //const toggleSwitch = () => setIsEnabled(previousState => !previousState);
   const navigation = useNavigation();
   const router = useRouter();
   useEffect(() => {
       navigation.setOptions({ headerShown: false });
   }, [navigation]);
-
-    const { height } = useWindowDimensions();
 
 
     return(

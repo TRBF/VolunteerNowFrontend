@@ -1,13 +1,12 @@
-import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { Tabs } from 'expo-router';
 import React from 'react';
 
 export default function TabLayout() {
+
   return (
-    <Tabs screenOptions={{ tabBarActiveTintColor: '#7211A2', tabBarInactiveTintColor: "#000", tabBarStyle: {elevation: 0,}, tabBarHideOnKeyboard: true, 
+    <Tabs screenOptions={{ headerShown: false, tabBarActiveTintColor: '#7211A2', tabBarInactiveTintColor: "#000", tabBarStyle: {elevation: 0,}, tabBarHideOnKeyboard: true, 
     }}>
       <Tabs.Screen
         name="index"
@@ -49,7 +48,14 @@ export default function TabLayout() {
           tabBarShowLabel: false,
         }}
       />
-
-      </Tabs>
+      <Tabs.Screen
+        name="login"
+        options={{
+          headerShown: false,
+          tabBarStyle: {display: 'none'},
+          href: null,
+        }}
+      />
+    </Tabs>
   );
 }
