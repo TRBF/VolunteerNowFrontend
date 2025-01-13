@@ -13,12 +13,12 @@ import {
   ScrollView,
 } from "react-native";
 import { StyleSheet } from "react-native";
-import { login } from "../apistuff/add";
-import { rememberAccount } from "../apistuff/_account";
+import { login } from "../../apistuff/add";
+import { rememberAccount } from "../../apistuff/account";
 import { Link, useNavigation, useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { styles } from "../styles/login";
+import { styles } from "../../styles/login";
 
 export default function Login() {
   const [username, setUsername] = React.useState("");
@@ -46,7 +46,7 @@ export default function Login() {
       // Handle the response based on the result
       if (result.success) {
         alert("Success, Login successful!");
-        await rememberAccount(result.result.token, result.result.userid);
+        //await rememberAccount(result.result.token, result.result.userid);
       } else {
         alert("Error, Login failed. Please check your credentials.");
       }

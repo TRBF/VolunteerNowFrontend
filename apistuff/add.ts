@@ -1,7 +1,7 @@
-import { isLoggedIn } from "./_account";
+import { isLoggedIn } from "./account";
 import { url_endpoint } from "./_config";
 import { uploadFile } from "./fileuploading";
-import { getAccountToken } from "./_account";
+import { getAccountToken } from "./account";
 
 export async function login(username, password) {
   const url =

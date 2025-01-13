@@ -9,20 +9,19 @@ import {
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Link } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { url_endpoint } from "../apistuff/_config";
+import { url_endpoint } from "../../apistuff/_config";
 
-import { PastExperience } from "../components/pastexperience";
-import { styles } from "../styles/profile";
+import { PastExperience } from "../../components/pastexperience";
+import { styles } from "../../styles/profile";
+import { getProfile, getUserOpportunities } from "../../apistuff/profile";
 
 export default function Tab() {
   const [id, setId] = useState(1); // needs to be changed based on what's stored on the device
 
-  const [name, setName] = useState("Chira");
-  const [lastName, setLastName] = useState("Alexandru");
-  const [username, setUsername] = useState("alex_c");
-  const [description, setDescription] = useState(
-    "Alex is passionate about computer science and sports. He is very competitive and likes to learn new things everyday. He loves to code and also play football with his friends."
-  );
+  const [name, setName] = useState("Loading...");
+  const [lastName, setLastName] = useState("Loading...");
+  const [username, setUsername] = useState("loading...");
+  const [description, setDescription] = useState("Description is loading...");
   const [volunteerCount, setVolunteerCount] = useState(14);
   const [hours, setVolunteeringHours] = useState(78);
   const [mostFrequented, setMostFrequented] = useState("UNTOLD");
@@ -31,41 +30,29 @@ export default function Tab() {
 
   const [isLoading, setLoading] = useState(true);
 
-  async function getProfile() {
-    try {
-      let response = await fetch(
-        `${url_endpoint}/api/get_user_by_id/${id}?format=json`
-      );
-      const json = await response.json();
+  async function init() {
+    let profile = {};
 
-      //setLastName(json.last_name);
-      setUsername(json.username);
-      //setDescription(json.description);
-      setPfpLink(json.profile_picture);
+    getProfile(id).then((user_profile) => {profile = user_profile})
+      .then(() => setUsername(profile["username"]))
+      .then(() => setPfpLink(profile["profile_picture"]))
+      .then(() => setName(profile["first_name"]))
+      .then(() => setLastName(profile["last_name"]))
+      .then(() => setDescription(profile["description"]));
 
-      response = await fetch(
-        `${url_endpoint}/api/get_user_participations/${id}?format=json`
-      );
-      const opportunities = await response.json();
-      console.log(opportunities)
-
-      setExperienceList([...opportunities]);
-
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
+    getUserOpportunities(id)
+      .then((opportunities) => {setExperienceList([...opportunities])})
+      .then(() => setLoading(false));
   }
 
   useEffect(() => {
-    getProfile();
+    init();
   }, []);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
       <View style={styles.header}>
-        <Link href={{ pathname: "pages/settingsUser" }}>
+        <Link href={{ pathname: "profile/settingsUser" }}>
           <FontAwesome
             name={"cog"}
             style={[{ color: "#9394a5" }, styles.icon]}
@@ -75,15 +62,7 @@ export default function Tab() {
         <Text style={styles.headerTitle}>@{username}</Text>
 
         <Link
-          href={{
-            pathname: "pages/editProfile",
-            params: {
-              usernameH: username,
-              firstNameH: name,
-              secondNameH: lastName,
-              descriptionH: description,
-            },
-          }}
+          href={{ pathname: "profile/editProfile" }}
         >
           <Ionicons
             name={"pencil"}
@@ -104,7 +83,7 @@ export default function Tab() {
           <View style={styles.profileTopSection}>
             <View style={styles.containerPfp}>
               <Image
-                source={{ uri: url_endpoint + "/api" + pfpLink }}
+                source={{ uri: `${url_endpoint}/api${pfpLink}?time=${Date.now()}`}}
                 style={styles.profilePicture}
                 resizeMode="cover"
               />

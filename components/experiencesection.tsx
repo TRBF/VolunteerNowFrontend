@@ -19,7 +19,7 @@ import { url_endpoint } from "../apistuff/_config";
 
 export function ExperienceSection({ experience }) {
   const [role, setNameText] = useState(experience.role);
-  const [organiserText, setOrganiserText] = useState(experience.username);
+  const [organiserText, setOrganiserText] = useState(experience.organiser);
   const [descriptionText, setDescriptionText] = useState(
     experience.description
   );

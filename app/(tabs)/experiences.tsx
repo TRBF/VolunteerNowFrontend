@@ -14,10 +14,10 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as DocumentPicker from "expo-document-picker";
 
-import { ExperienceSection } from "../components/experiencesection";
-import { styles } from "../styles/experiences";
-import { getUserAddedParticipations } from "../apistuff/experiences";
-import { user_id } from "../apistuff/_config";
+import { ExperienceSection } from "../../components/experiencesection";
+import { styles } from "../../styles/experiences";
+import { getUserAddedParticipations } from "../../apistuff/experiences";
+import { user_id } from "../../apistuff/_config";
 
 export default function DiplomasPastExperiencesScreen() {
   const [searchText, setSearchText] = useState("");

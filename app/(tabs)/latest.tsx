@@ -6,11 +6,11 @@ import {
   ScrollView,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { verticalUnits } from "../jmecheriis/ddunits";
+import { verticalUnits } from "../../jmecheriis/ddunits";
 
-import { Callout } from "../components/callout";
-import { styles } from "../styles/latest";
-import { getCalloutSenderUsername, getCallouts } from "../apistuff/latest";
+import { Callout } from "../../components/callout";
+import { styles } from "../../styles/latest";
+import { getCalloutSenderUsername, getCallouts } from "../../apistuff/latest";
 
 const Tab = () => {
   const [isLoading, setLoading] = useState(true);

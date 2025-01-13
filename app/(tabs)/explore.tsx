@@ -9,10 +9,10 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { Result } from "../components/searchresult";
-import { SearchBar } from "../components/searchbar";
-import { styles } from "../styles/explore";
-import { searchUniversal } from "../apistuff/search";
+import { Result } from "../../components/searchresult";
+import { SearchBar } from "../../components/searchbar";
+import { styles } from "../../styles/explore";
+import { searchUniversal } from "../../apistuff/search";
 
 const Tab = () => {
   const [search, setSearch] = useState("");
