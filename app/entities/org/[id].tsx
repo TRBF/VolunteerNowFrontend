@@ -13,8 +13,8 @@ import {
 } from "react-native";
 import { router, useLocalSearchParams, useNavigation } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { url_endpoint } from "../../apistuff/_config";
-import { verticalUnits } from "../../jmecheriis/ddunits";
+import { url_endpoint } from "../../../apistuff/_config";
+import { verticalUnits } from "../../../jmecheriis/ddunits";
 
 function PastExperience({ experience }) {
   const textLimit = 96;
@@ -36,7 +36,6 @@ function PastExperience({ experience }) {
             },
           ]}
         />
-        {/*<Text style={styles.experienceDate}>{startDate.getDay()}.{startDate.getMonth()}.{startDate.getFullYear()}</Text>*/}
         <Text style={styles.experienceDate}>{experience.days} days</Text>
       </View>
 
@@ -75,36 +74,36 @@ export default function VolunteerPage() {
   const [experienceList, setExperienceList] = useState([]);
   const { username } = useLocalSearchParams();
   const [isLoading, setLoading] = useState(true);
-
-  async function getProfile() {
-    try {
-      let response = await fetch(
-        `${url_endpoint}/api/get_volunteer_by_username/${username}?format=json`
-      );
-      const json = await response.json();
-
-      setName(json.name);
-      setDescription(json.description);
-      setPFPLink(json.link_to_pfp);
-      setCoverLink(json.link_to_cover_image);
-
-      response = await fetch(
-        `${url_endpoint}/api/get_user_opportunities/${json.id}?format=json`
-      );
-      const opportunities = await response.json();
-
-      if (Array.isArray(opportunities)) setExperienceList([...opportunities]);
-      else setExperienceList([opportunities]);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  useEffect(() => {
-    getProfile();
-  }, []);
+  //
+  //async function getProfile() {
+  //  try {
+  //    let response = await fetch(
+  //      `${url_endpoint}/api/get_volunteer_by_username/${username}?format=json`
+  //    );
+  //    const json = await response.json();
+  //
+  //    setName(json.name);
+  //    setDescription(json.description);
+  //    setPFPLink(json.link_to_pfp);
+  //    setCoverLink(json.link_to_cover_image);
+  //
+  //    response = await fetch(
+  //      `${url_endpoint}/api/get_user_opportunities/${json.id}?format=json`
+  //    );
+  //    const opportunities = await response.json();
+  //
+  //    if (Array.isArray(opportunities)) setExperienceList([...opportunities]);
+  //    else setExperienceList([opportunities]);
+  //  } catch (error) {
+  //    console.error(error);
+  //  } finally {
+  //    setLoading(false);
+  //  }
+  //}
+  //
+  //useEffect(() => {
+  //  getProfile();
+  //}, []);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>

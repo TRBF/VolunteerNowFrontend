@@ -16,12 +16,13 @@ import * as DocumentPicker from "expo-document-picker";
 
 import { ExperienceSection } from "../../components/experiencesection";
 import { styles } from "../../styles/experiences";
-import { getUserAddedParticipations } from "../../apistuff/experiences";
-import { user_id } from "../../apistuff/_config";
+import { getUserAddedParticipations, addUserAddedParticipation } from "../../apistuff/experiences";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function DiplomasPastExperiencesScreen() {
+  const [id, setID] = useState("1");
   const [searchText, setSearchText] = useState("");
-  const [nameText, setNameText] = useState("");
+  const [role, setRole] = useState("");
   const [organiserText, setOrganiserText] = useState("");
   const [descriptionText, setDescriptionText] = useState("");
   const [startDate, setStartDate] = useState("");
@@ -36,10 +37,18 @@ export default function DiplomasPastExperiencesScreen() {
 
   // call function to get events
   async function init() {
-    const e = await getUserAddedParticipations(user_id);
-    setExperiences(e);
-    console.log(experiences)
+    const userID = await AsyncStorage.getItem("user_id")
+    const e = await getUserAddedParticipations(userID);
+    if(Array.isArray(e))
+      setExperiences(e);
+    setID(userID)
     setLoading(false);
+  }
+
+  async function refreshExperiences() {
+    const e = await getUserAddedParticipations(id);
+    if(Array.isArray(e))
+      setExperiences(e);
   }
   
   // check log in and make api call
@@ -63,7 +72,7 @@ export default function DiplomasPastExperiencesScreen() {
 
   function pressableClicked() {
     if (Keyboard.isVisible()) Keyboard.dismiss();
-    else setVisible(!visible);
+    else setVisible(true);
   }
 
   function getDocument() {
@@ -87,7 +96,7 @@ export default function DiplomasPastExperiencesScreen() {
             {experiences.map((object, index) =>
               object.role.toLowerCase().startsWith(searchText.toLowerCase()) ||
               searchText === "" ? (
-                <ExperienceSection key={index} experience={object} />
+                <ExperienceSection key={index} experience={object} refreshExperiences={refreshExperiences}/>
               ) : null
             )}
             <View style={{ height: 50, width: "100%" }}></View>
@@ -106,9 +115,6 @@ export default function DiplomasPastExperiencesScreen() {
             animationType="slide"
             transparent={true}
             visible={visible}
-            onRequestClose={() => {
-              setVisible(!visible);
-            }}
           >
             <Pressable
               style={styles.centeredView}
@@ -119,16 +125,16 @@ export default function DiplomasPastExperiencesScreen() {
               <KeyboardAvoidingView style={styles.modalView} behavior="padding">
                 <Text style={styles.modalText}>Add experience</Text>
                 <TextInput
-                  placeholder="Experience Name"
+                  placeholder="What was your role?"
                   placeholderTextColor={"#cfcfcf"}
                   onChangeText={(text) => {
-                    setNameText(text);
+                    setRole(text);
                   }}
-                  value={nameText}
+                  value={role}
                   style={styles.modalTextInput}
                 />
                 <TextInput
-                  placeholder="Location"
+                  placeholder="Who organised it?"
                   placeholderTextColor={"#cfcfcf"}
                   onChangeText={(text) => {
                     setOrganiserText(text);
@@ -137,7 +143,7 @@ export default function DiplomasPastExperiencesScreen() {
                   style={styles.modalTextInput}
                 />
                 <TextInput
-                  placeholder="Description"
+                  placeholder="Describe your volunteering experience!"
                   placeholderTextColor={"#cfcfcf"}
                   onChangeText={(text) => {
                     setDescriptionText(text);
@@ -187,7 +193,11 @@ export default function DiplomasPastExperiencesScreen() {
                     style={styles.modalDate}
                   />
                 </View>
-                <Pressable style={styles.submitButton}>
+                <Pressable style={styles.submitButton} onPress={() => {
+                  addUserAddedParticipation(role, organiserText, descriptionText);
+                  refreshExperiences();
+                  setVisible(false);
+                }}>
                   <Text style={{ color: "white" }}>Submit</Text>
                 </Pressable>
               </KeyboardAvoidingView>

@@ -18,7 +18,8 @@ const Tab = () => {
 
   async function init(){
     const c = await getCallouts();
-    setCallouts(c);
+    if(Array.isArray(c))
+      setCallouts(c);
     setLoading(false);
   }
 

@@ -15,18 +15,16 @@ import {
 import { useNavigation, useRouter } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import * as ImagePicker from "expo-image-picker";
-import { modify_profile } from "../../apistuff/add";
 import { verticalUnits } from "../../jmecheriis/ddunits";
 import { getAccountId } from "../../apistuff/account";
-import { getProfile, updateProfilePicture } from "../../apistuff/profile";
+import { getProfile, updateProfilePicture, updateUser } from "../../apistuff/profile";
 import { url_endpoint } from "../../apistuff/_config";
-import { initialWindowMetrics } from "react-native-safe-area-context";
 
 export default function EditProfileScreen() {
   const navigation = useNavigation();
   const router = useRouter();
 
-  const [id, setID] = useState(1);
+  const [id, setID] = useState("1");
   
   let profile = {} 
   const [username, setUsername] = useState("@loading");
@@ -36,20 +34,38 @@ export default function EditProfileScreen() {
   const [pfpLink, setPfpLink] = React.useState<string | null>(null);
 
   const [isLoading, setLoading] = useState(true);
+  //
+  //async function init(){
+  //  getAccountId()
+  //    .then((account_id) => {setID(account_id)})
+  //
+  //  getProfile(id)
+  //    .then((account_profile) => {profile = account_profile})
+  //    .then(() => { setUsername(profile["username"]) })
+  //    .then(() => { setFirstName(profile["first_name"]) })
+  //    .then(() => { setSecondName(profile["last_name"]) })
+  //    .then(() => { setDescription(profile["description"]) })
+  //    .then(() => { setPfpLink(profile["profile_picture"]) })
+  //    .then(() => { setLoading(false) })
+  //}
+
+  async function init(){
+    const account_id = await getAccountId(); // Ensure account_id is fetched before proceeding
+    setID(account_id);
+
+    const profile = await getProfile(account_id); // Use account_id, not id
+    setUsername(profile["username"]);
+    setFirstName(profile["first_name"]);
+    setSecondName(profile["last_name"]);
+    setDescription(profile["description"]);
+    setPfpLink(profile["profile_picture"]);
+
+    setLoading(false);
+  }
 
   useEffect(() => {
     navigation.setOptions({ headerShown: false });
-    getAccountId()
-      .then((account_id) => {setID(account_id)})
-
-    getProfile(id)
-      .then((account_profile) => {profile = account_profile})
-      .then(() => { setUsername(profile["username"]) })
-      .then(() => { setFirstName(profile["first_name"]) })
-      .then(() => { setSecondName(profile["second_name"]) })
-      .then(() => { setDescription(profile["description"]) })
-      .then(() => { setPfpLink(profile["profile_picture"]) })
-      .then(() => { setLoading(false) })
+    init()
   }, [navigation]);
 
   async function getProfilePicture() {
@@ -60,7 +76,7 @@ export default function EditProfileScreen() {
       quality: 1,
     });
     
-    console.log(result.assets[0].uri);
+    console.log("URI: ", result.assets[0].uri);
     if (!result.canceled) {
       return result.assets[0].uri;
     } 
@@ -68,16 +84,38 @@ export default function EditProfileScreen() {
   }
 
   async function changeProfilePicture(){
+    /*
     const formData = new FormData();
-    
+    const account_id = await getAccountId(); // Ensure account_id is fetched before proceeding
 
-    getProfilePicture()
-      .then((pfpUri) => fetch(pfpUri))
-      .then((response) => response.blob())
-      .then((blob) => formData.append("profile_picture", blob, "pfp.png"))
-      .then(() => {updateProfilePicture(id, formData)})
-      .then(() => getProfile(id))
-      .then((profile) => setPfpLink(profile["profile_picture"] + `?time=${Date.now()}`))
+    const pfpURI = await getProfilePicture()
+    fetch(pfpURI)
+    .then(response => response.blob())
+    .then(blob =>{
+      formData.append("profile_picture", blob, "pfp.png")
+    });
+    await updateProfilePicture(formData)
+    const profile = await getProfile(account_id)
+    setPfpLink(profile["profile_picture"] + `?time=${Date.now()}`)
+*/
+
+    const pfpURI = await getProfilePicture()
+    const formData = new FormData();
+    formData.append('profile_picture', {
+      uri: pfpURI,  // File URI you get from the picker
+      type: 'image/jpeg', // Correct MIME type
+      name: 'profile_picture.jpg',
+    });
+    await updateProfilePicture(formData);
+    const profile = await getProfile(id);
+    setPfpLink(profile["profile_picture"] + `?time=${Date.now()}`)
+
+      //.then((pfpUri) => fetch(pfpUri))
+      //.then((response) => response.blob())
+      //.then((blob) => formData.append("profile_picture", blob, "pfp.png"))
+      //.then(() => {updateProfilePicture(formData)})
+      //.then(() => getProfile(id))
+      //.then((profile) => setPfpLink(profile["profile_picture"] + `?time=${Date.now()}`))
   }
 
   return (
@@ -166,7 +204,7 @@ export default function EditProfileScreen() {
               <Pressable
                 style={styles.button}
                 onPress={async () => {
-                  await modify_profile(
+                  await updateUser(
                     username,
                     firstName,
                     secondName,

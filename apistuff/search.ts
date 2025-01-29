@@ -5,6 +5,7 @@ export async function searchUniversal(search_term: string) {
     `${url_endpoint}/api/search/${search_term}?format=json`
   );
   let result = await response.json();
+  console.log("res: ", result);
   return result;
 }
 

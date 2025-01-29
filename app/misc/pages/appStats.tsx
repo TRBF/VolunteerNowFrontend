@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import { useNavigation, useRouter } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { verticalUnits } from "../../jmecheriis/ddunits";
+import { verticalUnits } from "../../../jmecheriis/ddunits";
 
 export default function ApplicationsStatusPage() {
   const applications = [

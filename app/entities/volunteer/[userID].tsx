@@ -5,20 +5,26 @@ import {
   Text,
   View,
   SafeAreaView,
+  Pressable,
 } from "react-native";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { Link, useFocusEffect } from "expo-router";
+import { Link, router, useFocusEffect, useLocalSearchParams, useNavigation } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { url_endpoint } from "../../apistuff/_config";
+import { url_endpoint } from "../../../apistuff/_config";
 
-import { PastExperience } from "../../components/pastexperience";
-import { styles } from "../../styles/profile";
-import { getProfile, getUserOpportunities } from "../../apistuff/profile";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { getAccountId } from "../../apistuff/account";
+import { PastExperience } from "../../../components/pastexperience";
+import { styles } from "../../../styles/profile";
+import { getProfile, getUserOpportunities } from "../../../apistuff/profile";
 
 export default function Tab() {
-  const [id, setID] = useState("4"); // needs to be changed based on what's stored on the device
+  const navigation = useNavigation();
+  
+  useEffect(() => {
+    navigation.setOptions({ headerShown: false });
+  }, [navigation]);
+
+
+  const { userID } = useLocalSearchParams();
 
   const [name, setName] = useState("Loading...");
   const [lastName, setLastName] = useState("Loading...");
@@ -32,18 +38,20 @@ export default function Tab() {
 
   const [isLoading, setLoading] = useState(true);
 
+  console.log("params: ", userID)
+  
   async function init() {
-    const account_id = await getAccountId();
-    setID(account_id);
+    const id = userID.toString(); 
 
-    const profile = await getProfile(account_id);
+    const profile = await getProfile(id);
     setUsername(profile["username"]);
     setPfpLink(profile["profile_picture"]);
     setName(profile["first_name"]);
     setLastName(profile["last_name"]);
     setDescription(profile["description"]);
     
-    const opportunities = await getUserOpportunities(account_id);
+    const opportunities = await getUserOpportunities(id);
+    console.log(opportunities)
     setExperienceList([...opportunities]);
     setLoading(false);
   }
@@ -61,23 +69,24 @@ export default function Tab() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
       <View style={styles.header}>
-        <Link href={{ pathname: "profile/settingsUser" }}>
-          <FontAwesome
-            name={"cog"}
+        <Pressable
+          onPress={() => {
+            setLoading(true);
+            router.back();
+          }}
+        >
+          <Ionicons
+            name="chevron-back"
             style={[{ color: "#9394a5" }, styles.icon]}
           />
-        </Link>
+        </Pressable>
 
         <Text style={styles.headerTitle}>@{username}</Text>
 
-        <Link
-          href={{ pathname: "profile/editProfile" }}
-        >
-          <Ionicons
-            name={"pencil"}
-            style={[{ color: "#9394a5" }, styles.icon]}
-          />
-        </Link>
+        <Ionicons
+          name={"chevron-back"}
+          style={[{ color: "#fff" }, styles.icon]}
+        />
       </View>
       {!isLoading && (
         <ScrollView
@@ -159,5 +168,6 @@ export default function Tab() {
     </SafeAreaView>
   );
 }
+
 
 

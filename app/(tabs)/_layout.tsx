@@ -43,17 +43,9 @@ export default function TabLayout() {
       <Tabs.Screen
         name="experiences"
         options={{
-          tabBarIcon: ({ color, focused }) => <Ionicons size={28} name={focused ? "add" : "add-outline"} color={color} />,
+          tabBarIcon: ({ color, focused }) => <Ionicons size={28} name={focused ? "folder-open" : "folder-open-outline"} color={color} />,
           headerShown: false,
           tabBarShowLabel: false,
-        }}
-      />
-      <Tabs.Screen
-        name="login"
-        options={{
-          headerShown: false,
-          tabBarStyle: {display: 'none'},
-          href: null,
         }}
       />
     </Tabs>

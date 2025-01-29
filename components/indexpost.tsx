@@ -49,8 +49,8 @@ export function Post({ postObject }: any) {
       <View style={{ width: "12%", aspectRatio: 1, marginRight: "4%" }}>
         <Link
           href={{
-            pathname: "entities/posts/[id]",
-            params: { username: postObject.id },
+            pathname: "entities/org/[id]",
+            params: { username: postObject.author },
           }}
           asChild
         >
@@ -78,8 +78,8 @@ export function Post({ postObject }: any) {
               <View style={styles.authorData}>
                 <Link
                   href={{
-                    pathname: "entities/org/[username]",
-                    params: { username: postObject.username },
+                    pathname: "entities/org/[id]",
+                    params: { username: postObject.author },
                   }}
                   asChild
                 >
@@ -87,8 +87,8 @@ export function Post({ postObject }: any) {
                 </Link>
                 <Link
                   href={{
-                    pathname: "entities/org/[username]",
-                    params: { username: postObject.username },
+                    pathname: "entities/org/[id]",
+                    params: { username: postObject.author },
                   }}
                   asChild
                 >
@@ -141,7 +141,7 @@ export function Post({ postObject }: any) {
                       textAlignVertical: "center",
                     }}
                   >
-                    123
+                    {postObject.like_count} 
                   </Text>
                 </Pressable>
                 <Pressable
@@ -164,12 +164,12 @@ export function Post({ postObject }: any) {
                     123
                   </Text>
                 </Pressable>
-                <Pressable onPress={() => setShareClicked(!shareClicked)}>
+                {/*<Pressable onPress={() => setShareClicked(!shareClicked)}>
                   <FontAwesome
                     name={shareClicked ? "send" : "send-o"}
                     style={[{ color: "#9394a5" }, styles.icon]}
                   />
-                </Pressable>
+                </Pressable>*/}
               </View>
               <Text style={styles.volunteersNeeded}>
                 {" "}

@@ -11,7 +11,7 @@ import Entypo from "@expo/vector-icons/Entypo";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Link, Redirect } from "expo-router";
 
-import { isLoggedIn } from "../../apistuff/account";
+import { getAccountId, isLoggedIn } from "../../apistuff/account";
 import { styles } from "../../styles/index";
 import { Post } from "../../components/indexpost";
 import { getEvents, getPfp } from "../../apistuff";
@@ -22,15 +22,22 @@ const Tab = () => {
   const [logged, setLogged] = useState(true);
   const [events, setEvents] = useState([]);
   const [isLoading, setLoading] = useState(true);
-  const [id, setID] = useState(1);
+  const [id, setID] = useState("1");
   const [pfpLink, setPfpLink] = useState("");
   const [refreshing, setRefreshing] = useState(false);
 
   // call function to get data from backend 
   async function init() {
+    const logStatus = await isLoggedIn()
+    console.log("lst: ", logStatus)
+
+    const account_id = await getAccountId();
+    setID(account_id);
     const e = await getEvents();
-    const p = await getPfp(id);
-    setEvents(e);
+    const p = await getPfp(account_id);
+    console.log("pfp: ", p)
+    if(Array.isArray(e))
+      setEvents(e);
     setPfpLink(p + `?time=${Date.now}`)
     setLoading(false);
   }
@@ -42,14 +49,11 @@ const Tab = () => {
   
   // check log in and make api call
   useEffect(() => {
-    setLogged(isLoggedIn()); // IDE might tell you this line doesn't work; it does.
+    isLoggedIn()
+    .then((logStatus) => setLogged(logStatus))
     init();
   }, []);
 
-  // if the user isn't logged in we want them to log in 
-  if (!logged) {
-    return <Redirect href="login" />;
-  }
   
   // set native navbar color
   NavigationBar.setBackgroundColorAsync("#ffffff");
@@ -62,6 +66,9 @@ const Tab = () => {
     .then(() => setRefreshing(false));
     setEvents([]);
   }, []);
+
+  if(!logged)
+    return(<Redirect href="(auth)/login"/>)
 
   return (
     <SafeAreaView style={{ backgroundColor: "#ffffff", flex: 1 }}>
@@ -101,13 +108,14 @@ const Tab = () => {
             />
 
             <Link
-              href={{ pathname: "/miscellaneous/pages/applicationsStatus.tsx" }}
+              href={{ pathname: "misc/pages/appStats" }}
               style={styles.headerImageContainerRight}
             >
               <Entypo
                 name={"documents"}
                 style={{
-                  color: "#7211A2",
+                  //color: "#7211A2",
+                  color: "#FFFFFF",
                   fontSize: 26,
                   alignItems: "center",
                 }}
@@ -115,8 +123,9 @@ const Tab = () => {
             </Link>
           </View>
 
-          {events.map((event: any) => (
-            <Post postObject={{ ...event }} key={event.content} />
+          {
+            events.map((event: any) => (
+            <Post postObject={{ ...event }} key={event.id} />
           ))}
         </ScrollView>
       )}

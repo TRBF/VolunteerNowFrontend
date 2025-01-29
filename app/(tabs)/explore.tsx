@@ -41,7 +41,8 @@ const Tab = () => {
             placeholder="Search"
             onChangeText={async (value: string) => {
               setSearch(value);
-              setResults(await searchUniversal(value));
+              const res = await searchUniversal(value);
+              setResults(res);
             }}
           />
 

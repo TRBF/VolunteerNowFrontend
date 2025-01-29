@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { url_endpoint } from "./_config";
 
 export async function signUp(
@@ -30,12 +31,49 @@ export async function signUp(
   return newUser;
 }
 
-export async function login(username, password) {
-  const url =
-    url_endpoint + `/api/login?username=${username}&password=${password}`;
-  const response = await fetch(url);
-  const result = await response.json();
-  console.log(result);
-  return result;
+async function fetchID(){
+  const token = await AsyncStorage.getItem("token");
+  const response = await fetch(
+      `${url_endpoint}/api/get_id/`,
+      {
+        method: "GET",
+        headers: {
+          "Authorization": `Token ${token}`
+        }
+      }
+    )
+  const json = await response.json()
+  console.log(json)
+  return json["id"] 
 }
 
+export async function login(username: string, password: string) { 
+  const formData = new FormData();
+
+  formData.append("username", username);
+  formData.append("password", password);
+
+  const response = await fetch(
+      `${url_endpoint}/api/get_token/`,
+      {
+        method: "POST",
+        body: formData,
+      }
+    )
+  const data = await response.json()
+  if(data["token"]){
+    await AsyncStorage.setItem("token", data["token"])
+    try {
+      const id = await fetchID()
+      const strID = id.toString()
+      await AsyncStorage.setItem("user_id", strID)
+      return 200;
+    } 
+    catch (error) {
+      console.error("Error fetching ID:", error);
+      return 500; 
+    }
+  }
+  else
+    return 400
+}

@@ -12,19 +12,14 @@ import {
   Pressable,
   ScrollView,
 } from "react-native";
-import { StyleSheet } from "react-native";
-import { login } from "../../apistuff/add";
-import { rememberAccount } from "../../apistuff/account";
+import { login } from "../../apistuff/logsign";
 import { Link, useNavigation, useRouter } from "expo-router";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { styles } from "../../styles/login";
 
 export default function Login() {
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
-  const [loading, setLoading] = React.useState(false); // To track the loading state
-  // const { navigate } = this.props.navigation;
   const navigation = useNavigation();
   const router = useRouter();
 
@@ -33,30 +28,20 @@ export default function Login() {
   }, [navigation]);
 
   const handleLogin = async () => {
-    // Validate the inputs first
     if (!username || !password) {
       alert("Error, Please enter both username and password.");
       return;
     }
 
-    try {
-      setLoading(true); // Set loading to true
-      const result = await login(username, password);
+    const code = await login(username, password)
 
-      // Handle the response based on the result
-      if (result.success) {
-        alert("Success, Login successful!");
-        //await rememberAccount(result.result.token, result.result.userid);
-      } else {
-        alert("Error, Login failed. Please check your credentials.");
-      }
-    } catch (error) {
-      alert("Error, An error occurred during login.");
-      console.error(error);
-    } finally {
-      setLoading(false); // Set loading to false regardless of success or failure
+    if (code==200) {
+      console.log("eee")
+      router.navigate("profile");
+    } else {
+      alert("Error, Login failed. Please check your credentials.");
     }
-  };
+  }
 
   return (
     <KeyboardAvoidingView
@@ -88,23 +73,31 @@ export default function Login() {
                   secureTextEntry={true}
                   placeholderTextColor="#B0B0B0"
                 />
+                {/*
                 {loading ? (
                   <ActivityIndicator size="large" color="#0000ff" />
                 ) : (
                   <Pressable
                     style={styles.button}
                     onPress={() => {
-                      AsyncStorage.setItem("token", "Exista");
-                      router.navigate("profile");
+                      handleLogin();
                     }}
                   >
                     <Text style={styles.buttonText}>Login</Text>
                   </Pressable>
-                )}
+                )} */}
+                <Pressable
+                  style={styles.button}
+                  onPress={() => {
+                    handleLogin();
+                  }}
+                >
+                  <Text style={styles.buttonText}>Login</Text>
+                </Pressable>
                 <View style={{ marginTop: " 3%", alignSelf: "center" }}>
                   <Link
                     href={{
-                      pathname: "/auth/forgotpassword",
+                      pathname: "forgotpassword",
                     }}
                   >
                     <Text style={styles.forgotPasswordText}>
@@ -119,7 +112,7 @@ export default function Login() {
                 <View style={styles.btnView}>
                   <Link
                     href={{
-                      pathname: "/auth/register",
+                      pathname: "register",
                     }}
                   >
                     <Text style={styles.btnText}>Sign Up!</Text>

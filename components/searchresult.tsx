@@ -10,15 +10,11 @@ import { url_endpoint } from "../apistuff/_config";
 import { styles } from "../styles/explore";
 
 export function Result({ user }) {
-  console.log("User: ", user);
   return (
     <Link
       href={{
-        pathname:
-          user.account_type == "volunteer"
-            ? "volunteer/[username]"
-            : "org/[username]",
-        params: { username: user.username },
+        pathname: "entities/volunteer/[id]",
+        params: { "id": user.id }
       }}
       asChild
     >
@@ -31,11 +27,9 @@ export function Result({ user }) {
           />
           <View style={styles.resultInfo}>
             <Text style={styles.resultName}>
-              {!user.name ? user.first_name + " " + user.last_name : user.name}
+              {user.first_name + " " + user.last_name}
             </Text>
-            {user.Username && (
-              <Text style={styles.resultUsername}>@{user.username}</Text>
-            )}
+            <Text style={styles.resultUsername}>@{user.username}</Text>
           </View>
         </View>
       </Pressable>

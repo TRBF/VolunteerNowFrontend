@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Text,
   View,
@@ -11,21 +11,17 @@ import {
 } from "react-native";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import * as DocumentPicker from "expo-document-picker";
-import { deleteExperience } from "../apistuff/add";
+import { deleteUserAddedParticipation, updateUserAddedParticipation } from "../apistuff/experiences";
 import { verticalUnits } from "../jmecheriis/ddunits";
 
 import { styles } from "../styles/experiences";
 import { url_endpoint } from "../apistuff/_config";
 
-export function ExperienceSection({ experience }) {
-  const [role, setNameText] = useState(experience.role);
-  const [organiserText, setOrganiserText] = useState(experience.organiser);
-  const [descriptionText, setDescriptionText] = useState(
-    experience.description
-  );
+export function ExperienceSection({ experience, refreshExperiences }) {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [visible, setVisible] = useState(false);
+  const [refreshTrigger, setRefresh] = useState(0);
 
   function startDateUpdate(text: string) {
     if (text.length == 2 && text[1] != "/") text += "/";
@@ -41,7 +37,7 @@ export function ExperienceSection({ experience }) {
 
   function pressableClicked() {
     if (Keyboard.isVisible()) Keyboard.dismiss();
-    else setVisible(!visible);
+    else setVisible(true);
   }
 
   function getDocument() {
@@ -51,6 +47,10 @@ export function ExperienceSection({ experience }) {
       }
     );
   }
+
+  useEffect(()=>{
+    refreshExperiences();
+  }, [refreshTrigger])
 
   const [confirmDelete, setConfirmDelete] = useState(false);
 
@@ -101,7 +101,7 @@ export function ExperienceSection({ experience }) {
           transparent={true}
           visible={visible}
           onRequestClose={() => {
-            setVisible(!visible);
+            setConfirmDelete(false);
           }}
         >
           <Pressable
@@ -113,30 +113,24 @@ export function ExperienceSection({ experience }) {
             <KeyboardAvoidingView style={styles.modalView} behavior="padding">
               <Text style={styles.modalText}>Modify {experience.organiser}</Text>
               <TextInput
-                placeholder="Experience Name"
+                placeholder="What was your role?"
                 placeholderTextColor={"#cfcfcf"}
-                onChangeText={(text) => {
-                  setNameText(text);
-                }}
-                value={role}
+                onChangeText={(text) => {experience.role = text}}
+                value={experience.role}
                 style={styles.modalTextInput}
               />
               <TextInput
-                placeholder="Organisation"
+                placeholder="Who organised it?"
                 placeholderTextColor={"#cfcfcf"}
-                onChangeText={(text) => {
-                  setOrganiserText(text);
-                }}
-                value={organiserText}
+                onChangeText={(text) => {experience.organiser = text}}
+                value={experience.organiser}
                 style={styles.modalTextInput}
               />
               <TextInput
-                placeholder="Description"
+                placeholder="Describe your volunteering experience!"
                 placeholderTextColor={"#cfcfcf"}
-                onChangeText={(text) => {
-                  setDescriptionText(text);
-                }}
-                value={descriptionText}
+                onChangeText={(text) => {experience.description = text}}
+                value={experience.description}
                 style={styles.modalDescription}
                 multiline={true}
               />
@@ -194,7 +188,8 @@ export function ExperienceSection({ experience }) {
                   onPress={() => {
                     if (!confirmDelete) setConfirmDelete(true);
                     else {
-                      deleteExperience(experience.id);
+                      deleteUserAddedParticipation(experience.id);
+                      setRefresh(refreshTrigger+1)
                       setVisible(false);
                     }
                   }}
@@ -203,7 +198,11 @@ export function ExperienceSection({ experience }) {
                     {confirmDelete ? "Confirm" : "Delete"}
                   </Text>
                 </Pressable>
-                <Pressable style={styles.submitButton}>
+                <Pressable style={styles.submitButton} onPress={()=>{
+                  updateUserAddedParticipation(experience.id, experience.role, experience.organiser, experience.description);
+                  setRefresh(refreshTrigger+1)
+                  setVisible(false);
+                }}>  
                   <Text style={{ color: "white" }}>Done</Text>
                 </Pressable>
               </View>

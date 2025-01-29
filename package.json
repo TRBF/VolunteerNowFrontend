@@ -19,14 +19,17 @@
     "@react-navigation/native": "^6.1.18",
     "@react-navigation/stack": "^6.4.1",
     "@types/react": "~18.3.12",
+    "axios": "^1.7.9",
     "date-fns": "^3.6.0",
     "expo": "^52.0.7",
     "expo-constants": "~17.0.3",
     "expo-document-picker": "~13.0.1",
     "expo-font": "~13.0.1",
     "expo-image": "~2.0.0",
+    "expo-image-picker": "~16.0.3",
     "expo-linear-gradient": "~14.0.1",
     "expo-linking": "~7.0.2",
+    "expo-navigation-bar": "~4.0.6",
     "expo-router": "~4.0.6",
     "expo-status-bar": "~2.0.0",
     "gh-pages": "^6.1.1",
@@ -44,9 +47,7 @@
     "react-native-swipe-gestures": "^1.0.5",
     "react-native-ui-datepicker": "^2.0.3",
     "react-native-web": "~0.19.13",
-    "typescript": "~5.3.3",
-    "expo-navigation-bar": "~4.0.6",
-    "expo-image-picker": "~16.0.3"
+    "typescript": "~5.3.3"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

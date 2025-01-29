@@ -11,6 +11,7 @@ export async function placeholderTestingStore(){
 export async function isLoggedIn() {
   try {
     const token = await AsyncStorage.getItem("token");
+    console.log("letoken", token)
     return token != null;
   } catch (e) {
     console.log(e);
@@ -22,15 +23,6 @@ export async function getAccountToken() {
 }
 
 export async function getAccountId() {
-  return parseInt(await AsyncStorage.getItem("account_id"));
-}
-
-export async function rememberAccount(token: string, id: number) {
-  try {
-    await AsyncStorage.setItem("token", token);
-    await AsyncStorage.setItem("account_id", id.toString());
-  } catch (e) {
-    console.log(e);
-  }
+  return await AsyncStorage.getItem("user_id");
 }
 

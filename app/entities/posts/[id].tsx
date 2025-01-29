@@ -5,6 +5,7 @@ import {
   Text,
   View,
   Pressable,
+  Linking,
 } from "react-native";
 import { useLocalSearchParams, useNavigation } from "expo-router";
 import { Image } from "expo-image";
@@ -15,9 +16,9 @@ import { useWindowDimensions } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Link, router } from "expo-router";
 
-import { getOpportunity } from "../../apistuff/post";
-import { styles } from "../../styles/post";
-import { url_endpoint } from "../../apistuff/_config";
+import { getOpportunity } from "../../../apistuff/post";
+import { styles } from "../../../styles/post";
+import { url_endpoint } from "../../../apistuff/_config";
 
 
 export default function Tab() {
@@ -116,17 +117,9 @@ export default function Tab() {
                 ))*/}
               </View>
               <View style={styles.applyNowContainer}>
-                <Link
-                  href={{
-                    pathname: "forms/[id]",
-                    params: { id: formID },
-                  }}
-                  asChild
-                >
-                  <Pressable style={styles.applyNowButton}>
-                    <Text style={styles.applyNowButtonText}>Apply Now</Text>
-                  </Pressable>
-                </Link>
+                <Pressable onPress={() => Linking.openURL("http://google.com")} style={styles.applyNowButton}>
+                  <Text style={styles.applyNowButtonText}>Apply Now</Text>
+                </Pressable>
               </View>
             </View>
           </ScrollView>
