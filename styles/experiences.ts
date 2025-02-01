@@ -19,7 +19,6 @@ export const styles = StyleSheet.create({
   experienceImage: {
     borderRadius: 10,
     marginRight: "5%",
-    marginBottom: "12%",
   },
   experienceName: {
     color: "#000000",
@@ -44,7 +43,6 @@ export const styles = StyleSheet.create({
     width: "80%",
     marginBottom: "2%",
   },
-
   container: {
     width: "100%",
     height: "100%",
@@ -166,12 +164,13 @@ export const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 22,
+    marginBottom: verticalUnits(10),
+    marginTop: verticalUnits(2),
   },
   modalView: {
     backgroundColor: "white",
     borderRadius: 20,
-    height: "80%",
+    height: "90%",
     width: "90%",
     shadowColor: "#000",
     shadowOffset: {
@@ -182,8 +181,10 @@ export const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
     padding: "5%",
-
+    paddingTop: verticalUnits(3),
     display: "flex",
+  },
+  modalViewContainerStyle: {
     justifyContent: "space-between",
     alignItems: "center",
   },
@@ -195,7 +196,8 @@ export const styles = StyleSheet.create({
   },
   modalTextInput: {
     width: "100%",
-    height: "6%",
+    height: verticalUnits(6),
+    marginBottom: verticalUnits(3),
     minHeight: "6%",
     borderRadius: 15,
     paddingLeft: 10,
@@ -212,15 +214,31 @@ export const styles = StyleSheet.create({
     paddingBottom: 10,
     backgroundColor: "#f6f6f6",
     textAlignVertical: "top",
+    marginBottom: verticalUnits(3)
   },
   modalDate: {
-    width: "30%",
+    width: "45%",
     height: "100%",
     backgroundColor: "#f6f6f6",
     textAlign: "center",
     justifyContent: "flex-start",
     alignItems: "flex-start",
     borderRadius: 15,
+  },
+  intervalPressable: {
+    width: "45%",
+    height: "100%",
+    backgroundColor: "#f6f6f6",
+    textAlign: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 15,
+  },
+  setIntervalText: {
+    color: "#cfcfcf",
+  },
+  unsetIntervalText: {
+    color: "#000000",
   },
   textStyle: {
     color: "white",
@@ -229,7 +247,8 @@ export const styles = StyleSheet.create({
   },
   uploadImageButton: {
     width: "100%",
-    height: "15%",
+    height: verticalUnits(15), 
+    marginBottom: verticalUnits(3),
     backgroundColor: "#f6f6f6",
     justifyContent: "center",
     alignItems: "center",
@@ -244,18 +263,20 @@ export const styles = StyleSheet.create({
     paddingVertical: "3%",
     paddingHorizontal: "15%",
     borderRadius: 15,
-    marginBottom: "5%",
+    marginBottom: verticalUnits(18),
   },
   deleteButton: {
     backgroundColor: "#ff0000",
     paddingVertical: "3%",
     paddingHorizontal: "15%",
     borderRadius: 15,
-    marginBottom: "5%",
+    marginBottom: verticalUnits(18),
   },
   modalText: {
     fontSize: 16,
     fontWeight: "normal",
+    marginBottom: verticalUnits(6),
+    textAlign: "center",
   },
   attestedText: {
     marginTop: verticalUnits(1),

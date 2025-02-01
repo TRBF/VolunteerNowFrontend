@@ -37,8 +37,6 @@ export default function Tab() {
   const [pfpLink, setPfpLink] = useState("");
 
   const [isLoading, setLoading] = useState(true);
-
-  console.log("params: ", userID)
   
   async function init() {
     const id = userID.toString(); 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Pressable,
   Image,
@@ -12,21 +12,52 @@ import { verticalUnits } from "../jmecheriis/ddunits";
 import { styles } from "../styles/profile";
 
 export function PastExperience({ experience }) {
-  const startDate: Date = new Date(experience.time);
   const textLimit = 96;
+
+  const [count, setCount] = useState(0)
+  const [countType, setCountType] = useState("0")
+
+  const start_date = new Date(experience.start_date)
+  const end_date = new Date(experience.end_date)
+
+  async function init(){
+    if(end_date.getFullYear()-start_date.getFullYear()>0){
+      setCount(end_date.getFullYear()-start_date.getFullYear()) 
+      setCountType("years")
+      if(end_date.getFullYear()-start_date.getFullYear() == 1)
+        setCountType("year")
+    }
+    else if(end_date.getMonth()-start_date.getMonth()>0){
+      setCount(end_date.getMonth()-start_date.getMonth())
+      setCountType("months")
+      if(end_date.getMonth()-start_date.getMonth() == 1)
+        setCountType("month")
+
+    }
+    else if(end_date.getDate()-start_date.getDate()>0){
+      setCount(end_date.getDate()-start_date.getDate())
+      setCountType("days")
+      if(end_date.getDate()-start_date.getDate() == 1)
+        setCountType("date")
+    }
+  }
+
+  useEffect(() => {
+    init();
+  }, [])
 
   return (
     <Link
       href={{
         pathname: "entities/org/[username]",
-        params: { username: experience.username },
+        params: { username: experience.organiser },
       }}
       asChild
     >
       <Pressable style={styles.experienceSection}>
         <View style={{ flexDirection: "column", alignItems: "flex-start" }}>
           <Image
-            source={{ uri: url_endpoint + "/api" + experience.profile_picture }}
+            source={{ uri: url_endpoint + "/api" + experience.participation_picture }}
             resizeMode="cover"
             style={[
               styles.experienceImage,
@@ -36,17 +67,14 @@ export function PastExperience({ experience }) {
               },
             ]}
           />
-          <Text style={styles.experienceDate}>
-            {startDate.getDay()}.{startDate.getMonth()}.
-            {startDate.getFullYear()}
-          </Text>
-          {/* <Text style={styles.experienceDate}>{experience.days} days</Text> */}
+          <Text style={styles.experienceDate}>{count} {countType}</Text>
+          <Text style={styles.experienceDate}>{experience.hours} hours</Text>
         </View>
 
         <View style={{ width: "76%" }}>
           <View style={styles.experienceIdentifiers}>
             <Text style={styles.experienceName}>{experience.role}</Text>
-            <Text style={styles.experienceLocation}>{experience.location}</Text>
+            <Text style={styles.experienceLocation}>{experience.organiser}</Text>
           </View>
           <Text style={styles.experienceDescription}>
             {experience.description.length > textLimit

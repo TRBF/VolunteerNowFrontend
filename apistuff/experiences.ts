@@ -13,8 +13,12 @@ export async function getUserAddedParticipations(id: String){
   return participations;
 }
 
-export async function addUserAddedParticipation(role: String, organiser: String, description: String){
+export async function addUserAddedParticipation(role: String, organiser: String, description: String, startDate: Date, endDate: Date, hours: String){
   const token = await AsyncStorage.getItem("token")
+  
+  const start_date = `${startDate.getFullYear()}-${startDate.getMonth()+1}-${startDate.getDate()}`
+  const end_date = `${endDate.getFullYear()}-${endDate.getMonth()+1}-${endDate.getDate()}`
+
   await fetch(
     `${url_endpoint}/api/add_user_added_participation/`,
     {
@@ -27,6 +31,9 @@ export async function addUserAddedParticipation(role: String, organiser: String,
         role: role,
         organiser: organiser,
         description: description,
+        start_date: start_date,
+        end_date: end_date,
+        hours: hours,
       }),
     }
   )

@@ -4,6 +4,7 @@ import { Link } from 'expo-router';
 import { useNavigation, useRouter } from "expo-router";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { verticalUnits } from '../../jmecheriis/ddunits';
+import { logout } from '../../apistuff/logsign';
 
 
 export default function SettingsUserScreen(){
@@ -45,16 +46,17 @@ export default function SettingsUserScreen(){
                 */}
 
                 <Link href={{
-                    pathname: "pages/GDPRFormular"
+                    pathname: "pages/GDPR"
                     }}>
-                    <Text style={styles.textStyle}>GDPR formular</Text>
+                    <Text style={styles.textStyle}>GDPR</Text>
                 </Link>
 
-                <Pressable style={{marginVertical: "3%"}}>
-                    <Text style={styles.textStyle}>Donate</Text>
-                </Pressable>
-
-                <Pressable>
+                <Pressable onPress={
+                  ()=>{
+                    logout();
+                    router.navigate("(auth)/login")
+                  }
+                }>
                     <Text style={styles.logOut}>Log Out</Text>
                 </Pressable>
 

@@ -8,6 +8,7 @@ import {
   Modal,
   KeyboardAvoidingView,
   Keyboard,
+  ScrollView,
 } from "react-native";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import * as DocumentPicker from "expo-document-picker";
@@ -16,24 +17,56 @@ import { verticalUnits } from "../jmecheriis/ddunits";
 
 import { styles } from "../styles/experiences";
 import { url_endpoint } from "../apistuff/_config";
+import { DatePickerModal } from "react-native-paper-dates";
 
 export function ExperienceSection({ experience, refreshExperiences }) {
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
   const [visible, setVisible] = useState(false);
   const [refreshTrigger, setRefresh] = useState(0);
 
-  function startDateUpdate(text: string) {
-    if (text.length == 2 && text[1] != "/") text += "/";
-    else if (text.length == 5 && text[4] != "/") text += "/";
-    setStartDate(text);
+  const [count, setCount] = useState(0)
+  const [countType, setCountType] = useState("0")
+
+  const start_date = new Date(experience.start_date)
+  const end_date = new Date(experience.end_date)
+
+  async function init(){
+    if(end_date.getFullYear()-start_date.getFullYear()>0){
+      setCount(end_date.getFullYear()-start_date.getFullYear()) 
+      setCountType("years")
+      if(end_date.getFullYear()-start_date.getFullYear() == 1)
+        setCountType("year")
+    }
+    else if(end_date.getMonth()-start_date.getMonth()>0){
+      setCount(end_date.getMonth()-start_date.getMonth())
+      setCountType("months")
+      if(end_date.getMonth()-start_date.getMonth() == 1)
+        setCountType("month")
+
+    }
+    else if(end_date.getDate()-start_date.getDate()>0){
+      setCount(end_date.getDate()-start_date.getDate())
+      setCountType("days")
+      if(end_date.getDate()-start_date.getDate() == 1)
+        setCountType("date")
+    }
   }
 
-  function endDateUpdate(text: string) {
-    if (text.length == 2 && text[1] != "/") text += "/";
-    else if (text.length == 5 && text[4] != "/") text += "/";
-    setEndDate(text);
-  }
+  // date stuff
+  const [range, setRange] = React.useState({ startDate: undefined, endDate: undefined });
+  const [open, setOpen] = React.useState(false);
+
+   const onDismiss = React.useCallback(() => {
+    setOpen(false);
+  }, [setOpen]);
+
+ const onConfirm = React.useCallback(
+    ({ startDate, endDate }) => {
+      setOpen(false);
+      setRange({ startDate, endDate });
+    },
+    [setOpen, setRange]
+  );
+  // end of date stuff
 
   function pressableClicked() {
     if (Keyboard.isVisible()) Keyboard.dismiss();
@@ -51,6 +84,10 @@ export function ExperienceSection({ experience, refreshExperiences }) {
   useEffect(()=>{
     refreshExperiences();
   }, [refreshTrigger])
+
+  useEffect(()=>{
+    init(); 
+  }, [])
 
   const [confirmDelete, setConfirmDelete] = useState(false);
 
@@ -73,11 +110,8 @@ export function ExperienceSection({ experience, refreshExperiences }) {
               },
             ]}
           />
-          <Text style={styles.experienceDate}>
-            {/*experience.experienceStartDate*/}
-            REEEE
-          </Text>
-          <Text style={styles.experienceDate}>{/*experience.days*/} days</Text>
+          <Text style={styles.experienceDate}>{count} {countType}</Text>
+          <Text style={styles.experienceDate}>{experience.hours} hours</Text>
         </View>
 
         <View style={{ width: "76%" }}>
@@ -110,7 +144,7 @@ export function ExperienceSection({ experience, refreshExperiences }) {
               pressableClicked();
             }}
           >
-            <KeyboardAvoidingView style={styles.modalView} behavior="padding">
+            <ScrollView style={styles.modalView}>
               <Text style={styles.modalText}>Modify {experience.organiser}</Text>
               <TextInput
                 placeholder="What was your role?"
@@ -152,27 +186,31 @@ export function ExperienceSection({ experience, refreshExperiences }) {
                   display: "flex",
                   flexDirection: "row",
                   justifyContent: "space-evenly",
+                  marginBottom: verticalUnits(3),
                 }}
               >
-                <TextInput
-                  placeholder="DD/MM/YY"
-                  keyboardType="numeric"
-                  placeholderTextColor={"#cfcfcf"}
-                  onChangeText={(text) => {
-                    startDateUpdate(text);
-                  }}
-                  value={startDate}
-                  style={styles.modalDate}
+                <Pressable style = {styles.intervalPressable} onPress={() => setOpen(true)}>
+                  <Text style = {styles.intervalText}>
+                      When?
+                  </Text>
+                </Pressable>
+                <DatePickerModal
+                  locale="en"
+                  mode="range"
+                  visible={open}
+                  onDismiss={onDismiss}
+                  startDate={range.startDate}
+                  endDate={range.endDate}
+                  onConfirm={onConfirm}
+                  label="When did you volunteer?"
                 />
-                <TextInput
-                  placeholder="DD/MM/YY"
-                  keyboardType="numeric"
-                  placeholderTextColor={"#cfcfcf"}
-                  onChangeText={(text) => {
-                    endDateUpdate(text);
-                  }}
-                  value={endDate}
-                  style={styles.modalDate}
+                <TextInput 
+                  style = {styles.modalDate} 
+                  keyboardType="numeric" 
+                  placeholderTextColor = "#cfcfcf" 
+                  placeholder = "No. hours?" 
+                  secureTextEntry={false}
+                  onChangeText={(text) => {experience.hours = text}}
                 />
               </View>
               <View
@@ -206,7 +244,7 @@ export function ExperienceSection({ experience, refreshExperiences }) {
                   <Text style={{ color: "white" }}>Done</Text>
                 </Pressable>
               </View>
-            </KeyboardAvoidingView>
+            </ScrollView>
           </Pressable>
         </Modal>
       </View>

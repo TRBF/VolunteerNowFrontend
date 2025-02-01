@@ -10,25 +10,43 @@ export async function signUp(
   gender: string,
   birthday: Date
 ) {
-  const url = url_endpoint + "/api/register";
-  const response = await fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      username: username,
-      password: password,
-      email: email,
-      first_name: first_name,
-      last_name: last_name,
-      gender: gender,
-      birthday: birthday,
-    }),
-  });
-  const newUser = await response.json();
-  console.log(newUser);
-  return newUser;
+  try {
+    const response1 = await fetch(`${url_endpoint}/api/register/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: username,
+        password: password,
+        email: email,
+        first_name: first_name,
+        last_name: last_name,
+        //gender: gender,
+        //birthday: birthday,
+      }),
+    });
+    const user = await response1.json();
+
+    await login(username, password);
+    const token = await AsyncStorage.getItem("token");
+
+    await fetch(`${url_endpoint}/api/update_user_profile/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        'Authorization': `Token ${token}`
+      },
+      body: JSON.stringify({
+        gender: gender,
+        birthday: birthday,
+      }),
+    });
+    return true;
+  } catch(error) {
+    console.error(error);
+    return false;
+  }
 }
 
 async function fetchID(){
@@ -76,4 +94,9 @@ export async function login(username: string, password: string) {
   }
   else
     return 400
+}
+
+export async function logout() {
+  await AsyncStorage.removeItem("token");
+  await AsyncStorage.removeItem("user_id");
 }

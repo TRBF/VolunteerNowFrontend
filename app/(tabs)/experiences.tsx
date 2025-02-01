@@ -6,7 +6,6 @@ import {
   TextInput,
   ScrollView,
   Modal,
-  KeyboardAvoidingView,
   Keyboard,
 } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -18,6 +17,8 @@ import { ExperienceSection } from "../../components/experiencesection";
 import { styles } from "../../styles/experiences";
 import { getUserAddedParticipations, addUserAddedParticipation } from "../../apistuff/experiences";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { verticalUnits } from "../../jmecheriis/ddunits";
+import { DatePickerModal } from "react-native-paper-dates";
 
 export default function DiplomasPastExperiencesScreen() {
   const [id, setID] = useState("1");
@@ -25,16 +26,35 @@ export default function DiplomasPastExperiencesScreen() {
   const [role, setRole] = useState("");
   const [organiserText, setOrganiserText] = useState("");
   const [descriptionText, setDescriptionText] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
   const [visible, setVisible] = useState(false);
   const [experiences, setExperiences] = useState([]);
-  const [isLoading, setLoading] = useState(true);
+  const [hours, setHours] = useState("0")
+  const [datePickerText, setDatePickerText] = useState("When?")
 
   const updateSearch = (text: string) => {
     setSearchText(text);
   };
 
+  // date stuff
+  const [range, setRange] = React.useState({ startDate: undefined, endDate: undefined });
+  const [open, setOpen] = React.useState(false);
+
+   const onDismiss = React.useCallback(() => {
+    setOpen(false);
+  }, [setOpen]);
+
+
+
+  const onConfirm = React.useCallback(
+    ({ startDate, endDate }) => {
+      setOpen(false);
+      setRange({ startDate, endDate });
+      setDatePickerText("Interval set!")
+    },
+    [setOpen, setRange]
+  );
+  // end of date stuff
+  
   // call function to get events
   async function init() {
     const userID = await AsyncStorage.getItem("user_id")
@@ -42,7 +62,6 @@ export default function DiplomasPastExperiencesScreen() {
     if(Array.isArray(e))
       setExperiences(e);
     setID(userID)
-    setLoading(false);
   }
 
   async function refreshExperiences() {
@@ -56,23 +75,9 @@ export default function DiplomasPastExperiencesScreen() {
     init();
   }, []);
 
-
-
-  function startDateUpdate(text: string) {
-    if (text.length == 2 && text[1] != "/") text += "/";
-    else if (text.length == 5 && text[4] != "/") text += "/";
-    setStartDate(text);
-  }
-
-  function endDateUpdate(text: string) {
-    if (text.length == 2 && text[1] != "/") text += "/";
-    else if (text.length == 5 && text[4] != "/") text += "/";
-    setEndDate(text);
-  }
-
   function pressableClicked() {
     if (Keyboard.isVisible()) Keyboard.dismiss();
-    else setVisible(true);
+    else setVisible(false);
   }
 
   function getDocument() {
@@ -122,7 +127,7 @@ export default function DiplomasPastExperiencesScreen() {
                 pressableClicked();
               }}
             >
-              <KeyboardAvoidingView style={styles.modalView} behavior="padding">
+              <ScrollView style={styles.modalView} contentContainerStyle={styles.modalViewContainerStyle}>
                 <Text style={styles.modalText}>Add experience</Text>
                 <TextInput
                   placeholder="What was your role?"
@@ -170,37 +175,44 @@ export default function DiplomasPastExperiencesScreen() {
                     display: "flex",
                     flexDirection: "row",
                     justifyContent: "space-evenly",
+                    marginBottom: verticalUnits(3),
                   }}
                 >
-                  <TextInput
-                    placeholder="DD/MM/YY"
-                    keyboardType="numeric"
-                    placeholderTextColor={"#cfcfcf"}
-                    onChangeText={(text) => {
-                      startDateUpdate(text);
-                    }}
-                    value={startDate}
-                    style={styles.modalDate}
+                  <Pressable style = {styles.intervalPressable} onPress={() => setOpen(true)}>
+                    <Text style = {range.startDate && range.endDate ? styles.unsetIntervalText : styles.setIntervalText}>
+                     { datePickerText } 
+                    </Text>
+                  </Pressable>
+                  <DatePickerModal
+                    locale="en"
+                    mode="range"
+                    visible={open}
+                    onDismiss={onDismiss}
+                    startDate={range.startDate}
+                    endDate={range.endDate}
+                    onConfirm={onConfirm}
+                    label="When did you volunteer?"
                   />
-                  <TextInput
-                    placeholder="DD/MM/YY"
-                    keyboardType="numeric"
-                    placeholderTextColor={"#cfcfcf"}
+                  <TextInput 
+                    style = {styles.modalDate} 
+                    keyboardType="numeric" 
+                    placeholderTextColor = "#cfcfcf" 
+                    placeholder = "No. hours?" 
+                    secureTextEntry={false}
                     onChangeText={(text) => {
-                      endDateUpdate(text);
+                      setHours(text);
                     }}
-                    value={endDate}
-                    style={styles.modalDate}
+                    value={hours}
                   />
                 </View>
                 <Pressable style={styles.submitButton} onPress={() => {
-                  addUserAddedParticipation(role, organiserText, descriptionText);
+                  addUserAddedParticipation(role, organiserText, descriptionText, range.startDate, range.endDate, hours);
                   refreshExperiences();
                   setVisible(false);
                 }}>
                   <Text style={{ color: "white" }}>Submit</Text>
                 </Pressable>
-              </KeyboardAvoidingView>
+              </ScrollView>
             </Pressable>
           </Modal>
         </View>

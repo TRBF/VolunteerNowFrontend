@@ -25,7 +25,8 @@ export default function Tab() {
   const [username, setUsername] = useState("loading...");
   const [description, setDescription] = useState("Description is loading...");
   const [volunteerCount, setVolunteerCount] = useState(14);
-  const [hours, setVolunteeringHours] = useState(78);
+  const [hours, setHours] = useState(78);
+  const [count, setCount] = useState(78);
   const [mostFrequented, setMostFrequented] = useState("UNTOLD");
   const [experienceList, setExperienceList] = useState([{}, {}]);
   const [pfpLink, setPfpLink] = useState("");
@@ -42,6 +43,10 @@ export default function Tab() {
     setName(profile["first_name"]);
     setLastName(profile["last_name"]);
     setDescription(profile["description"]);
+
+    setHours(profile["hours"]);
+    setMostFrequented(profile["most_fq"]);
+    setCount(profile["count"]);
     
     const opportunities = await getUserOpportunities(account_id);
     setExperienceList([...opportunities]);
@@ -102,7 +107,7 @@ export default function Tab() {
               <View style={styles.profileStatsSection}>
                 <View style={styles.profileStatsSubsection}>
                   <Text style={styles.profileStatsSubsectionText}>
-                    {volunteerCount}
+                    {count}
                   </Text>
                   <Text style={styles.profileStatsSubsectionTextV2}>
                     participations

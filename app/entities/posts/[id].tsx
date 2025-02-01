@@ -37,8 +37,8 @@ export default function Tab() {
     profile_picture: "",
     cover_image: "",
     post_image: "",
+    form_link: "",
   }); 
-  const formID = "replace this";
 
   // call function to get events
   async function init() {
@@ -51,22 +51,6 @@ export default function Tab() {
     init();
     navigation.setOptions({ headerShown: false });
   }, [navigation]);
-
-  const postData = {
-    title: "Voluntar 2024 Salvati Copiii",
-    authorUsername: "salvati.copiii",
-    description:
-      "Dacă dorești să desfășori activități în București, în următoarele 2 săptămâni din momentul înscrierii, colegii noștri care coordonează Centrul Național de Voluntari îți vor scrie o invitație la interviu.",
-    requirements: [
-      { "varsta minima1": 13 },
-      { "trebuie să fii cel puțin în clasa": 8 },
-      { "trebuie sa locuiesti in": "Bucuresti" },
-    ],
-    pfpLink:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMxjfyfIPWRcFJJWM-L6kAZ0y1ciMWIV-CoA&s",
-    coverLink:
-      "https://www.salvaticopiii.ro/sites/ro/files/styles/image_token/public/migrated_files/images/5eef6f5e-6647-4534-9fe6-d153027d8f7c.JPG.webp?itok=ErlmlYdC",
-  };
 
   return (
     <View style={{ flex: 1, backgroundColor: "#ffffff" }}>
@@ -117,7 +101,7 @@ export default function Tab() {
                 ))*/}
               </View>
               <View style={styles.applyNowContainer}>
-                <Pressable onPress={() => Linking.openURL("http://google.com")} style={styles.applyNowButton}>
+                <Pressable onPress={() => Linking.openURL(postObject.form_link ? postObject.form_link : "https://google.com")} style={styles.applyNowButton}>
                   <Text style={styles.applyNowButtonText}>Apply Now</Text>
                 </Pressable>
               </View>

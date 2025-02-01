@@ -181,6 +181,7 @@ export const styles = StyleSheet.create({
   },
   experienceName: {
     color: "#000000",
+    fontWeight: 500,
   },
   experienceLocation: {
     color: "#9394a5",
@@ -194,6 +195,7 @@ export const styles = StyleSheet.create({
   },
   experienceDescription: {
     color: "#000000",
+    fontWeight: 400,
   },
   experienceIdentifiers: {
     display: "flex",
