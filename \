@@ -28,8 +28,6 @@ export function ExperienceSection({ experience, refreshExperiences }) {
   const [countType, setCountType] = useState("0")
 
   const [pictureURI, setPictureURI] = useState("")
-  const [datePickerText, setDatePickerText] = useState("When?")
-  const [hours, setHours] = useState(experience.hours)
 
   const start_date = new Date(experience.start_date)
   const end_date = new Date(experience.end_date)
@@ -56,10 +54,7 @@ export function ExperienceSection({ experience, refreshExperiences }) {
     }
     console.log(experience.participation_picture)
     if(experience.participation_picture)
-      setPictureURI(`${url_endpoint}/api${experience.participation_picture}`)
-    
-    if(start_date && end_date)
-      setDatePickerText("Interval set!")
+      setPictureURI(url_endpoint + '/api' + experience.participation_picture)
   }
 
   // date stuff
@@ -218,7 +213,9 @@ export function ExperienceSection({ experience, refreshExperiences }) {
                 }}
               >
                 <Pressable style = {styles.intervalPressable} onPress={() => setOpen(true)}>
-                  <Text style = {start_date && end_date ? styles.unsetIntervalText : styles.setIntervalText}>{datePickerText}</Text>
+                  <Text style = {styles.intervalText}>
+                      When?
+                  </Text>
                 </Pressable>
                 <DatePickerModal
                   locale="en"
@@ -236,8 +233,7 @@ export function ExperienceSection({ experience, refreshExperiences }) {
                   placeholderTextColor = "#cfcfcf" 
                   placeholder = "No. hours?" 
                   secureTextEntry={false}
-                  onChangeText={(text) => {setHours(text)}}
-                  value={hours}
+                  onChangeText={(text) => {experience.hours = text}}
                 />
               </View>
               <View
@@ -264,7 +260,7 @@ export function ExperienceSection({ experience, refreshExperiences }) {
                   </Text>
                 </Pressable>
                 <Pressable style={styles.submitButton} onPress={()=>{
-                  updateUserAddedParticipation(experience.id, experience.role, experience.organiser, experience.description, range.startDate, range.endDate, hours, pictureURI);
+                  updateUserAddedParticipation(experience.id, experience.role, experience.organiser, experience.description, range.startDate, range.endDate, pictureURI);
                   setRefresh(refreshTrigger+1)
                   setVisible(false);
                 }}>  

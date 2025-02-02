@@ -20,6 +20,12 @@ export const styles = StyleSheet.create({
     borderRadius: 10,
     marginRight: "5%",
   },
+  modalImage: {
+    height: verticalUnits(15),
+    width: "100%",
+    borderRadius: 10,
+    opacity: 0.6,
+  },
   experienceName: {
     color: "#000000",
   },
@@ -255,7 +261,7 @@ export const styles = StyleSheet.create({
     borderRadius: 15,
   },
   uploadIcon: {
-    fontSize: 40,
+    fontSize: 50,
     color: "#cfcfcf",
   },
   submitButton: {

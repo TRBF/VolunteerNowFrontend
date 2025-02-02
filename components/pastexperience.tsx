@@ -5,7 +5,6 @@ import {
   Text,
   View,
 } from "react-native";
-import { Link } from "expo-router";
 import { url_endpoint } from "../apistuff/_config";
 import { verticalUnits } from "../jmecheriis/ddunits";
 
@@ -47,48 +46,40 @@ export function PastExperience({ experience }) {
   }, [])
 
   return (
-    <Link
-      href={{
-        pathname: "entities/org/[username]",
-        params: { username: experience.organiser },
-      }}
-      asChild
-    >
-      <Pressable style={styles.experienceSection}>
-        <View style={{ flexDirection: "column", alignItems: "flex-start" }}>
-          <Image
-            source={{ uri: url_endpoint + "/api" + experience.participation_picture }}
-            resizeMode="cover"
-            style={[
-              styles.experienceImage,
-              {
-                height: verticalUnits(8.3),
-                width: verticalUnits(8.3),
-              },
-            ]}
-          />
-          <Text style={styles.experienceDate}>{count} {countType}</Text>
-          <Text style={styles.experienceDate}>{experience.hours} hours</Text>
-        </View>
+  <Pressable style={styles.experienceSection}>
+      <View style={{ flexDirection: "column", alignItems: "flex-start" }}>
+        <Image
+          source={{ uri: url_endpoint + "/api" + experience.participation_picture }}
+          resizeMode="cover"
+          style={[
+            styles.experienceImage,
+            {
+              height: verticalUnits(8.3),
+              width: verticalUnits(8.3),
+            },
+          ]}
+        />
+        <Text style={styles.experienceDate}>{count} {countType}</Text>
+        <Text style={styles.experienceDate}>{experience.hours} hours</Text>
+      </View>
 
-        <View style={{ width: "76%" }}>
-          <View style={styles.experienceIdentifiers}>
-            <Text style={styles.experienceName}>{experience.role}</Text>
-            <Text style={styles.experienceLocation}>{experience.organiser}</Text>
-          </View>
-          <Text style={styles.experienceDescription}>
-            {experience.description.length > textLimit
-              ? experience.description.slice(0, textLimit) + "..."
-              : experience.description}
-          </Text>
-          {experience.diploma ? (
-            <Text style={styles.attestedText}>Attested by diploma</Text>
-          ) : (
-            <View></View>
-          )}
+      <View style={{ width: "76%" }}>
+        <View style={styles.experienceIdentifiers}>
+          <Text style={styles.experienceName}>{experience.role}</Text>
+          <Text style={styles.experienceLocation}>{experience.organiser}</Text>
         </View>
-      </Pressable>
-    </Link>
+        <Text style={styles.experienceDescription}>
+          {experience.description.length > textLimit
+            ? experience.description.slice(0, textLimit) + "..."
+            : experience.description}
+        </Text>
+        {experience.diploma ? (
+          <Text style={styles.attestedText}>Attested by diploma</Text>
+        ) : (
+          <View></View>
+        )}
+      </View>
+    </Pressable>
   );
 }
 

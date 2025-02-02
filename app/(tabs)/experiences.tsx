@@ -7,6 +7,7 @@ import {
   ScrollView,
   Modal,
   Keyboard,
+  Image
 } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import AntDesign from "@expo/vector-icons/AntDesign";
@@ -15,10 +16,12 @@ import * as DocumentPicker from "expo-document-picker";
 
 import { ExperienceSection } from "../../components/experiencesection";
 import { styles } from "../../styles/experiences";
-import { getUserAddedParticipations, addUserAddedParticipation } from "../../apistuff/experiences";
+import { getUserAddedParticipations, addUserAddedParticipation, updateUserAddedParticipationPicture } from "../../apistuff/experiences";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { verticalUnits } from "../../jmecheriis/ddunits";
 import { DatePickerModal } from "react-native-paper-dates";
+
+import * as ImagePicker from "expo-image-picker"
 
 export default function DiplomasPastExperiencesScreen() {
   const [id, setID] = useState("1");
@@ -30,6 +33,7 @@ export default function DiplomasPastExperiencesScreen() {
   const [experiences, setExperiences] = useState([]);
   const [hours, setHours] = useState("0")
   const [datePickerText, setDatePickerText] = useState("When?")
+  const [pictureURI, setPictureURI] = useState("")
 
   const updateSearch = (text: string) => {
     setSearchText(text);
@@ -80,9 +84,17 @@ export default function DiplomasPastExperiencesScreen() {
     else setVisible(false);
   }
 
-  function getDocument() {
-    DocumentPicker.getDocumentAsync({ type: "image/*" });
+  async function getUserAddedParticipationPicture() {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ['images'],
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+    if (!result.canceled)
+      setPictureURI(result.assets[0].uri);
   }
+
 
   return (
     <View style={{ backgroundColor: "#ffffff" }}>
@@ -157,17 +169,32 @@ export default function DiplomasPastExperiencesScreen() {
                   style={styles.modalDescription}
                   multiline={true}
                 />
-                <Pressable
-                  style={styles.uploadImageButton}
-                  onPress={() => {
-                    getDocument();
-                  }}
-                >
-                  <AntDesign
-                    name={"upload"}
-                    style={[{ color: "#9394a5" }, styles.uploadIcon]}
-                  />
-                </Pressable>
+                {
+                  !pictureURI ? 
+                  <Pressable
+                    style={styles.uploadImageButton}
+                    onPress={() => {
+                      getUserAddedParticipationPicture();
+                    }}
+                  >
+                      <Ionicons
+                        name={"camera-outline"}
+                        style={[{ color: "#9394a5" }, styles.uploadIcon]}
+                      />
+                  </Pressable>
+                  :
+                  <Pressable
+                    style={styles.uploadImageButton}
+                    onPress={() => {
+                      getUserAddedParticipationPicture();
+                    }}>
+                    <Image
+                      source={{ uri: pictureURI }}
+                      resizeMode="cover"
+                      style={styles.modalImage}
+                    />
+                  </Pressable>
+                }
                 <View
                   style={{
                     width: "100%",
@@ -206,7 +233,7 @@ export default function DiplomasPastExperiencesScreen() {
                   />
                 </View>
                 <Pressable style={styles.submitButton} onPress={() => {
-                  addUserAddedParticipation(role, organiserText, descriptionText, range.startDate, range.endDate, hours);
+                  addUserAddedParticipation(role, organiserText, descriptionText, range.startDate, range.endDate, hours, pictureURI);
                   refreshExperiences();
                   setVisible(false);
                 }}>

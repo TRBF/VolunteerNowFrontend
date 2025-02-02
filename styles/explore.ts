@@ -1,5 +1,6 @@
 import { StyleSheet } from "react-native";
 import { Dimensions } from "react-native";
+import { verticalUnits } from "../jmecheriis/ddunits";
 
 export const styles = StyleSheet.create({
   mainView: {
@@ -31,8 +32,8 @@ export const styles = StyleSheet.create({
     borderBottomColor: "#ddd",
   },
   resultPFP: {
-    height: Dimensions.get("window").height / 16,
-    width: Dimensions.get("window").height / 16,
+    height: verticalUnits(6),
+    width: verticalUnits(6),
     marginRight: 10,
     borderRadius: 50,
   },

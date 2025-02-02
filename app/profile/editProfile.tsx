@@ -25,8 +25,6 @@ export default function EditProfileScreen() {
   const router = useRouter();
 
   const [id, setID] = useState("1");
-  
-  let profile = {} 
   const [username, setUsername] = useState("@loading");
   const [firstName, setFirstName] = useState("Loading");
   const [secondName, setSecondName] = useState("Loading");
@@ -83,23 +81,7 @@ export default function EditProfileScreen() {
     return null;
   }
 
-  async function changeProfilePicture(){
-    /*
-    const formData = new FormData();
-    const account_id = await getAccountId(); // Ensure account_id is fetched before proceeding
-
-    const pfpURI = await getProfilePicture()
-    fetch(pfpURI)
-    .then(response => response.blob())
-    .then(blob =>{
-      formData.append("profile_picture", blob, "pfp.png")
-    });
-    await updateProfilePicture(formData)
-    const profile = await getProfile(account_id)
-    setPfpLink(profile["profile_picture"] + `?time=${Date.now()}`)
-*/
-
-    const pfpURI = await getProfilePicture()
+  async function changeProfilePicture(){    const pfpURI = await getProfilePicture()
     const formData = new FormData();
     formData.append('profile_picture', {
       uri: pfpURI,  // File URI you get from the picker
@@ -109,13 +91,6 @@ export default function EditProfileScreen() {
     await updateProfilePicture(formData);
     const profile = await getProfile(id);
     setPfpLink(profile["profile_picture"] + `?time=${Date.now()}`)
-
-      //.then((pfpUri) => fetch(pfpUri))
-      //.then((response) => response.blob())
-      //.then((blob) => formData.append("profile_picture", blob, "pfp.png"))
-      //.then(() => {updateProfilePicture(formData)})
-      //.then(() => getProfile(id))
-      //.then((profile) => setPfpLink(profile["profile_picture"] + `?time=${Date.now()}`))
   }
 
   return (
