@@ -1,1 +1,1 @@
-export const url_endpoint = "http://192.168.1.218:8000";
+export const url_endpoint = "http://147.93.121.31:8000";

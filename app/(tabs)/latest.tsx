@@ -1,20 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
-  StyleSheet,
   View,
   Text,
   ScrollView,
+  RefreshControl,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { verticalUnits } from "../../jmecheriis/ddunits";
 
 import { Callout } from "../../components/callout";
 import { styles } from "../../styles/latest";
-import { getCalloutSenderUsername, getCallouts } from "../../apistuff/latest";
+import { getCallouts } from "../../apistuff/latest";
 
 const Tab = () => {
   const [isLoading, setLoading] = useState(true);
   const [callouts, setCallouts] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
 
   async function init(){
     const c = await getCallouts();
@@ -28,11 +29,20 @@ const Tab = () => {
     init();
   }, []);
 
+  const onRefresh = useCallback(()=>{
+    setRefreshing(true);
+    init();
+    setRefreshing(false);
+  }, [])
+
   return (
     <View style={{ height: "100%", backgroundColor: "#ffffff" }}>
       {!isLoading &&
         <SafeAreaView style={{ backgroundColor: "#ffffff" }}>
-          <ScrollView>
+          <ScrollView
+            refreshControl={
+              <RefreshControl refreshing = {refreshing} onRefresh={onRefresh}/>
+            }>
             <View style={styles.header}>
               <Text style={styles.headerTitle}>Callouts</Text>
             </View>
@@ -45,7 +55,7 @@ const Tab = () => {
               }}
             >
               {callouts.map((callout: any) => (
-                <Callout key={callout.key} callout={callout} />
+                <Callout key={callout.id} callout={callout} />
               ))}
               <View style={{ height: verticalUnits(10), width: "100%" }}></View>
             </ScrollView>

@@ -16,6 +16,7 @@ import { login } from "../../apistuff/logsign";
 import { Link, useNavigation, useRouter } from "expo-router";
 
 import { styles } from "../../styles/login";
+import { url_endpoint } from "../../apistuff/_config";
 
 export default function Login() {
   const [username, setUsername] = React.useState("");
@@ -73,19 +74,6 @@ export default function Login() {
                   secureTextEntry={true}
                   placeholderTextColor="#B0B0B0"
                 />
-                {/*
-                {loading ? (
-                  <ActivityIndicator size="large" color="#0000ff" />
-                ) : (
-                  <Pressable
-                    style={styles.button}
-                    onPress={() => {
-                      handleLogin();
-                    }}
-                  >
-                    <Text style={styles.buttonText}>Login</Text>
-                  </Pressable>
-                )} */}
                 <Pressable
                   style={styles.button}
                   onPress={() => {
@@ -96,9 +84,7 @@ export default function Login() {
                 </Pressable>
                 <View style={{ marginTop: " 3%", alignSelf: "center" }}>
                   <Link
-                    href={{
-                      pathname: "forgotpassword",
-                    }}
+                    href={`${url_endpoint}/api/reset_password/`}
                   >
                     <Text style={styles.forgotPasswordText}>
                       Forgot password?

@@ -13,10 +13,11 @@ import { getPfp } from "../apistuff/search";
 export function Result({ user }) {
  
   const [loading, setLoading] = useState(true);
+  const [pfpLink, setPfpLink] = useState("");
 
-  let pfpLink: String;
   async function init(){
-    pfpLink = await getPfp(user.id)
+    const link = await getPfp(user.id)
+    setPfpLink(link)
     console.log(pfpLink)
   }
 
@@ -37,7 +38,7 @@ export function Result({ user }) {
         <Pressable>
           <View style={styles.result}>
             <Image
-              source={{ uri: "http://0.0.0.0:8000/api/media/images/default_pfp.png"}}
+              source={{ uri: `${url_endpoint}/api${pfpLink}`}}
               style={styles.resultPFP}
               resizeMode="cover"
             />

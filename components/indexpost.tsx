@@ -76,26 +76,8 @@ export function Post({ postObject }: any) {
           <View style={styles.postInfo}>
             <View style={styles.creationData}>
               <View style={styles.authorData}>
-                <Link
-                  href={{
-                    pathname: "entities/org/[id]",
-                    params: { username: postObject.author },
-                  }}
-                  asChild
-                >
                   <Text style={styles.authorName}>{postObject.name}</Text>
-                </Link>
-                <Link
-                  href={{
-                    pathname: "entities/org/[id]",
-                    params: { username: postObject.author },
-                  }}
-                  asChild
-                >
-                  <Text style={styles.authorUsername}>
-                    {postObject.location}
-                  </Text>
-                </Link>
+                  <Text style={styles.authorUsername}>{postObject.location}</Text>
               </View>
             </View>
 
@@ -121,6 +103,7 @@ export function Post({ postObject }: any) {
             </View>
             <View style={styles.bottomSection}>
               <View style={styles.rightButtons}>
+              {/*
                 <Pressable
                   style={{ flexDirection: "row" }}
                   onPress={() => setHeartClicked(!heartClicked)}
@@ -169,7 +152,8 @@ export function Post({ postObject }: any) {
                     name={shareClicked ? "send" : "send-o"}
                     style={[{ color: "#9394a5" }, styles.icon]}
                   />
-                </Pressable>*/}
+                </Pressable>}
+                */}
               </View>
               <Text style={styles.volunteersNeeded}>
                 {" "}

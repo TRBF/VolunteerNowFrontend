@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { verticalUnits } from "../jmecheriis/ddunits";
 
 export const styles = StyleSheet.create({
   post: {
@@ -16,6 +17,7 @@ export const styles = StyleSheet.create({
   authorData: {
     display: "flex",
     flexDirection: "row",
+    flexWrap: "wrap",
   },
 
   postInfo: {
