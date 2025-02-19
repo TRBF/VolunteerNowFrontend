@@ -6,19 +6,15 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
+        "backgroundColor": "#0f0f0f"
+      },
+      "package": "com.trbf3127.VolunteerNow"
     },
     "web": {
       "favicon": "./assets/favicon.png",
@@ -29,13 +25,35 @@
       [
         "expo-font",
         {
-          "fonts": ["node_modules/@expo-google-fonts/roboto/Roboto_400Regular.ttf"]
+          "fonts": [
+            "node_modules/@expo-google-fonts/roboto/Roboto_400Regular.ttf"
+          ]
+        }
+      ],
+      [
+      "expo-splash-screen",
+        {
+          "backgroundColor": "#FFFFFF",
+          "image": "./assets/images/splash-icon.png",
+          "dark": {
+            "image": "./assets/images/splash-icon.png",
+            "backgroundColor": "#7211A2"
+          },
+          "imageWidth": 200
         }
       ]
     ],
     "experiments": {
       "baseUrl": "/VolunteerNowFrontend"
     },
-    "scheme": "my-scheme"
+    "scheme": "my-scheme",
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "41815a57-2bc4-4847-9b31-9748cd88f138"
+      }
+    }
   }
 }

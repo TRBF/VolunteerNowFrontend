@@ -24,7 +24,6 @@ export default function Tab() {
   const [lastName, setLastName] = useState("Loading...");
   const [username, setUsername] = useState("loading...");
   const [description, setDescription] = useState("Description is loading...");
-  const [volunteerCount, setVolunteerCount] = useState(14);
   const [hours, setHours] = useState(78);
   const [count, setCount] = useState(78);
   const [mostFrequented, setMostFrequented] = useState("UNTOLD");
@@ -51,6 +50,7 @@ export default function Tab() {
     const opportunities = await getUserOpportunities(account_id);
     setExperienceList([...opportunities]);
     setLoading(false);
+    throw new Error("My first Sentry error!");
   }
 
   useFocusEffect(
@@ -64,7 +64,7 @@ export default function Tab() {
   }, []);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "white", marginTop: 20 }}>
       <View style={styles.header}>
         <Link href={{ pathname: "profile/settingsUser" }}>
           <FontAwesome

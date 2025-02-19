@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { ScrollView, StyleSheet, Text, View, Pressable, SafeAreaView, Platform, StatusBar } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, Pressable, SafeAreaView, Platform, StatusBar, Linking } from 'react-native';
 import { Link } from 'expo-router';
 import { useNavigation, useRouter } from "expo-router";
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -44,12 +44,9 @@ export default function SettingsUserScreen(){
                     />
                 </View>
                 */}
-
-                <Link href={{
-                    pathname: "pages/GDPR"
-                    }}>
+                <Pressable onPress={() => {Linking.openURL("https://volunteernow.ro/gdpr")}}>
                     <Text style={styles.textStyle}>GDPR</Text>
-                </Link>
+                </Pressable>
 
                 <Pressable onPress={
                   ()=>{

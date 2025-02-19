@@ -177,7 +177,7 @@ export default function Register() {
                       if (result) 
                         router.navigate("(tabs)/profile");
                       else 
-                        alert("Error signing up: " + result.error);
+                        alert("Error signing up.");
                     });
                   }}
                 >

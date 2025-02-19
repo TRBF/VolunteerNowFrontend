@@ -11,7 +11,7 @@ export async function signUp(
   birthday: Date
 ) {
   try {
-    const response1 = await fetch(`${url_endpoint}/api/register/`, {
+    await fetch(`${url_endpoint}/api/register/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -26,7 +26,6 @@ export async function signUp(
         //birthday: birthday,
       }),
     });
-    const user = await response1.json();
 
     await login(username, password);
     const token = await AsyncStorage.getItem("token");
