@@ -5,6 +5,7 @@ import {
   Text,
   View,
   SafeAreaView,
+  Button,
 } from "react-native";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Link, useFocusEffect } from "expo-router";
@@ -16,6 +17,7 @@ import { styles } from "../../styles/profile";
 import { getProfile, getUserOpportunities } from "../../apistuff/profile";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getAccountId } from "../../apistuff/account";
+import * as Sentry from "sentry-expo";
 
 export default function Tab() {
   const [id, setID] = useState("4"); // needs to be changed based on what's stored on the device

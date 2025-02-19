@@ -31,7 +31,7 @@
         }
       ],
       [
-      "expo-splash-screen",
+        "expo-splash-screen",
         {
           "backgroundColor": "#FFFFFF",
           "image": "./assets/images/splash-icon.png",
@@ -41,7 +41,16 @@
           },
           "imageWidth": 200
         }
-      ]
+      ],
+      [
+        "@sentry/react-native/expo",
+        {
+          "url": "https://sentry.io/",
+          "project": "react-native",
+          "organization": "volunteernow"
+        }
+      ],
+      "sentry-expo"
     ],
     "experiments": {
       "baseUrl": "/VolunteerNowFrontend"

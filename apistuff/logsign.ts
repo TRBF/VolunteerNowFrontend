@@ -1,5 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { url_endpoint } from "./_config";
+import * as Sentry from "sentry-expo";
 
 export async function signUp(
   username: string,
@@ -22,8 +23,6 @@ export async function signUp(
         email: email,
         first_name: first_name,
         last_name: last_name,
-        //gender: gender,
-        //birthday: birthday,
       }),
     });
 
@@ -43,7 +42,7 @@ export async function signUp(
     });
     return true;
   } catch(error) {
-    console.error(error);
+    Sentry.Native.captureException(error);
     return false;
   }
 }
@@ -69,30 +68,33 @@ export async function login(username: string, password: string) {
 
   formData.append("username", username);
   formData.append("password", password);
-
-  const response = await fetch(
-      `${url_endpoint}/api/get_token/`,
-      {
-        method: "POST",
-        body: formData,
+  try{
+    const response = await fetch(
+        `${url_endpoint}/api/get_token/`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      )
+    const data = await response.json()
+    if(data["token"]){
+      await AsyncStorage.setItem("token", data["token"])
+      try {
+        const id = await fetchID()
+        const strID = id.toString()
+        await AsyncStorage.setItem("user_id", strID)
+        return 200;
+      } 
+      catch (error) {
+        console.error("Error fetching ID:", error);
+        return 500; 
       }
-    )
-  const data = await response.json()
-  if(data["token"]){
-    await AsyncStorage.setItem("token", data["token"])
-    try {
-      const id = await fetchID()
-      const strID = id.toString()
-      await AsyncStorage.setItem("user_id", strID)
-      return 200;
-    } 
-    catch (error) {
-      console.error("Error fetching ID:", error);
-      return 500; 
     }
   }
-  else
-    return 400
+  catch(error){
+    Sentry.Native.captureException(error);
+    return 400;
+  }
 }
 
 export async function logout() {

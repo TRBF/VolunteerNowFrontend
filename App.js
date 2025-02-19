@@ -1,11 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import * as Sentry from "@sentry/react-native";
+import * as Sentry from 'sentry-expo';
 
 Sentry.init({
-  dsn: "https://YOUR_DSN_HERE.ingest.sentry.io/PROJECT_ID",
-  enableInExpoDevelopment: true,  // Set this to false if using Expo in development mode
-  debug: true, // Enables Sentry debugging logs
+  dsn: "https://a39f7f3ec9520a6d4308eb4058f28240@o4508845305102336.ingest.de.sentry.io/4508845780566096",
+  enableInExpoDevelopment: true,
+  debug: true,
 });
 
 function App() {
@@ -17,7 +17,7 @@ function App() {
   );
 }
 
-export default Sentry.wrap(App)
+export default Sentry.wrap(App);
 
 const styles = StyleSheet.create({
   container: {

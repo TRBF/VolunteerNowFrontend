@@ -11,6 +11,7 @@ import {
   View,
   Pressable,
   SafeAreaView,
+  ScrollView,
 } from "react-native";
 import {
   useNavigation,
@@ -34,12 +35,25 @@ export default function Register() {
   const [fname, setFname] = React.useState("");
   const [lname, setLname] = React.useState("");
   const [country, setCountry] = useState("1");
+  const [isKeyboardVisible, setKeyboardVisible] = useState(false);
 
   const navigation = useNavigation();
   const router = useRouter();
   
   useEffect(() => {
     navigation.setOptions({ headerShown: false });
+    const keyboardDidShowListener = Keyboard.addListener("keyboardDidShow", () => {
+      setKeyboardVisible(true);
+    });
+
+    const keyboardDidHideListener = Keyboard.addListener("keyboardDidHide", () => {
+      setKeyboardVisible(false);
+    });
+
+    return () => {
+      keyboardDidShowListener.remove();
+      keyboardDidHideListener.remove();
+    };
   }, [navigation]);
 
   const [date, setDate] = React.useState(new Date());
@@ -59,7 +73,7 @@ export default function Register() {
 
   return (
     <>
-      <KeyboardAvoidingView
+      <ScrollView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styles.container}
       >
@@ -187,14 +201,14 @@ export default function Register() {
             </View>
           </View>
         </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
+      </ScrollView>
 
-      <View style={styles.redirectView}>
+      {!isKeyboardVisible &&<View style={styles.redirectView}>
         <Text style={{fontSize: 15}}>Already have an account?</Text>
         <Pressable onPress={() => navigation.goBack()}>
           <Text style={styles.btnLogin}>Login</Text>
         </Pressable>
-      </View>
+      </View>}
     </>
   );
 }
