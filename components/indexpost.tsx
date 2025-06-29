@@ -15,12 +15,17 @@ import { url_endpoint } from "../apistuff/_config";
 import { verticalUnits } from "../jmecheriis/ddunits";
 import { styles } from "../styles/index";
 import { Comment } from "../components/indexcomment";
+import { SafeImage } from "./SafeImage";
 
 export function Post({ postObject }: any) {
   const [shareClicked, setShareClicked] = useState(false);
   const [heartClicked, setHeartClicked] = useState(false);
   const [commentClicked, setCommentClicked] = useState(false);
   const [visible, setVisible] = useState(true);
+
+  // Debug logging for image URLs
+  console.log('Post profile_picture:', postObject.profile_picture);
+  console.log('Post post_image:', postObject.post_image);
 
   const usersComment = [
     {
@@ -55,12 +60,14 @@ export function Post({ postObject }: any) {
           asChild
         >
           <Pressable style={{ width: "100%", aspectRatio: 1 }}>
-            <Image
+            <SafeImage
               source={{
-                uri: url_endpoint + postObject.profile_picture,
+                uri: postObject.profile_picture,
               }}
               style={{ height: "100%", borderRadius: 1000 }}
               contentFit="cover"
+              useExpoImage={true}
+              fallbackText="Org"
             />
           </Pressable>
         </Link>
@@ -95,10 +102,12 @@ export function Post({ postObject }: any) {
                 marginBottom: verticalUnits(2),
               }}
             >
-              <Image
-                source={{ uri: url_endpoint + postObject.post_image }}
+              <SafeImage
+                source={{ uri: postObject.post_image }}
                 style={styles.featureImage}
                 contentFit="cover"
+                useExpoImage={true}
+                fallbackText="Post"
               />
             </View>
             <View style={styles.bottomSection}>

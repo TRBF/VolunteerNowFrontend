@@ -98,7 +98,7 @@ export default function Tab() {
           <View style={styles.profileTopSection}>
             <View style={styles.containerPfp}>
               <Image
-                source={{ uri: `${url_endpoint}${pfpLink}?time=${Date.now()}`}}
+                source={{ uri: pfpLink }}
                 style={styles.profilePicture}
                 resizeMode="cover"
               />

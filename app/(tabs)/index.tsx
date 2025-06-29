@@ -37,7 +37,7 @@ const Tab = () => {
       const p = await getPfp(account_id);
       if(e && Array.isArray(e))
         setEvents(e);
-      setPfpLink(p + `?time=${Date.now}`)
+      setPfpLink(p);
       setLoading(false);
     }
     catch (error) {
@@ -98,7 +98,7 @@ const Tab = () => {
               <Pressable style={styles.headerImageContainerLeft}>
                 <Image
                   style={{ aspectRatio: 1, borderRadius: 50 }}
-                  source={{ uri: `${url_endpoint}${pfpLink}?time=${Date.now}`}}
+                  source={{ uri: pfpLink }}
 
                   key={Date.now()}
                 />

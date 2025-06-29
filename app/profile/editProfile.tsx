@@ -128,7 +128,7 @@ export default function EditProfileScreen() {
           >
             <View style={styles.imageContainer}>
               <Image
-                source={{ uri: `${url_endpoint}${pfpLink}?time=${Date.now()}`}}
+                source={{ uri: pfpLink }}
                 style={styles.profileImage}
                 resizeMode="cover"
               />

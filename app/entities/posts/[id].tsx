@@ -19,6 +19,7 @@ import { Link, router } from "expo-router";
 import { getOpportunity } from "../../../apistuff/post";
 import { styles } from "../../../styles/post";
 import { url_endpoint } from "../../../apistuff/_config";
+import { SafeImage } from "../../../components/SafeImage";
 
 
 export default function Tab() {
@@ -67,17 +68,21 @@ export default function Tab() {
           </View>
           <ScrollView contentContainerStyle={{ width: "100%" }}>
             <View style={styles.coverImageContainer}>
-              <Image
+              <SafeImage
                 style={styles.coverImage}
-                source={{ uri: url_endpoint + postObject.post_image }}
+                source={{ uri: postObject.post_image }}
+                useExpoImage={true}
+                fallbackText="Cover"
               />
             </View>
             <View style={styles.mainSection}>
               <View style={styles.topSection}>
                 <View style={styles.eventImageContainer}>
-                  <Image
+                  <SafeImage
                     style={styles.eventImage}
-                    source={{ uri: url_endpoint + postObject.profile_picture }}
+                    source={{ uri: postObject.profile_picture }}
+                    useExpoImage={true}
+                    fallbackText="Org"
                   />
                 </View>
                 <View style={styles.titleAndAuthor}>

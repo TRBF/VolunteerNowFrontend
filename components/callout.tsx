@@ -79,7 +79,7 @@ export function Callout({ callout }) {
           }}
         >
           <Image
-            source={{ uri: url_endpoint + "/api" + callout.callout_picture }}
+            source={{ uri: callout.callout_picture }}
             resizeMode="cover"
             style={[
               styles.calloutImage,
