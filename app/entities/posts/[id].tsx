@@ -20,6 +20,11 @@ import { getOpportunity } from "../../../apistuff/post";
 import { styles } from "../../../styles/post";
 import { url_endpoint } from "../../../apistuff/_config";
 
+function getImageSource(link) {
+  if (!link) return undefined;
+  if (link.startsWith('http')) return { uri: link };
+  return { uri: url_endpoint + "/api" + link };
+}
 
 export default function Tab() {
   const navigation = useNavigation();
@@ -69,7 +74,7 @@ export default function Tab() {
             <View style={styles.coverImageContainer}>
               <Image
                 style={styles.coverImage}
-                source={{ uri: url_endpoint + "/api" + postObject.post_image }}
+                source={getImageSource(postObject.post_image)}
               />
             </View>
             <View style={styles.mainSection}>
@@ -77,7 +82,7 @@ export default function Tab() {
                 <View style={styles.eventImageContainer}>
                   <Image
                     style={styles.eventImage}
-                    source={{ uri: url_endpoint + "/api" + postObject.profile_picture }}
+                    source={getImageSource(postObject.profile_picture)}
                   />
                 </View>
                 <View style={styles.titleAndAuthor}>

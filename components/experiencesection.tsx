@@ -20,6 +20,12 @@ import { DatePickerModal } from "react-native-paper-dates";
 
 import * as ImagePicker from "expo-image-picker";
 
+function getImageSource(link) {
+  if (!link) return undefined;
+  if (link.startsWith('http')) return { uri: link };
+  return { uri: url_endpoint + "/api" + link };
+}
+
 export function ExperienceSection({ experience, refreshExperiences }) {
   const [visible, setVisible] = useState(false);
   const [refreshTrigger, setRefresh] = useState(0);
@@ -113,7 +119,7 @@ export function ExperienceSection({ experience, refreshExperiences }) {
       <View style={styles.experienceSection}>
         <View style={{ flexDirection: "column", alignItems: "baseline" }}>
           <Image
-            source={{ uri: url_endpoint + "/api" + experience.participation_picture }}
+            source={getImageSource(experience.participation_picture)}
             resizeMode="cover"
             style={[
               styles.experienceImage,

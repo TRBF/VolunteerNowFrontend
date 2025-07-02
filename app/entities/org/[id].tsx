@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import {
   ScrollView,
@@ -16,6 +15,12 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { url_endpoint } from "../../../apistuff/_config";
 import { verticalUnits } from "../../../jmecheriis/ddunits";
 
+function getImageSource(link) {
+  if (!link) return undefined;
+  if (link.startsWith('http')) return { uri: link };
+  return { uri: url_endpoint + "/api" + link };
+}
+
 function PastExperience({ experience }) {
   const textLimit = 96;
 
@@ -26,7 +31,7 @@ function PastExperience({ experience }) {
     <View style={styles.experienceSection}>
       <View style={{ flexDirection: "column", alignItems: "flex-start" }}>
         <Image
-          source={{ uri: experience.link_to_pfp }}
+          source={getImageSource(experience.link_to_pfp)}
           resizeMode="cover"
           style={[
             styles.experienceImage,
@@ -136,7 +141,7 @@ export default function VolunteerPage() {
           }}
         >
           {/*<View style={styles.banner}></View>*/}
-          <Image style={styles.banner} source={{ uri: coverLink }}></Image>
+          <Image style={styles.banner} source={getImageSource(coverLink)}></Image>
 
           <View style={styles.profileTopSection}>
             <View style={styles.containerPfp}>

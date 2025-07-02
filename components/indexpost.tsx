@@ -16,6 +16,12 @@ import { verticalUnits } from "../jmecheriis/ddunits";
 import { styles } from "../styles/index";
 import { Comment } from "../components/indexcomment";
 
+function getImageSource(link) {
+  if (!link) return undefined;
+  if (link.startsWith('http')) return { uri: link };
+  return { uri: url_endpoint + "/api" + link };
+}
+
 export function Post({ postObject }: any) {
   const [shareClicked, setShareClicked] = useState(false);
   const [heartClicked, setHeartClicked] = useState(false);
@@ -56,9 +62,7 @@ export function Post({ postObject }: any) {
         >
           <Pressable style={{ width: "100%", aspectRatio: 1 }}>
             <Image
-              source={{
-                uri: url_endpoint + "/api" + postObject.profile_picture,
-              }}
+              source={getImageSource(postObject.profile_picture)}
               style={{ height: "100%", borderRadius: 1000 }}
               contentFit="cover"
             />
@@ -96,7 +100,7 @@ export function Post({ postObject }: any) {
               }}
             >
               <Image
-                source={{ uri: url_endpoint + "/api" + postObject.post_image }}
+                source={getImageSource(postObject.post_image)}
                 style={styles.featureImage}
                 contentFit="cover"
               />

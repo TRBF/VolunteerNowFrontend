@@ -10,6 +10,12 @@ import { verticalUnits } from "../jmecheriis/ddunits";
 
 import { styles } from "../styles/profile";
 
+function getImageSource(link) {
+  if (!link) return undefined;
+  if (link.startsWith('http')) return { uri: link };
+  return { uri: url_endpoint + "/api" + link };
+}
+
 export function PastExperience({ experience }) {
   const textLimit = 96;
 
@@ -49,7 +55,7 @@ export function PastExperience({ experience }) {
   <Pressable style={styles.experienceSection}>
       <View style={{ flexDirection: "column", alignItems: "flex-start" }}>
         <Image
-          source={{ uri: url_endpoint + "/api" + experience.participation_picture }}
+          source={getImageSource(experience.participation_picture)}
           resizeMode="cover"
           style={[
             styles.experienceImage,
